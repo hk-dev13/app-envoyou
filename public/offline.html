@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envoyou - Offline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .retry-btn {
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+        }
+
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .features {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .features h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #10b981;
+        }
+
+        .features ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .features li {
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .features li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #dc2626;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .offline-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="status" id="status">Offline</div>
+
+    <div class="offline-container">
+        <div class="offline-icon">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+
+        <h1>You're Offline</h1>
+
+        <p>
+            No internet connection detected. Don't worry! You can still access some features of Envoyou while offline.
+        </p>
+
+        <button class="retry-btn" onclick="window.location.reload()">
+            Try Again
+        </button>
+
+        <div class="features">
+            <h3>Available Offline:</h3>
+            <ul>
+                <li>View previously loaded pages</li>
+                <li>Access cached documentation</li>
+                <li>Use installed app features</li>
+                <li>View saved data visualizations</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Check online status
+        function updateOnlineStatus() {
+            const statusElement = document.getElementById('status');
+            if (navigator.onLine) {
+                statusElement.textContent = 'Online';
+                statusElement.style.background = '#10b981';
+                // Auto-reload when back online
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                statusElement.textContent = 'Offline';
+                statusElement.style.background = '#dc2626';
+            }
+        }
+
+        // Listen for online/offline events
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Initial check
+        updateOnlineStatus();
+
+        // Periodic connectivity check
+        setInterval(() => {
+            if (navigator.onLine) {
+                // Try to fetch a small resource to verify connectivity
+                fetch('/favicon.ico', { method: 'HEAD', cache: 'no-cache' })
+                    .then(() => updateOnlineStatus())
+                    .catch(() => {
+                        document.getElementById('status').textContent = 'Limited Connectivity';
+                        document.getElementById('status').style.background = '#f59e0b';
+                    });
+            }
+        }, 30000); // Check every 30 seconds
+    </script>
+</body>
+</html>
