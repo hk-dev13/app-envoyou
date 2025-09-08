@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
 // // import ErrorBoundary from './components/ErrorBoundary';
@@ -14,9 +14,6 @@ import { useAuth } from './hooks/useAuth';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const DashboardUsage = lazy(() => import('./pages/DashboardUsage'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
-const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
-const RegisterSuccessPage = lazy(() => import('./pages/auth/RegisterSuccessPage'));
-const EmailVerificationPage = lazy(() => import('./pages/auth/EmailVerificationPage'));
 const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsPage'));
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
@@ -33,6 +30,15 @@ const PageLoader = () => (
     </div>
   </div>
 );
+
+// Email verification redirect component
+const EmailVerificationRedirect = () => {
+  const { token } = useParams();
+  useEffect(() => {
+    window.location.href = `https://envoyou.com/verify/${token}`;
+  }, [token]);
+  return <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">Redirecting to email verification...</div>;
+};
 
 // Main App component that uses auth context
 const AppContent = () => {
@@ -53,11 +59,13 @@ const AppContent = () => {
               } 
             />
             
-            {/* Auth routes - redirect if already logged in */}
+            {/* Auth routes - only login for existing users */}
             <Route path="/auth/login" element={<LoginPage />} />
-            <Route path="/auth/register" element={<RegisterPage />} />
-            <Route path="/auth/register-success" element={<RegisterSuccessPage />} />
-            <Route path="/verify/:token" element={<EmailVerificationPage />} />
+            
+            {/* Redirect registration attempts to landing page */}
+            <Route path="/auth/register" element={<Navigate to="https://envoyou.com/auth/register" replace />} />
+            <Route path="/auth/register-success" element={<Navigate to="https://envoyou.com/auth/register-success" replace />} />
+            <Route path="/verify/:token" element={<EmailVerificationRedirect />} />
             
             {/* Protected dashboard routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
