@@ -12,4 +12,4 @@ Allow: /favicon_io_envoyou/
 Allow: /vite.svg
 
 # Sitemap location
-Sitemap: https://www.envoyou.com/sitemap.xml
+Sitemap: https://app.envoyou.com/sitemap.xml
