@@ -2,6 +2,12 @@
 
 User dashboard for Envoyou API management and analytics platform.
 
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-19-blue.svg)
+![Vite](https://img.shields.io/badge/Vite-Latest-green.svg)
+![Tailwind](https://img.shields.io/badge/Tailwind-v4-blue.svg)
+
+
 ## Features
 
 - User authentication and email verification
@@ -46,3 +52,12 @@ VITE_APP_ENV=development
 ## Deployment
 
 This app is configured for deployment on Netlify at app.envoyou.com subdomain.
+
+## Contact
+Maintained by [Husni Kusuma](https://github.com/hk-dev13)  
+🌐 Website: [envoyou.com](https://envoyou.com)  
+📧 More info: [info@envoyou.com](mailto:info@envoyou.com)  
+
+---
+> <p style="text-align: center;">© 2025 <a href="https://envoyou.com">Envoyou</a> | All Rights Reserved</p>
+> <p style="text-align: center;">Empowering Global Environmental Transparency</p>
