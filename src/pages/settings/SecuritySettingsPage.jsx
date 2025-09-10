@@ -61,7 +61,7 @@ function SecuritySettingsPage() {
                 
                 // Simulate API call
                 await new Promise(resolve => setTimeout(resolve, 500));
-                logout();
+                await logout();
             } catch (error) {
                 console.error('Failed to logout from all devices:', error);
                 setMessage('Failed to logout from all devices. Please try again.');

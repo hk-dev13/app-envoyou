@@ -57,7 +57,13 @@ const Dashboard = () => {
               </div>
               
               <button
-                onClick={logout}
+                onClick={async () => {
+                  try {
+                    await logout();
+                  } catch (error) {
+                    console.error('Logout failed:', error);
+                  }
+                }}
                 className="text-slate-400 hover:text-white transition-colors"
                 title="Sign out"
               >
