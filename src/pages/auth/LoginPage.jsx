@@ -69,12 +69,12 @@ const LoginPage = () => {
           </h2>
           <p className="mt-2 text-sm text-slate-400">
             Or{' '}
-            <a
-              href="https://envoyou.com/auth/register"
+            <Link
+              to="/auth/register"
               className="font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
             >
               create a new account
-            </a>
+            </Link>
           </p>
         </div>
 
