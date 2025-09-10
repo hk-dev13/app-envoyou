@@ -2,13 +2,22 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-  ],
+    
+    // Bundle analyzer (only in analyze mode)
+    process.env.ANALYZE && visualizer({
+      filename: 'dist/bundle-analysis.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
+  ].filter(Boolean),
   
   resolve: {
     alias: {
@@ -19,16 +28,60 @@ export default defineConfig({
   // Build configuration
   build: {
     outDir: 'dist',
-    sourcemap: process.env.NODE_ENV === 'development',
+    minify: 'esbuild',
+    target: 'esnext',
+    
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          ui: ['lucide-react'],
+        manualChunks: (id) => {
+          // React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-vendor';
+          }
+          
+          // Routing
+          if (id.includes('node_modules/react-router-dom')) {
+            return 'router';
+          }
+          
+          // Supabase
+          if (id.includes('node_modules/@supabase')) {
+            return 'supabase';
+          }
+          
+          // UI libraries
+          if (id.includes('node_modules/lucide-react')) {
+            return 'ui-icons';
+          }
+          
+          // Charts
+          if (id.includes('node_modules/chart.js') || id.includes('node_modules/react-chartjs-2')) {
+            return 'ui-charts';
+          }
+          
+          // Animation libraries
+          if (id.includes('node_modules/aos') || id.includes('node_modules/framer-motion')) {
+            return 'animations';
+          }
+          
+          // Sentry
+          if (id.includes('node_modules/@sentry')) {
+            return 'analytics';
+          }
+          
+          // Other node_modules
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
       },
     },
+    
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 1000,
+    
+    // Enable CSS code splitting
+    cssCodeSplit: true,
   },
   
   // Development server
@@ -46,7 +99,22 @@ export default defineConfig({
   
   // Dependency optimization
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: [
+      'react', 
+      'react-dom', 
+      'react-router-dom',
+      '@supabase/supabase-js',
+      'lucide-react'
+    ],
+    exclude: ['@sentry/react'], // Exclude heavy packages from pre-bundling
+  },
+  
+  // Build optimizations
+  esbuild: {
+    // Drop console.log in production
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : [],
+    // Target modern browsers for smaller bundles
+    target: 'es2020',
   },
   
   // Define global constants
