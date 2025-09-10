@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import apiService from '../services/apiService';
 
 const EmailVerificationBanner = () => {
   const { user } = useAuth();
+  const [isResending, setIsResending] = useState(false);
+  const [message, setMessage] = useState('');
 
   // Only show if user exists and email is not verified
   if (!user || user.email_verified) {
     return null;
   }
 
-  const handleResendVerification = () => {
-    // TODO: Implement resend verification email
-    alert('Fitur kirim ulang email verifikasi akan segera hadir.');
+  const handleResendVerification = async () => {
+    setIsResending(true);
+    setMessage('');
+
+    try {
+      await apiService.sendVerificationEmail({ email: user.email });
+      setMessage('Verification email has been resent!');
+      setTimeout(() => setMessage(''), 5000);
+    } catch (error) {
+      console.error('Failed to resend verification email:', error);
+      setMessage('Failed to resend verification email. Please try again.');
+      setTimeout(() => setMessage(''), 5000);
+    } finally {
+      setIsResending(false);
+    }
   };
 
   return (
@@ -25,13 +40,13 @@ const EmailVerificationBanner = () => {
           </div>
           <div className="ml-3">
             <h3 className="text-sm font-medium text-yellow-200">
-              Harap verifikasi email terlebih dahulu
+              Please verify your email first
             </h3>
             <div className="mt-2 text-sm text-yellow-300">
               <p>
-                Kami telah mengirim email verifikasi ke{' '}
+                We have sent a verification email to{' '}
                 <span className="font-medium">{user.email}</span>.
-                Silakan klik link di email untuk mengaktifkan akun Anda.
+                Please click the link in the email to activate your account.
               </p>
             </div>
           </div>
@@ -39,20 +54,26 @@ const EmailVerificationBanner = () => {
         <div className="flex-shrink-0 ml-4">
           <button
             onClick={handleResendVerification}
-            className="bg-yellow-800 hover:bg-yellow-700 text-yellow-200 px-3 py-1 rounded-md text-sm font-medium transition-colors"
+            disabled={isResending}
+            className="bg-yellow-800 hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-yellow-200 px-3 py-1 rounded-md text-sm font-medium transition-colors"
           >
-            Kirim Ulang
+            {isResending ? 'Sending...' : 'Resend'}
           </button>
         </div>
       </div>
+      {message && (
+        <div className="mt-3 text-sm text-yellow-200">
+          <p>{message}</p>
+        </div>
+      )}
       <div className="mt-3 text-sm text-yellow-300">
         <p>
-          Belum menerima email? Periksa folder spam atau{' '}
+          Haven't received the email? Check your spam folder or{' '}
           <button
             onClick={handleResendVerification}
             className="font-medium underline hover:text-yellow-200"
           >
-            klik di sini untuk kirim ulang
+            click here to resend
           </button>
         </p>
       </div>

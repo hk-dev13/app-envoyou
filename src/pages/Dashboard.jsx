@@ -13,21 +13,22 @@ const Dashboard = () => {
     activeKeys: 0
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [apiKeys, setApiKeys] = useState([]);
 
   useEffect(() => {
     const fetchUserStats = async () => {
       try {
         setLoading(true);
         const userStats = await apiService.getUserStats();
-        const apiKeys = await apiService.getApiKeys();
+        const keys = await apiService.getApiKeys();
         
         setStats({
           apiCalls: userStats.total_calls || 0,
           thisMonth: userStats.monthly_calls || 0,
           quota: userStats.quota || 5000,
-          activeKeys: apiKeys.length || 0
+          activeKeys: keys.length || 0
         });
+        setApiKeys(keys);
       } catch (err) {
         console.error('Failed to fetch user stats:', err);
         
@@ -73,21 +74,21 @@ const Dashboard = () => {
               </Link>
               <nav className="hidden md:flex space-x-8 ml-10">
                 <Link to="/dashboard" className="text-emerald-400 font-medium">Dashboard</Link>
-                <Link to="/dashboard/api-keys" className="text-slate-300 hover:text-white transition-colors">API Keys</Link>
+                <Link to="/settings/api-keys" className="text-slate-300 hover:text-white transition-colors">API Keys</Link>
                 <Link to="/dashboard/usage" className="text-slate-300 hover:text-white transition-colors">Usage</Link>
-                <Link to="/dashboard/settings" className="text-slate-300 hover:text-white transition-colors">Settings</Link>
+                <Link to="/settings/profile" className="text-slate-300 hover:text-white transition-colors">Settings</Link>
               </nav>
             </div>
             
             <div className="flex items-center space-x-4">
-              <Link to="/documentation" className="text-slate-400 hover:text-white transition-colors">
+              <a href="https://envoyou.com/documentation" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-              </Link>
+              </a>
               
               <div className="relative">
-                <button className="flex items-center space-x-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <Link to="/settings/profile" className="flex items-center space-x-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
                   <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
                     <span className="text-white font-medium">
                       {user?.name?.[0] || user?.email?.[0] || 'U'}
@@ -96,7 +97,7 @@ const Dashboard = () => {
                   <span className="text-white font-medium hidden md:block">
                     {user?.name}
                   </span>
-                </button>
+                </Link>
               </div>
               
               <button
@@ -237,26 +238,29 @@ const Dashboard = () => {
               </Link>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                  <div>
-                    <p className="text-sm font-medium text-white">Production Key</p>
-                    <p className="text-xs text-slate-400">envyou_prod_****</p>
+              {apiKeys.length > 0 ? (
+                apiKeys.slice(0, 2).map((key, index) => (
+                  <div key={key.id || index} className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-2 h-2 rounded-full ${key.environment === 'production' ? 'bg-green-400' : 'bg-blue-400'}`}></div>
+                      <div>
+                        <p className="text-sm font-medium text-white">{key.name || `API Key ${index + 1}`}</p>
+                        <p className="text-xs text-slate-400">
+                          {key.prefix ? `${key.prefix}****` : '****'}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs text-slate-400">
+                      {key.status || 'Active'}
+                    </span>
                   </div>
+                ))
+              ) : (
+                <div className="text-center py-4">
+                  <p className="text-sm text-slate-400">No API keys found</p>
+                  <p className="text-xs text-slate-500 mt-1">Create your first API key to get started</p>
                 </div>
-                <span className="text-xs text-slate-400">Active</span>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-slate-700 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <div>
-                    <p className="text-sm font-medium text-white">Development Key</p>
-                    <p className="text-xs text-slate-400">envyou_dev_****</p>
-                  </div>
-                </div>
-                <span className="text-xs text-slate-400">Active</span>
-              </div>
+              )}
             </div>
             <Link 
               to="/settings/api-keys"
@@ -281,25 +285,13 @@ const Dashboard = () => {
               </Link>
             </div>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm text-white">CEVS lookup for Tesla</p>
-                  <p className="text-xs text-slate-400">2 minutes ago</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm text-white">Emissions data query</p>
-                  <p className="text-xs text-slate-400">15 minutes ago</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm text-white">ISO certification check</p>
-                  <p className="text-xs text-slate-400">1 hour ago</p>
+              <div className="flex items-center justify-center py-8">
+                <div className="text-center">
+                  <svg className="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <p className="text-slate-400 text-sm">Activity tracking coming soon</p>
+                  <p className="text-slate-500 text-xs mt-1">We'll show your recent API calls here</p>
                 </div>
               </div>
             </div>

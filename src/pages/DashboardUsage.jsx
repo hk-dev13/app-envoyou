@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import apiService from '../services/apiService';
 
 const DashboardUsage = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [stats, setStats] = useState({
     apiCalls: 0,
     thisMonth: 0,
@@ -72,21 +72,21 @@ const DashboardUsage = () => {
               </Link>
               <nav className="hidden md:flex space-x-8 ml-10">
                 <Link to="/dashboard" className="text-slate-300 hover:text-white transition-colors">Dashboard</Link>
-                <Link to="/dashboard/api-keys" className="text-slate-300 hover:text-white transition-colors">API Keys</Link>
+                <Link to="/settings/api-keys" className="text-slate-300 hover:text-white transition-colors">API Keys</Link>
                 <Link to="/dashboard/usage" className="text-emerald-400 font-medium">Usage</Link>
-                <Link to="/dashboard/settings" className="text-slate-300 hover:text-white transition-colors">Settings</Link>
+                <Link to="/settings/profile" className="text-slate-300 hover:text-white transition-colors">Settings</Link>
               </nav>
             </div>
 
             <div className="flex items-center space-x-4">
-              <Link to="/documentation" className="text-slate-400 hover:text-white transition-colors">
+              <a href="https://envoyou.com/documentation" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-              </Link>
+              </a>
 
               <div className="relative">
-                <button className="flex items-center space-x-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <Link to="/settings/profile" className="flex items-center space-x-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
                   <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
                     <span className="text-white text-sm font-medium">
                       {user?.name?.[0] || user?.email?.[0] || 'U'}
@@ -95,8 +95,24 @@ const DashboardUsage = () => {
                   <span className="hidden lg:block text-white">
                     {user?.name || user?.email}
                   </span>
-                </button>
+                </Link>
               </div>
+              
+              <button
+                onClick={async () => {
+                  try {
+                    await logout();
+                  } catch (error) {
+                    console.error('Logout failed:', error);
+                  }
+                }}
+                className="text-slate-400 hover:text-white transition-colors"
+                title="Sign out"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>

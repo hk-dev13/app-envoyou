@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SettingsLayout from '../../components/settings/SettingsLayout';
 import { useAuth } from '../../hooks/useAuth';
+import apiService from '../../services/apiService';
 
 function SecuritySettingsPage() {
     const { logout } = useAuth();
@@ -33,11 +34,7 @@ function SecuritySettingsPage() {
         }
 
         try {
-            // Here would be API call to change password
-            // await changePassword({ currentPassword, newPassword });
-            
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await apiService.changePassword(currentPassword, newPassword);
             
             setMessage('Password changed successfully!');
             setCurrentPassword('');
