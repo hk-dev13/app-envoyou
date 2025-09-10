@@ -67,8 +67,7 @@ const AppContent = () => {
             <Route path="/auth/register" element={<RegisterPage />} />
             <Route path="/auth/register-success" element={<RegisterSuccessPage />} />
             <Route path="/auth/callback" element={<OAuthCallbackPage />} />
-            <Route path="/auth/google/callback" element={<OAuthCallbackPage />} />
-            <Route path="/auth/github/callback" element={<OAuthCallbackPage />} />
+            <Route path="/auth/v1/callback" element={<OAuthCallbackPage />} />
             <Route path="/verify/:token" element={<EmailVerificationRedirect />} />
             
             {/* Protected dashboard routes */}
