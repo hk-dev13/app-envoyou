@@ -29,7 +29,16 @@ const DashboardUsage = () => {
         });
       } catch (err) {
         console.error('Failed to fetch user stats:', err);
-        setError('Failed to load usage data');
+        
+        // Check if it's an authentication error
+        if (err.response?.status === 403 || err.response?.status === 401) {
+          setError('Please get an API key to view your usage statistics');
+        } else if (err.response?.status === 404) {
+          setError('User statistics not available yet');
+        } else {
+          setError('Failed to load usage data');
+        }
+        
         // Keep dummy data as fallback
         setStats({
           apiCalls: 1247,
