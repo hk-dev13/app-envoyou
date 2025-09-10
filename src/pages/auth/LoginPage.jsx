@@ -54,37 +54,13 @@ const LoginPage = () => {
   };
 
   const handleGoogleLogin = () => {
-    if (!OAUTH_CONFIG.google.clientId) {
-      console.error('Google OAuth client ID not configured');
-      return;
-    }
-
-    const params = new URLSearchParams({
-      client_id: OAUTH_CONFIG.google.clientId,
-      redirect_uri: OAUTH_CONFIG.google.redirectUri,
-      scope: OAUTH_CONFIG.google.scope,
-      response_type: 'code',
-      state: 'google',
-    });
-
-    window.location.href = `${OAUTH_CONFIG.google.authUrl}?${params.toString()}`;
+    // Use backend OAuth endpoint
+    window.location.href = `${API_BASE_URL}/auth/google/login`;
   };
 
   const handleGithubLogin = () => {
-    if (!OAUTH_CONFIG.github.clientId) {
-      console.error('GitHub OAuth client ID not configured');
-      return;
-    }
-
-    const params = new URLSearchParams({
-      client_id: OAUTH_CONFIG.github.clientId,
-      redirect_uri: OAUTH_CONFIG.github.redirectUri,
-      scope: OAUTH_CONFIG.github.scope,
-      response_type: 'code',
-      state: 'github',
-    });
-
-    window.location.href = `${OAUTH_CONFIG.github.authUrl}?${params.toString()}`;
+    // Use backend OAuth endpoint
+    window.location.href = `${API_BASE_URL}/auth/github/login`;
   };
 
   return (

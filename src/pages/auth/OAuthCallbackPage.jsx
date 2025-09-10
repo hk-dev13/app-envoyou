@@ -34,33 +34,54 @@ const OAuthCallbackPage = () => {
       const pathSegments = location.pathname.split('/');
       const provider = pathSegments[pathSegments.length - 2]; // 'google' or 'github' from /auth/google/callback
 
+      console.log('OAuth callback received:', { provider, code, state });
+
       try {
-        let result;
-        if (provider === 'google' || state === 'google') {
-          result = await googleLogin(code);
-        } else if (provider === 'github' || state === 'github') {
-          result = await githubLogin(code);
-        } else {
-          throw new Error('Unknown OAuth provider');
+        // Call the backend OAuth callback endpoint
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const callbackUrl = `${API_BASE_URL}/auth/${provider}/callback`;
+
+        const response = await fetch(callbackUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            code: code,
+            state: state
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || 'Authentication failed');
         }
 
-        if (result.success) {
-          navigate('/dashboard', { replace: true });
-        } else {
-          navigate('/auth/login', {
-            state: { error: result.error || 'Authentication failed' }
-          });
-        }
+        const result = await response.json();
+        console.log('OAuth login result:', result);
+
+        // Store tokens in localStorage
+        localStorage.setItem('envoyou_auth_token', result.access_token);
+        localStorage.setItem('envoyou_user_data', JSON.stringify(result.user));
+
+        // Navigate to dashboard
+        navigate('/dashboard', { replace: true });
+
       } catch (err) {
         console.error('OAuth callback error:', err);
         navigate('/auth/login', {
-          state: { error: 'Authentication failed. Please try again.' }
+          state: {
+            error: err.message || 'Social login failed. Please try again or use email and password.'
+          }
         });
       }
     };
 
-    handleOAuthCallback();
-  }, [searchParams, location.pathname, navigate, googleLogin, githubLogin]);
+    // Add a small delay to prevent rapid successive calls
+    const timeoutId = setTimeout(handleOAuthCallback, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchParams, location.pathname, navigate]);
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
