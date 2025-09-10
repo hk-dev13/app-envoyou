@@ -37,7 +37,7 @@ export const AUTH_CONFIG = {
 export const OAUTH_CONFIG = {
   google: {
     clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-    redirectUri: import.meta.env.VITE_OAUTH_REDIRECT_URI || `${window.location.origin}/auth/callback`,
+    redirectUri: import.meta.env.VITE_GOOGLE_CALLBACK_URL || `${window.location.origin}/auth/google/callback`,
     scope: 'openid email profile',
     authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
     tokenUrl: 'https://oauth2.googleapis.com/token',
@@ -45,7 +45,7 @@ export const OAUTH_CONFIG = {
   },
   github: {
     clientId: import.meta.env.VITE_GITHUB_CLIENT_ID,
-    redirectUri: import.meta.env.VITE_OAUTH_REDIRECT_URI || `${window.location.origin}/auth/callback`,
+    redirectUri: import.meta.env.VITE_GITHUB_CALLBACK_URL || `${window.location.origin}/auth/github/callback`,
     scope: 'user:email',
     authUrl: 'https://github.com/login/oauth/authorize',
     tokenUrl: 'https://github.com/login/oauth/access_token',

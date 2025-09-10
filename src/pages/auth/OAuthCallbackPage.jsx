@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const OAuthCallbackPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { googleLogin, githubLogin, error } = useAuth();
 
@@ -29,11 +30,15 @@ const OAuthCallbackPage = () => {
         return;
       }
 
+      // Determine provider from URL path
+      const pathSegments = location.pathname.split('/');
+      const provider = pathSegments[pathSegments.length - 2]; // 'google' or 'github' from /auth/google/callback
+
       try {
         let result;
-        if (state === 'google') {
+        if (provider === 'google' || state === 'google') {
           result = await googleLogin(code);
-        } else if (state === 'github') {
+        } else if (provider === 'github' || state === 'github') {
           result = await githubLogin(code);
         } else {
           throw new Error('Unknown OAuth provider');
@@ -55,7 +60,7 @@ const OAuthCallbackPage = () => {
     };
 
     handleOAuthCallback();
-  }, [searchParams, navigate, googleLogin, githubLogin]);
+  }, [searchParams, location.pathname, navigate, googleLogin, githubLogin]);
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
