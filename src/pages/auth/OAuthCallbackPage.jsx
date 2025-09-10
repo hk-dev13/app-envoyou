@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { API_CONFIG } from '../../config';
 
 const OAuthCallbackPage = () => {
   const navigate = useNavigate();
@@ -38,8 +39,7 @@ const OAuthCallbackPage = () => {
 
       try {
         // Call the backend OAuth callback endpoint
-        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-        const callbackUrl = `${API_BASE_URL}/auth/${provider}/callback`;
+        const callbackUrl = `${API_CONFIG.baseURL}/auth/${provider}/callback`;
 
         const response = await fetch(callbackUrl, {
           method: 'POST',

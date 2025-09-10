@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { OAUTH_CONFIG } from '../../config';
+import { API_CONFIG } from '../../config';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -112,12 +112,12 @@ const RegisterPage = () => {
 
   const handleGoogleLogin = () => {
     // Use backend OAuth endpoint
-    window.location.href = `${API_BASE_URL}/auth/google/login`;
+    window.location.href = `${API_CONFIG.baseURL}/auth/google/login`;
   };
 
   const handleGithubLogin = () => {
     // Use backend OAuth endpoint
-    window.location.href = `${API_BASE_URL}/auth/github/login`;
+    window.location.href = `${API_CONFIG.baseURL}/auth/github/login`;
   };
 
   return (
