@@ -38,34 +38,23 @@ const OAuthCallbackPage = () => {
       console.log('OAuth callback received:', { provider, code, state });
 
       try {
-        // Call the backend OAuth callback endpoint
-        const callbackUrl = `${API_CONFIG.baseURL}/auth/${provider}/callback`;
-
-        const response = await fetch(callbackUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            code: code,
-            state: state
-          })
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || 'Authentication failed');
+        // Use AuthContext functions to handle OAuth callback
+        let result;
+        if (provider === 'google') {
+          result = await googleLogin(code);
+        } else if (provider === 'github') {
+          result = await githubLogin(code);
+        } else {
+          throw new Error('Unknown OAuth provider');
         }
 
-        const result = await response.json();
-        console.log('OAuth login result:', result);
-
-        // Store tokens in localStorage
-        localStorage.setItem('envoyou_auth_token', result.access_token);
-        localStorage.setItem('envoyou_user_data', JSON.stringify(result.user));
-
-        // Navigate to dashboard
-        navigate('/dashboard', { replace: true });
+        if (result.success) {
+          console.log('OAuth login successful');
+          // Navigate to dashboard
+          navigate('/dashboard', { replace: true });
+        } else {
+          throw new Error(result.error || 'Authentication failed');
+        }
 
       } catch (err) {
         console.error('OAuth callback error:', err);

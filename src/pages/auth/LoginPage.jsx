@@ -53,14 +53,38 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Use backend OAuth endpoint
-    window.location.href = `${API_CONFIG.baseURL}/auth/google/login`;
+  const handleGoogleLogin = async () => {
+    try {
+      // First get the OAuth URL from backend
+      const response = await fetch(`${API_CONFIG.baseURL}/auth/google/login`);
+      if (!response.ok) {
+        throw new Error('Failed to get Google OAuth URL');
+      }
+      const data = await response.json();
+      
+      // Redirect to Google OAuth
+      window.location.href = data.auth_url;
+    } catch (error) {
+      console.error('Google login error:', error);
+      // You could show an error message to the user here
+    }
   };
 
-  const handleGithubLogin = () => {
-    // Use backend OAuth endpoint
-    window.location.href = `${API_CONFIG.baseURL}/auth/github/login`;
+  const handleGithubLogin = async () => {
+    try {
+      // First get the OAuth URL from backend
+      const response = await fetch(`${API_CONFIG.baseURL}/auth/github/login`);
+      if (!response.ok) {
+        throw new Error('Failed to get GitHub OAuth URL');
+      }
+      const data = await response.json();
+      
+      // Redirect to GitHub OAuth
+      window.location.href = data.auth_url;
+    } catch (error) {
+      console.error('GitHub login error:', error);
+      // You could show an error message to the user here
+    }
   };
 
   return (

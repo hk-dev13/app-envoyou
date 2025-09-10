@@ -210,11 +210,11 @@ class APIService {
 
   // Social Login Methods
   async googleLogin(code) {
-    return this.post('/auth/google/login', { code });
+    return this.post('/auth/google/callback', { code });
   }
 
   async githubLogin(code) {
-    return this.post('/auth/github/login', { code });
+    return this.post('/auth/github/callback', { code });
   }
 
   async getOAuthUrl(provider) {
