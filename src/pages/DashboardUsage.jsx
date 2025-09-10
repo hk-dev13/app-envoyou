@@ -1,15 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import apiService from '../services/apiService';
 
 const DashboardUsage = () => {
   const { user } = useAuth();
-  const [stats] = useState({
-    apiCalls: 1247,
-    thisMonth: 89,
+  const [stats, setStats] = useState({
+    apiCalls: 0,
+    thisMonth: 0,
     quota: 5000,
-    activeKeys: 2
+    activeKeys: 0
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      try {
+        setLoading(true);
+        const userStats = await apiService.getUserStats();
+        const apiKeys = await apiService.getApiKeys();
+        
+        setStats({
+          apiCalls: userStats.total_calls || 0,
+          thisMonth: userStats.monthly_calls || 0,
+          quota: userStats.quota || 5000,
+          activeKeys: apiKeys.length || 0
+        });
+      } catch (err) {
+        console.error('Failed to fetch user stats:', err);
+        setError('Failed to load usage data');
+        // Keep dummy data as fallback
+        setStats({
+          apiCalls: 1247,
+          thisMonth: 89,
+          quota: 5000,
+          activeKeys: 2
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserStats();
+  }, []);
 
   const quotaPercentage = (stats.thisMonth / stats.quota) * 100;
 
@@ -78,7 +112,13 @@ const DashboardUsage = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-slate-400">Total API Calls</p>
-                <p className="text-2xl font-bold text-white">{stats.apiCalls.toLocaleString()}</p>
+                {loading ? (
+                  <div className="animate-pulse">
+                    <div className="h-8 bg-slate-700 rounded w-20"></div>
+                  </div>
+                ) : (
+                  <p className="text-2xl font-bold text-white">{stats.apiCalls.toLocaleString()}</p>
+                )}
               </div>
             </div>
           </div>
@@ -93,7 +133,13 @@ const DashboardUsage = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-slate-400">This Month</p>
-                <p className="text-2xl font-bold text-white">{stats.thisMonth}</p>
+                {loading ? (
+                  <div className="animate-pulse">
+                    <div className="h-8 bg-slate-700 rounded w-16"></div>
+                  </div>
+                ) : (
+                  <p className="text-2xl font-bold text-white">{stats.thisMonth}</p>
+                )}
               </div>
             </div>
           </div>
@@ -108,7 +154,13 @@ const DashboardUsage = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-slate-400">Quota Used</p>
-                <p className="text-2xl font-bold text-white">{quotaPercentage.toFixed(1)}%</p>
+                {loading ? (
+                  <div className="animate-pulse">
+                    <div className="h-8 bg-slate-700 rounded w-12"></div>
+                  </div>
+                ) : (
+                  <p className="text-2xl font-bold text-white">{quotaPercentage.toFixed(1)}%</p>
+                )}
               </div>
             </div>
           </div>
@@ -123,7 +175,13 @@ const DashboardUsage = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-slate-400">Active Keys</p>
-                <p className="text-2xl font-bold text-white">{stats.activeKeys}</p>
+                {loading ? (
+                  <div className="animate-pulse">
+                    <div className="h-8 bg-slate-700 rounded w-8"></div>
+                  </div>
+                ) : (
+                  <p className="text-2xl font-bold text-white">{stats.activeKeys}</p>
+                )}
               </div>
             </div>
           </div>

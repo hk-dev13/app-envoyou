@@ -312,6 +312,10 @@ class APIService {
     return this.get('/permits/stats');
   }
 
+  async getUserStats() {
+    return this.get('/user/stats');
+  }
+
   async getCEVSData(companyName, country = null, apiKey = null) {
     if (!companyName) throw new Error('Company name is required for CEVS lookup');
     
