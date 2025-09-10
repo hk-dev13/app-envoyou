@@ -33,6 +33,26 @@ export const AUTH_CONFIG = {
   userKey: 'envoyou_user_data',
 };
 
+// OAuth Configuration
+export const OAUTH_CONFIG = {
+  google: {
+    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+    redirectUri: import.meta.env.VITE_OAUTH_REDIRECT_URI || `${window.location.origin}/auth/callback`,
+    scope: 'openid email profile',
+    authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    tokenUrl: 'https://oauth2.googleapis.com/token',
+    userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
+  },
+  github: {
+    clientId: import.meta.env.VITE_GITHUB_CLIENT_ID,
+    redirectUri: import.meta.env.VITE_OAUTH_REDIRECT_URI || `${window.location.origin}/auth/callback`,
+    scope: 'user:email',
+    authUrl: 'https://github.com/login/oauth/authorize',
+    tokenUrl: 'https://github.com/login/oauth/access_token',
+    userInfoUrl: 'https://api.github.com/user',
+  },
+};
+
 // Feature Flags
 export const FEATURES = {
   analytics: import.meta.env.VITE_ENABLE_ANALYTICS === 'true',
@@ -199,6 +219,7 @@ export default {
   APP_CONFIG,
   API_CONFIG,
   AUTH_CONFIG,
+  OAUTH_CONFIG,
   FEATURES,
   EXTERNAL_SERVICES,
   CONTACT,

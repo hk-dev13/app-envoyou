@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { OAUTH_CONFIG } from '../../config';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -50,6 +51,40 @@ const LoginPage = () => {
     if (result.success) {
       navigate(from, { replace: true });
     }
+  };
+
+  const handleGoogleLogin = () => {
+    if (!OAUTH_CONFIG.google.clientId) {
+      console.error('Google OAuth client ID not configured');
+      return;
+    }
+
+    const params = new URLSearchParams({
+      client_id: OAUTH_CONFIG.google.clientId,
+      redirect_uri: OAUTH_CONFIG.google.redirectUri,
+      scope: OAUTH_CONFIG.google.scope,
+      response_type: 'code',
+      state: 'google',
+    });
+
+    window.location.href = `${OAUTH_CONFIG.google.authUrl}?${params.toString()}`;
+  };
+
+  const handleGithubLogin = () => {
+    if (!OAUTH_CONFIG.github.clientId) {
+      console.error('GitHub OAuth client ID not configured');
+      return;
+    }
+
+    const params = new URLSearchParams({
+      client_id: OAUTH_CONFIG.github.clientId,
+      redirect_uri: OAUTH_CONFIG.github.redirectUri,
+      scope: OAUTH_CONFIG.github.scope,
+      response_type: 'code',
+      state: 'github',
+    });
+
+    window.location.href = `${OAUTH_CONFIG.github.authUrl}?${params.toString()}`;
   };
 
   return (
@@ -217,7 +252,9 @@ const LoginPage = () => {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              className="w-full inline-flex justify-center py-2.5 px-4 border border-slate-700 rounded-lg shadow-sm bg-slate-800 text-sm font-medium text-slate-300 hover:bg-slate-700 transition-colors"
+              onClick={handleGoogleLogin}
+              disabled={isLoading}
+              className="w-full inline-flex justify-center py-2.5 px-4 border border-slate-700 rounded-lg shadow-sm bg-slate-800 text-sm font-medium text-slate-300 hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.042-3.441.219-.937 1.404-5.965 1.404-5.965s-.358-.719-.358-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.357-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.99-5.367 11.99-12C24.007 5.367 18.641.001.012.001z"/>
@@ -227,7 +264,9 @@ const LoginPage = () => {
 
             <button
               type="button"
-              className="w-full inline-flex justify-center py-2.5 px-4 border border-slate-700 rounded-lg shadow-sm bg-slate-800 text-sm font-medium text-slate-300 hover:bg-slate-700 transition-colors"
+              onClick={handleGithubLogin}
+              disabled={isLoading}
+              className="w-full inline-flex justify-center py-2.5 px-4 border border-slate-700 rounded-lg shadow-sm bg-slate-800 text-sm font-medium text-slate-300 hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>

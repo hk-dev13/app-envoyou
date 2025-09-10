@@ -208,6 +208,19 @@ class APIService {
     });
   }
 
+  // Social Login Methods
+  async googleLogin(code) {
+    return this.post('/auth/google/login', { code });
+  }
+
+  async githubLogin(code) {
+    return this.post('/auth/github/login', { code });
+  }
+
+  async getOAuthUrl(provider) {
+    return this.get(`/auth/${provider}/url`);
+  }
+
   // --- User Profile Methods ---
 
   async getUserProfile() {

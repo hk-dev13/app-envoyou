@@ -14,6 +14,9 @@ import { useAuth } from './hooks/useAuth';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const DashboardUsage = lazy(() => import('./pages/DashboardUsage'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
+const RegisterSuccessPage = lazy(() => import('./pages/auth/RegisterSuccessPage'));
+const OAuthCallbackPage = lazy(() => import('./pages/auth/OAuthCallbackPage'));
 const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsPage'));
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
@@ -61,10 +64,9 @@ const AppContent = () => {
             
             {/* Auth routes - only login for existing users */}
             <Route path="/auth/login" element={<LoginPage />} />
-            
-            {/* Redirect registration attempts to landing page */}
-            <Route path="/auth/register" element={<Navigate to="https://envoyou.com/auth/register" replace />} />
-            <Route path="/auth/register-success" element={<Navigate to="https://envoyou.com/auth/register-success" replace />} />
+            <Route path="/auth/register" element={<RegisterPage />} />
+            <Route path="/auth/register-success" element={<RegisterSuccessPage />} />
+            <Route path="/auth/callback" element={<OAuthCallbackPage />} />
             <Route path="/verify/:token" element={<EmailVerificationRedirect />} />
             
             {/* Protected dashboard routes */}

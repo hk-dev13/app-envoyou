@@ -204,6 +204,63 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Social Login functions
+  const googleLogin = async (code) => {
+    dispatch({ type: AUTH_ACTIONS.LOGIN_START });
+    try {
+      const data = await apiService.googleLogin(code);
+
+      if (!data.access_token || !data.user) {
+        throw new Error('Google login response is missing token or user data.');
+      }
+
+      localStorage.setItem('envoyou_token', data.access_token);
+      localStorage.setItem('envoyou_user', JSON.stringify(data.user));
+
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_SUCCESS,
+        payload: { token: data.access_token, user: data.user },
+      });
+      logger.info(`User ${data.user.email} logged in with Google successfully.`);
+      return { success: true };
+    } catch (error) {
+      logger.error('Google login failed', { error: error.message });
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_FAILURE,
+        payload: error.message || 'An unexpected error occurred during Google login.',
+      });
+      return { success: false, error: error.message };
+    }
+  };
+
+  const githubLogin = async (code) => {
+    dispatch({ type: AUTH_ACTIONS.LOGIN_START });
+    try {
+      const data = await apiService.githubLogin(code);
+
+      if (!data.access_token || !data.user) {
+        throw new Error('GitHub login response is missing token or user data.');
+      }
+
+      localStorage.setItem('envoyou_token', data.access_token);
+      localStorage.setItem('envoyou_user', JSON.stringify(data.user));
+
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_SUCCESS,
+        payload: { token: data.access_token, user: data.user },
+      });
+      logger.info(`User ${data.user.email} logged in with GitHub successfully.`);
+      return { success: true };
+    } catch (error) {
+      logger.error('GitHub login failed', { error: error.message });
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_FAILURE,
+        payload: error.message || 'An unexpected error occurred during GitHub login.',
+      });
+      return { success: false, error: error.message };
+    }
+  };
+
   // Logout function
   const logout = async () => {
     const userEmail = state.user?.email;
@@ -231,6 +288,8 @@ export const AuthProvider = ({ children }) => {
     ...state,
     login,
     register,
+    googleLogin,
+    githubLogin,
     logout,
     clearError,
     checkAuthStatus,
