@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useEffect, useCallback } from 'react';
 import apiService from '../services/apiService';
+import getSupabaseClient from '../services/supabaseClient';
 import logger from '../services/logger';
 
 // Auth Actions
@@ -87,42 +88,69 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const checkAuthStatus = useCallback(async () => {
-    let token = null;
     try {
-        token = localStorage.getItem('envoyou_token');
-    } catch (error) {
-        console.warn('localStorage not available (incognito mode):', error);
-    }
-    if (!token) {
-      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
-      return;
-    }
+      const supabase = getSupabaseClient();
+      const { data: { session }, error } = await supabase.auth.getSession();
 
-    try {
-      const userData = await apiService.getUserProfile();
-      if (userData) {
-        // Update localStorage with fresh user data
+      if (error) {
+        console.error('Error getting session:', error);
+        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+        return;
+      }
+
+      if (session?.user) {
+        // Get user profile from your API
         try {
-            localStorage.setItem('envoyou_user', JSON.stringify(userData));
-        } catch (error) {
-            console.warn('localStorage not available (incognito mode):', error);
+          const userData = await apiService.getUserProfile();
+
+          // Store both Supabase session and API token
+          localStorage.setItem('envoyou_token', session.access_token);
+          localStorage.setItem('envoyou_user', JSON.stringify(userData || session.user));
+
+          dispatch({
+            type: AUTH_ACTIONS.LOGIN_SUCCESS,
+            payload: {
+              token: session.access_token,
+              user: userData || {
+                id: session.user.id,
+                email: session.user.email,
+                name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+                avatar_url: session.user.user_metadata?.avatar_url,
+                email_verified: session.user.email_confirmed_at ? true : false
+              }
+            },
+          });
+          logger.info('User session restored successfully.');
+        } catch (apiError) {
+          console.error('Error fetching user profile:', apiError);
+          // Fallback to Supabase user data
+          localStorage.setItem('envoyou_token', session.access_token);
+          localStorage.setItem('envoyou_user', JSON.stringify(session.user));
+
+          dispatch({
+            type: AUTH_ACTIONS.LOGIN_SUCCESS,
+            payload: {
+              token: session.access_token,
+              user: {
+                id: session.user.id,
+                email: session.user.email,
+                name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+                avatar_url: session.user.user_metadata?.avatar_url,
+                email_verified: session.user.email_confirmed_at ? true : false
+              }
+            },
+          });
         }
-        dispatch({
-          type: AUTH_ACTIONS.LOGIN_SUCCESS,
-          payload: { user: userData, token },
-        });
-        logger.info('User session restored and updated successfully.');
       } else {
-        throw new Error('Invalid user data received from server.');
+        // Clear any stored data if no session
+        localStorage.removeItem('envoyou_token');
+        localStorage.removeItem('envoyou_user');
+        dispatch({ type: AUTH_ACTIONS.LOGOUT });
       }
     } catch (error) {
-      logger.error('Session restore failed. Token might be invalid or expired.', { error });
-      try {
-          localStorage.removeItem('envoyou_token');
-          localStorage.removeItem('envoyou_user');
-      } catch (error) {
-          console.warn('localStorage not available (incognito mode):', error);
-      }
+      console.error('Auth status check failed:', error);
+      localStorage.removeItem('envoyou_token');
+      localStorage.removeItem('envoyou_user');
       dispatch({ type: AUTH_ACTIONS.LOGOUT });
     } finally {
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
@@ -204,24 +232,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Social Login functions
-  const googleLogin = async (code) => {
+  // Social Login functions using Supabase
+  const googleLogin = async () => {
     dispatch({ type: AUTH_ACTIONS.LOGIN_START });
     try {
-      const data = await apiService.googleLogin(code);
+      const supabase = getSupabaseClient();
 
-      if (!data.access_token || !data.user) {
-        throw new Error('Google login response is missing token or user data.');
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+
+      if (error) {
+        throw error;
       }
 
-      localStorage.setItem('envoyou_token', data.access_token);
-      localStorage.setItem('envoyou_user', JSON.stringify(data.user));
-
-      dispatch({
-        type: AUTH_ACTIONS.LOGIN_SUCCESS,
-        payload: { token: data.access_token, user: data.user },
-      });
-      logger.info(`User ${data.user.email} logged in with Google successfully.`);
+      // OAuth redirect will happen automatically
       return { success: true };
     } catch (error) {
       logger.error('Google login failed', { error: error.message });
@@ -233,23 +261,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const githubLogin = async (code) => {
+  const githubLogin = async () => {
     dispatch({ type: AUTH_ACTIONS.LOGIN_START });
     try {
-      const data = await apiService.githubLogin(code);
+      const supabase = getSupabaseClient();
 
-      if (!data.access_token || !data.user) {
-        throw new Error('GitHub login response is missing token or user data.');
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      });
+
+      if (error) {
+        throw error;
       }
 
-      localStorage.setItem('envoyou_token', data.access_token);
-      localStorage.setItem('envoyou_user', JSON.stringify(data.user));
-
-      dispatch({
-        type: AUTH_ACTIONS.LOGIN_SUCCESS,
-        payload: { token: data.access_token, user: data.user },
-      });
-      logger.info(`User ${data.user.email} logged in with GitHub successfully.`);
+      // OAuth redirect will happen automatically
       return { success: true };
     } catch (error) {
       logger.error('GitHub login failed', { error: error.message });
@@ -261,16 +289,41 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Handle OAuth callback
+  const handleAuthCallback = useCallback(async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data.session) {
+        await checkAuthStatus(); // This will handle the login success
+        return { success: true };
+      } else {
+        throw new Error('No session found after OAuth callback');
+      }
+    } catch (error) {
+      logger.error('OAuth callback failed', { error: error.message });
+      dispatch({
+        type: AUTH_ACTIONS.LOGIN_FAILURE,
+        payload: error.message || 'Authentication failed',
+      });
+      return { success: false, error: error.message };
+    }
+  }, [checkAuthStatus]);
+
   // Logout function
   const logout = async () => {
     const userEmail = state.user?.email;
-    // Optional: Call an API endpoint to invalidate the token on the server side
-    // try {
-    //   await apiService.post('/auth/logout');
-    //   logger.info('Server-side token invalidated.');
-    // } catch (error) {
-    //   logger.error('Failed to invalidate server-side token on logout.', { error });
-    // }
+    try {
+      const supabase = getSupabaseClient();
+      await supabase.auth.signOut();
+    } catch (error) {
+      logger.error('Supabase logout failed', { error });
+    }
 
     localStorage.removeItem('envoyou_token');
     localStorage.removeItem('envoyou_user');
@@ -290,14 +343,33 @@ export const AuthProvider = ({ children }) => {
     register,
     googleLogin,
     githubLogin,
+    handleAuthCallback,
     logout,
     clearError,
     checkAuthStatus,
   };
 
-  // Load user from localStorage on app start
+  // Load user from localStorage on app start and listen for auth changes
   useEffect(() => {
     checkAuthStatus();
+
+    // Listen for auth state changes
+    const supabase = getSupabaseClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Supabase auth state changed:', event, session?.user?.email);
+
+      if (event === 'SIGNED_IN' && session) {
+        await checkAuthStatus();
+      } else if (event === 'SIGNED_OUT') {
+        localStorage.removeItem('envoyou_token');
+        localStorage.removeItem('envoyou_user');
+        dispatch({ type: AUTH_ACTIONS.LOGOUT });
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [checkAuthStatus]);
 
   return (

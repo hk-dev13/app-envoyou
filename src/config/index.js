@@ -75,6 +75,11 @@ export const EXTERNAL_SERVICES = {
     enabled: true, // Enable Sentry if DSN is available, regardless of environment
     dsn: import.meta.env.VITE_SENTRY_DSN,
   },
+  supabase: {
+    enabled: true,
+    url: import.meta.env.VITE_SUPABASE_URL,
+    anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+  },
 };
 
 // Security Configuration

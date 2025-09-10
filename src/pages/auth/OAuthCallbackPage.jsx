@@ -1,61 +1,34 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { API_CONFIG } from '../../config';
 
 const OAuthCallbackPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
-  const { googleLogin, githubLogin, error } = useAuth();
+  const { handleAuthCallback, error } = useAuth();
 
   useEffect(() => {
-    const handleOAuthCallback = async () => {
-      const code = searchParams.get('code');
-      const state = searchParams.get('state');
+    const handleCallback = async () => {
       const error = searchParams.get('error');
+      const errorDescription = searchParams.get('error_description');
 
       if (error) {
-        console.error('OAuth error:', error);
+        console.error('OAuth error:', error, errorDescription);
         navigate('/auth/login', {
-          state: { error: `Authentication failed: ${error}` }
+          state: { error: `Authentication failed: ${errorDescription || error}` }
         });
         return;
       }
-
-      if (!code) {
-        console.error('No authorization code received');
-        navigate('/auth/login', {
-          state: { error: 'No authorization code received' }
-        });
-        return;
-      }
-
-      // Determine provider from URL path
-      const pathSegments = location.pathname.split('/');
-      const provider = pathSegments[pathSegments.length - 2]; // 'google' or 'github' from /auth/google/callback
-
-      console.log('OAuth callback received:', { provider, code, state });
 
       try {
-        // Use AuthContext functions to handle OAuth callback
-        let result;
-        if (provider === 'google') {
-          result = await googleLogin(code);
-        } else if (provider === 'github') {
-          result = await githubLogin(code);
-        } else {
-          throw new Error('Unknown OAuth provider');
-        }
+        const result = await handleAuthCallback();
 
         if (result.success) {
-          console.log('OAuth login successful');
-          // Navigate to dashboard
+          console.log('OAuth authentication successful');
           navigate('/dashboard', { replace: true });
         } else {
           throw new Error(result.error || 'Authentication failed');
         }
-
       } catch (err) {
         console.error('OAuth callback error:', err);
         navigate('/auth/login', {
@@ -67,10 +40,10 @@ const OAuthCallbackPage = () => {
     };
 
     // Add a small delay to prevent rapid successive calls
-    const timeoutId = setTimeout(handleOAuthCallback, 100);
+    const timeoutId = setTimeout(handleCallback, 100);
 
     return () => clearTimeout(timeoutId);
-  }, [searchParams, location.pathname, navigate]);
+  }, [searchParams, navigate, handleAuthCallback]);
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

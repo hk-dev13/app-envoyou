@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@sentry/react": "^10.10.0",
+    "@supabase/supabase-js": "^2.57.4",
     "aos": "^2.3.4",
     "chart.js": "^4.5.0",
     "lucide-react": "^0.542.0",
