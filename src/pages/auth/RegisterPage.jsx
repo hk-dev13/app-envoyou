@@ -17,7 +17,7 @@ const RegisterPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   
-  const { register, error, isLoading, clearError } = useAuth();
+  const { register, googleLogin, githubLogin, error, isLoading, clearError } = useAuth();
   const navigate = useNavigate();
 
   // Clear error when component unmounts or form changes
@@ -112,35 +112,21 @@ const RegisterPage = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      // First get the OAuth URL from backend
-      const response = await fetch(`${API_CONFIG.baseURL}/auth/google/login`);
-      if (!response.ok) {
-        throw new Error('Failed to get Google OAuth URL');
-      }
-      const data = await response.json();
-      
-      // Redirect to Google OAuth
-      window.location.href = data.auth_url;
+      await googleLogin();
+      // Supabase will handle the redirect automatically
     } catch (error) {
       console.error('Google login error:', error);
-      // You could show an error message to the user here
+      // Error will be handled by AuthContext
     }
   };
 
   const handleGithubLogin = async () => {
     try {
-      // First get the OAuth URL from backend
-      const response = await fetch(`${API_CONFIG.baseURL}/auth/github/login`);
-      if (!response.ok) {
-        throw new Error('Failed to get GitHub OAuth URL');
-      }
-      const data = await response.json();
-      
-      // Redirect to GitHub OAuth
-      window.location.href = data.auth_url;
+      await githubLogin();
+      // Supabase will handle the redirect automatically
     } catch (error) {
       console.error('GitHub login error:', error);
-      // You could show an error message to the user here
+      // Error will be handled by AuthContext
     }
   };
 
