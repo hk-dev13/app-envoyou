@@ -20,6 +20,21 @@ const RegisterPage = () => {
   const { register, googleLogin, githubLogin, error, isLoading, clearError } = useAuth();
   const navigate = useNavigate();
 
+  // Timeout protection for loading states
+  useEffect(() => {
+    let timeoutId;
+    if (isLoading) {
+      timeoutId = setTimeout(() => {
+        console.warn('Registration loading timeout - reloading page');
+        clearError();
+        window.location.reload();
+      }, 30000); // 30 second timeout
+    }
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isLoading, clearError]);
+
   // Clear error when component unmounts or form changes
   useEffect(() => {
     return () => clearError();

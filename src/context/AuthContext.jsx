@@ -90,7 +90,11 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = useCallback(async () => {
     try {
       const supabase = getSupabaseClient();
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const response = await supabase.auth.getSession();
+
+      // Safe destructuring to handle null/undefined data
+      const { data, error } = response;
+      const session = data?.session;
 
       if (error) {
         console.error('Error getting session:', error);
@@ -153,6 +157,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('envoyou_user');
       dispatch({ type: AUTH_ACTIONS.LOGOUT });
     } finally {
+      // Ensure loading is always set to false
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
     }
   }, []);
@@ -183,6 +188,9 @@ export const AuthProvider = ({ children }) => {
         payload: error.message || 'An unexpected error occurred during login.',
       });
       return { success: false, error: error.message };
+    } finally {
+      // Ensure loading is always reset
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
     }
   };
 
@@ -293,13 +301,16 @@ export const AuthProvider = ({ children }) => {
   const handleAuthCallback = useCallback(async () => {
     try {
       const supabase = getSupabaseClient();
-      const { data, error } = await supabase.auth.getSession();
+      const response = await supabase.auth.getSession();
+
+      // Safe destructuring to handle null/undefined data
+      const { data, error } = response;
 
       if (error) {
         throw error;
       }
 
-      if (data.session) {
+      if (data?.session) {
         await checkAuthStatus(); // This will handle the login success
         return { success: true };
       } else {
@@ -351,23 +362,53 @@ export const AuthProvider = ({ children }) => {
 
   // Load user from localStorage on app start and listen for auth changes
   useEffect(() => {
-    checkAuthStatus();
+    let timeoutId;
+
+    const initializeAuth = async () => {
+      try {
+        // Set a timeout to ensure loading doesn't get stuck
+        timeoutId = setTimeout(() => {
+          console.warn('Auth initialization timeout - forcing loading to false');
+          dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+        }, 10000); // 10 second timeout
+
+        await checkAuthStatus();
+      } catch (error) {
+        console.error('Auth initialization failed:', error);
+        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+      }
+    };
+
+    initializeAuth();
 
     // Listen for auth state changes
     const supabase = getSupabaseClient();
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Supabase auth state changed:', event, session?.user?.email);
 
-      if (event === 'SIGNED_IN' && session) {
-        await checkAuthStatus();
-      } else if (event === 'SIGNED_OUT') {
-        localStorage.removeItem('envoyou_token');
-        localStorage.removeItem('envoyou_user');
-        dispatch({ type: AUTH_ACTIONS.LOGOUT });
+      // Clear any existing timeout
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      try {
+        if (event === 'SIGNED_IN' && session) {
+          await checkAuthStatus();
+        } else if (event === 'SIGNED_OUT') {
+          localStorage.removeItem('envoyou_token');
+          localStorage.removeItem('envoyou_user');
+          dispatch({ type: AUTH_ACTIONS.LOGOUT });
+        }
+      } catch (error) {
+        console.error('Auth state change handler failed:', error);
+        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       }
     });
 
     return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       subscription.unsubscribe();
     };
   }, [checkAuthStatus]);

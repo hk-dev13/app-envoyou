@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -80,7 +81,9 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   const app = (
     <StrictMode>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </StrictMode>
   );
 

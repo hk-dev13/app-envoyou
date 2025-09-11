@@ -29,6 +29,19 @@ const LoginPage = () => {
     }
   }, [error, clearError]);
 
+  // Safety net: Force reset loading state after 30 seconds
+  useEffect(() => {
+    if (isLoading) {
+      const loadingTimeout = setTimeout(() => {
+        console.warn('Login loading timeout - forcing reset');
+        // This will trigger a re-render and potentially reset loading state
+        window.location.reload();
+      }, 30000); // 30 seconds timeout
+
+      return () => clearTimeout(loadingTimeout);
+    }
+  }, [isLoading]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({

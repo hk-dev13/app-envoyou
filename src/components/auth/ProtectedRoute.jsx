@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -15,6 +15,18 @@ const LoadingSpinner = () => (
 const ProtectedRoute = ({ children, requireAuth = true }) => {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
+
+  // Timeout protection for loading states
+  useEffect(() => {
+    if (isLoading) {
+      const timeoutId = setTimeout(() => {
+        console.warn('ProtectedRoute loading timeout - reloading page');
+        window.location.reload();
+      }, 15000); // 15 second timeout (shorter since this is a route guard)
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoading]);
 
   // Show loading spinner while checking authentication
   if (isLoading) {
