@@ -170,39 +170,39 @@ class APIService {
   // --- Authentication Methods ---
 
   async register(userData) {
-    return this.post('/auth/register', userData);
+    return this.post('/v1/auth/register', userData);
   }
 
   async login(credentials) {
-    return this.post('/auth/login', credentials);
+    return this.post('/v1/auth/login', credentials);
   }
 
   async logout() {
-    return this.post('/auth/logout');
+    return this.post('/v1/auth/logout');
   }
 
   async refreshToken() {
-    return this.post('/auth/refresh');
+    return this.post('/v1/auth/refresh');
   }
 
   async sendVerificationEmail(email) {
-    return this.post('/auth/send-verification', { email });
+    return this.post('/v1/auth/send-verification', { email });
   }
 
   async verifyEmail(tokenData) {
-    return this.post('/auth/verify-email', tokenData);
+    return this.post('/v1/auth/verify-email', tokenData);
   }
 
   async forgotPassword(email) {
-    return this.post('/auth/forgot-password', { email });
+    return this.post('/v1/auth/forgot-password', { email });
   }
 
   async resetPassword(token, newPassword) {
-    return this.post('/auth/reset-password', { token, new_password: newPassword });
+    return this.post('/v1/auth/reset-password', { token, new_password: newPassword });
   }
 
   async changePassword(currentPassword, newPassword) {
-    return this.post('/auth/change-password', {
+    return this.post('/v1/auth/change-password', {
       current_password: currentPassword,
       new_password: newPassword
     });
@@ -210,29 +210,29 @@ class APIService {
 
   // Social Login Methods
   async googleLogin(code) {
-    return this.post('/auth/google/token', { code });
+    return this.post('/v1/auth/google/token', { code });
   }
 
   async githubLogin(code) {
-    return this.post('/auth/github/token', { code });
+    return this.post('/v1/auth/github/token', { code });
   }
 
   async getOAuthUrl(provider) {
-    return this.get(`/auth/${provider}/url`);
+    return this.get(`/v1/auth/${provider}/url`);
   }
 
   // --- User Profile Methods ---
 
   async getUserProfile() {
-    return this.get('/user/profile');
+    return this.get('/v1/user/profile');
   }
 
   async updateUserProfile(profileData) {
-    return this.put('/user/profile', profileData);
+    return this.put('/v1/user/profile', profileData);
   }
 
   async uploadAvatar(formData) {
-    return this.request('/user/avatar', {
+    return this.request('/v1/user/avatar', {
       method: 'POST',
       body: formData,
       headers: {
@@ -245,75 +245,75 @@ class APIService {
   // --- API Keys Methods ---
 
   async getApiKeys() {
-    return this.get('/user/api-keys');
+    return this.get('/v1/user/api-keys');
   }
 
   async createApiKey(data) {
     if (typeof data === 'string') {
       // Backward compatibility: if data is just a string, treat it as name
-      return this.post('/user/api-keys', { name: data });
+      return this.post('/v1/user/api-keys', { name: data });
     } else {
       // New format: data is an object with name and environment
-      return this.post('/user/api-keys', data);
+      return this.post('/v1/user/api-keys', data);
     }
   }
 
   async deleteApiKey(keyId) {
-    return this.delete(`/user/api-keys/${keyId}`);
+    return this.delete(`/v1/user/api-keys/${keyId}`);
   }
 
   // --- Sessions Methods ---
 
   async getUserSessions() {
-    return this.get('/user/sessions');
+    return this.get('/v1/user/sessions');
   }
 
   async deleteUserSession(sessionId) {
-    return this.delete(`/user/sessions/${sessionId}`);
+    return this.delete(`/v1/user/sessions/${sessionId}`);
   }
 
   // --- 2FA Methods ---
 
   async setup2FA() {
-    return this.post('/auth/2fa/setup');
+    return this.post('/v1/auth/2fa/setup');
   }
 
   async verify2FA(code) {
-    return this.post('/auth/2fa/verify', { code });
+    return this.post('/v1/auth/2fa/verify', { code });
   }
 
   async disable2FA() {
-    return this.post('/auth/2fa/disable');
+    return this.post('/v1/auth/2fa/disable');
   }
 
   // --- Environmental Data Methods ---
 
   async getPermits(params = {}) {
-    return this.get('/permits', { params });
+    return this.get('/v1/permits', { params });
   }
 
   async searchPermits(query, params = {}) {
-    return this.get('/permits/search', { params: { q: query, ...params } });
+    return this.get('/v1/permits/search', { params: { q: query, ...params } });
   }
 
   async getActivePermits() {
-    return this.get('/permits/active');
+    return this.get('/v1/permits/active');
   }
 
   async getPermitsByCompany(companyName) {
-    return this.get(`/permits/company/${encodeURIComponent(companyName)}`);
+    return this.get(`/v1/permits/company/${encodeURIComponent(companyName)}`);
   }
 
   async getPermitsByType(permitType) {
-    return this.get(`/permits/type/${encodeURIComponent(permitType)}`);
+    return this.get(`/v1/permits/type/${encodeURIComponent(permitType)}`);
   }
 
   async getPermitStats() {
-    return this.get('/permits/stats');
+    return this.get('/v1/permits/stats');
   }
 
   async getUserStats() {
-    return this.get('/user/stats');
+    return this.get('/v1/user/stats');
   }
 
   async getCEVSData(companyName, country = null, apiKey = null) {
@@ -323,36 +323,36 @@ class APIService {
     if (country) params.country = country;
 
     const headers = apiKey ? { 'X-API-Key': apiKey } : {};
-    return this.get(`/global/cevs/${encodeURIComponent(companyName)}`, { params, headers });
+    return this.get(`/v1/global/cevs/${encodeURIComponent(companyName)}`, { params, headers });
   }
 
   async getEmissionsData(state = null, year = null, page = 1, limit = 50) {
     const params = { state, year, page, limit };
     Object.keys(params).forEach(key => params[key] == null && delete params[key]);
-    return this.get('/global/emissions', { params });
+    return this.get('/v1/global/emissions', { params });
   }
 
   async getCountries(country = null, limit = 50) {
     const params = { country, limit };
     Object.keys(params).forEach(key => params[key] == null && delete params[key]);
-    return this.get('/global/iso', { params });
+    return this.get('/v1/global/iso', { params });
   }
 
   async submitAPIKeyRequest(formData) {
     // Use the correct backend endpoint for free API key requests
-    return this.post('/auth/request-free-api-key', formData);
+    return this.post('/v1/auth/request-free-api-key', formData);
   }
 
   async testAPIKey(apiKey) {
     // Use a working endpoint for testing API keys
-    return this.get('/health', {
+    return this.get('/v1/health', {
       headers: { 'X-API-Key': apiKey },
     });
   }
 
   async requestDemoKey(clientName = "Demo User") {
     // Use the free API key endpoint for demo requests
-    const data = await this.post('/auth/request-free-api-key', {
+    const data = await this.post('/v1/auth/request-free-api-key', {
       name: clientName,
       email: 'demo@example.com',
       purpose: 'Demo testing'
