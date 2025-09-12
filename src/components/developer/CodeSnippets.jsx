@@ -1,23 +1,64 @@
 import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Separator } from '../ui/separator';
+import {
+  Copy,
+  Check,
+  Code2,
+  FileText,
+  Key,
+  AlertTriangle,
+  CheckCircle,
+  Zap
+} from 'lucide-react';
 
 const CodeSnippets = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState('javascript');
   const [selectedEndpoint, setSelectedEndpoint] = useState('verify');
-
-  const languages = [
-    { id: 'javascript', name: 'JavaScript', icon: '🟨' },
-    { id: 'python', name: 'Python', icon: '🐍' },
-    { id: 'curl', name: 'cURL', icon: '📡' },
-    { id: 'php', name: 'PHP', icon: '🐘' },
-    { id: 'ruby', name: 'Ruby', icon: '💎' },
-    { id: 'go', name: 'Go', icon: '🐹' }
-  ];
+  const [copiedStates, setCopiedStates] = useState({});
 
   const endpoints = [
-    { id: 'verify', name: 'Data Verification', description: 'Verify environmental data' },
-    { id: 'data', name: 'Get Data', description: 'Retrieve environmental data' },
-    { id: 'auth', name: 'Authentication', description: 'User authentication' }
+    {
+      id: 'verify',
+      name: 'Data Verification',
+      description: 'Verify environmental data',
+      icon: CheckCircle,
+      color: 'text-emerald-400'
+    },
+    {
+      id: 'data',
+      name: 'Get Data',
+      description: 'Retrieve environmental data',
+      icon: FileText,
+      color: 'text-blue-400'
+    },
+    {
+      id: 'auth',
+      name: 'Authentication',
+      description: 'User authentication',
+      icon: Key,
+      color: 'text-purple-400'
+    }
   ];
+
+  const copyToClipboard = async (language, endpoint) => {
+    const code = codeSnippets[language]?.[endpoint] || '';
+    try {
+      await navigator.clipboard.writeText(code);
+      const key = `${language}-${endpoint}`;
+      setCopiedStates(prev => ({ ...prev, [key]: true }));
+      setTimeout(() => {
+        setCopiedStates(prev => ({ ...prev, [key]: false }));
+      }, 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const selectedEndpointData = endpoints.find(e => e.id === selectedEndpoint);
+  const EndpointIcon = selectedEndpointData?.icon;
 
   const codeSnippets = {
     javascript: {
@@ -741,146 +782,210 @@ func main() {
     }
   };
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    // You could add a toast notification here
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-white">Code Snippets</h2>
-        <p className="text-slate-400 mt-1">Ready-to-use code examples for integrating with EnvoyOU API</p>
-      </div>
-
-      {/* Language Selector */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-        <h3 className="text-white font-medium mb-3">Choose your language</h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-          {languages.map((lang) => (
-            <button
-              key={lang.id}
-              onClick={() => setSelectedLanguage(lang.id)}
-              className={`p-3 rounded-lg border transition-colors ${
-                selectedLanguage === lang.id
-                  ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                  : 'border-slate-600 bg-slate-700/30 text-slate-300 hover:border-slate-500'
-              }`}
-            >
-              <div className="text-center">
-                <div className="text-2xl mb-1">{lang.icon}</div>
-                <div className="text-sm font-medium">{lang.name}</div>
-              </div>
-            </button>
-          ))}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold text-white">Code Snippets</h2>
+          <p className="text-slate-400 mt-1">Ready-to-use code examples in multiple languages</p>
         </div>
+        <Badge variant="secondary" className="bg-emerald-600/20 text-emerald-400 border-emerald-600/30">
+          <Code2 className="h-3 w-3 mr-1" />
+          6 Languages
+        </Badge>
       </div>
 
-      {/* Endpoint Selector */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-        <h3 className="text-white font-medium mb-3">Choose an endpoint</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {endpoints.map((endpoint) => (
-            <button
+      {/* Endpoint Selection */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {endpoints.map((endpoint) => {
+          const Icon = endpoint.icon;
+          const isSelected = selectedEndpoint === endpoint.id;
+
+          return (
+            <Card
               key={endpoint.id}
-              onClick={() => setSelectedEndpoint(endpoint.id)}
-              className={`p-4 rounded-lg border text-left transition-colors ${
-                selectedEndpoint === endpoint.id
-                  ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                  : 'border-slate-600 bg-slate-700/30 text-slate-300 hover:border-slate-500'
+              className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
+                isSelected
+                  ? 'bg-slate-800/80 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
+                  : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
               }`}
+              onClick={() => setSelectedEndpoint(endpoint.id)}
             >
-              <div className="font-medium">{endpoint.name}</div>
-              <div className="text-sm opacity-75">{endpoint.description}</div>
-            </button>
-          ))}
-        </div>
+              <CardHeader className="pb-3">
+                <div className="flex items-center space-x-3">
+                  <div className={`p-2 rounded-lg ${isSelected ? 'bg-emerald-600/20' : 'bg-slate-700/50'}`}>
+                    <Icon className={`h-5 w-5 ${endpoint.color}`} />
+                  </div>
+                  <div>
+                    <CardTitle className={`text-lg ${isSelected ? 'text-emerald-400' : 'text-white'}`}>
+                      {endpoint.name}
+                    </CardTitle>
+                    <CardDescription className="text-slate-400">
+                      {endpoint.description}
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Code Snippet */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg overflow-hidden">
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
-          <div className="flex items-center space-x-3">
-            <span className="text-slate-400 text-sm">Example code for</span>
-            <span className="text-white font-medium">
-              {endpoints.find(e => e.id === selectedEndpoint)?.name}
-            </span>
-            <span className="text-slate-400">in</span>
-            <span className="text-emerald-400 font-medium">
-              {languages.find(l => l.id === selectedLanguage)?.name}
-            </span>
+      {/* Code Tabs */}
+      <Card className="bg-slate-800/50 border-slate-700">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              {EndpointIcon && <EndpointIcon className={`h-5 w-5 ${selectedEndpointData?.color}`} />}
+              <div>
+                <CardTitle className="text-white">
+                  {selectedEndpointData?.name} Example
+                </CardTitle>
+                <CardDescription>
+                  Implementation in different programming languages
+                </CardDescription>
+              </div>
+            </div>
+            <Badge variant="outline" className="text-slate-400 border-slate-600">
+              Don't forget to replace YOUR_API_KEY
+            </Badge>
           </div>
-          <button
-            onClick={() => copyToClipboard(codeSnippets[selectedLanguage]?.[selectedEndpoint] || '')}
-            className="px-3 py-1 bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm rounded transition-colors flex items-center space-x-1"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
-            <span>Copy</span>
-          </button>
-        </div>
-        <div className="p-4">
-          <pre className="text-sm text-slate-300 overflow-x-auto bg-slate-900/50 p-4 rounded border border-slate-600">
-            <code>{codeSnippets[selectedLanguage]?.[selectedEndpoint] || 'Code snippet not available for this language/endpoint combination.'}</code>
-          </pre>
-        </div>
-      </div>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="javascript" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 bg-slate-900/50">
+              <TabsTrigger value="javascript" className="text-xs">JavaScript</TabsTrigger>
+              <TabsTrigger value="python" className="text-xs">Python</TabsTrigger>
+              <TabsTrigger value="curl" className="text-xs">cURL</TabsTrigger>
+              <TabsTrigger value="php" className="text-xs">PHP</TabsTrigger>
+              <TabsTrigger value="ruby" className="text-xs">Ruby</TabsTrigger>
+              <TabsTrigger value="go" className="text-xs">Go</TabsTrigger>
+            </TabsList>
+
+            {['javascript', 'python', 'curl', 'php', 'ruby', 'go'].map((language) => (
+              <TabsContent key={language} value={language} className="mt-4">
+                <div className="relative">
+                  <div className="flex items-center justify-between p-3 bg-slate-900/50 border border-slate-600 rounded-t-lg">
+                    <span className="text-sm text-slate-400 capitalize">{language}</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => copyToClipboard(language, selectedEndpoint)}
+                      className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+                    >
+                      {copiedStates[`${language}-${selectedEndpoint}`] ? (
+                        <>
+                          <Check className="h-4 w-4 mr-2 text-emerald-400" />
+                          Copied!
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="h-4 w-4 mr-2" />
+                          Copy
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  <pre className="bg-slate-900/50 p-4 rounded-b-lg border-x border-b border-slate-600 overflow-x-auto text-sm">
+                    <code className="text-slate-300 font-mono leading-relaxed">
+                      {codeSnippets[language]?.[selectedEndpoint] || 'Code snippet not available for this language/endpoint combination.'}
+                    </code>
+                  </pre>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
+        </CardContent>
+      </Card>
 
       {/* Quick Start Guide */}
-      <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-        <h3 className="text-xl font-bold text-white mb-4">Quick Start Guide</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h4 className="text-lg font-medium text-white mb-3">1. Get Your API Key</h4>
-            <p className="text-slate-300 mb-3">
-              Create an API key from the API Keys tab above. You'll need this for authentication.
-            </p>
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
-              <code className="text-emerald-400 text-sm">
-                Authorization: Bearer YOUR_API_KEY
-              </code>
-            </div>
-          </div>
+      <Card className="bg-slate-800/50 border-slate-700">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center">
+            <Zap className="h-5 w-5 mr-2 text-yellow-400" />
+            Quick Start Guide
+          </CardTitle>
+          <CardDescription>
+            Get up and running with the EnvoyOU API in minutes
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  1
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-white mb-2">Get Your API Key</h4>
+                  <p className="text-slate-300 mb-3">
+                    Create an API key from the API Keys section. You'll need this for authentication.
+                  </p>
+                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                    <code className="text-emerald-400 text-sm font-mono">
+                      Authorization: Bearer YOUR_API_KEY
+                    </code>
+                  </div>
+                </div>
+              </div>
 
-          <div>
-            <h4 className="text-lg font-medium text-white mb-3">2. Make Your First Request</h4>
-            <p className="text-slate-300 mb-3">
-              Use the code snippets above to make your first API call. Start with authentication.
-            </p>
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
-              <code className="text-blue-400 text-sm">
-                POST https://api.envoyou.com/v1/auth/login
-              </code>
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  2
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-white mb-2">Make Your First Request</h4>
+                  <p className="text-slate-300 mb-3">
+                    Use the code snippets above to make your first API call. Start with authentication.
+                  </p>
+                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                    <code className="text-blue-400 text-sm font-mono">
+                      POST /v1/auth/login
+                    </code>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <h4 className="text-lg font-medium text-white mb-3">3. Handle Rate Limits</h4>
-            <p className="text-slate-300 mb-3">
-              Monitor your usage in the Analytics tab. Respect rate limits to avoid throttling.
-            </p>
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
-              <code className="text-yellow-400 text-sm">
-                X-RateLimit-Remaining: 999
-              </code>
-            </div>
-          </div>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  3
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-white mb-2">Monitor Rate Limits</h4>
+                  <p className="text-slate-300 mb-3">
+                    Keep an eye on your usage in the Analytics section. Respect rate limits to avoid throttling.
+                  </p>
+                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                    <code className="text-yellow-400 text-sm font-mono">
+                      X-RateLimit-Remaining: 999
+                    </code>
+                  </div>
+                </div>
+              </div>
 
-          <div>
-            <h4 className="text-lg font-medium text-white mb-3">4. Error Handling</h4>
-            <p className="text-slate-300 mb-3">
-              Always handle API errors gracefully. Check the response status and error messages.
-            </p>
-            <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
-              <code className="text-red-400 text-sm">
-                {`{ "error": "Invalid API key" }`}
-              </code>
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                  4
+                </div>
+                <div>
+                  <h4 className="text-lg font-medium text-white mb-2">Handle Errors</h4>
+                  <p className="text-slate-300 mb-3">
+                    Always handle API errors gracefully. Check response status and error messages.
+                  </p>
+                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                    <code className="text-red-400 text-sm font-mono">
+                      {`{ "error": "Invalid API key" }`}
+                    </code>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
