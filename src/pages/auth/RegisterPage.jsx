@@ -122,6 +122,22 @@ const RegisterPage = () => {
     
     if (result.success) {
       navigate('/auth/register-success');
+    } else if (error && error.includes("Email already registered")) {
+      // Check if this might be an OAuth user who wants to set a password
+      setValidationErrors({
+        email: (
+          <div>
+            This email is already registered with social login.{' '}
+            <Link
+              to={`/auth/set-password?email=${encodeURIComponent(formData.email)}`}
+              className="text-emerald-400 hover:text-emerald-300 underline"
+            >
+              Click here to set a password
+            </Link>{' '}
+            for traditional login.
+          </div>
+        )
+      });
     }
   };
 
@@ -463,6 +479,20 @@ const RegisterPage = () => {
             </button>
           </div>
         </form>
+
+        {/* Link to set password for OAuth users */}
+        <div className="text-center mt-4">
+          <p className="text-sm text-slate-400">
+            Already have an account with social login?{' '}
+            <Link
+              to="/auth/set-password"
+              className="text-emerald-400 hover:text-emerald-300 underline"
+            >
+              Set a password
+            </Link>{' '}
+            for traditional login.
+          </p>
+        </div>
       </div>
     </div>
   );

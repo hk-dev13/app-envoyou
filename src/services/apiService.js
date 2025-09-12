@@ -193,6 +193,10 @@ class APIService {
     return this.post('/v1/auth/verify-email', tokenData);
   }
 
+  async setPassword(email, password) {
+    return this.post('/v1/auth/set-password', { email, password });
+  }
+
   async forgotPassword(email) {
     return this.post('/v1/auth/forgot-password', { email });
   }
