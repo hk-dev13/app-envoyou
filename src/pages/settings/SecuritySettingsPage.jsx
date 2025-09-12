@@ -4,14 +4,19 @@ import { useAuth } from '../../hooks/useAuth';
 import apiService from '../../services/apiService';
 
 function SecuritySettingsPage() {
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [localPassword, setLocalPassword] = useState('');
+    const [confirmLocalPassword, setConfirmLocalPassword] = useState('');
     const [showCurrentPassword, setShowCurrentPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showLocalPassword, setShowLocalPassword] = useState(false);
+    const [showConfirmLocalPassword, setShowConfirmLocalPassword] = useState(false);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
+    const [isSettingLocalPassword, setIsSettingLocalPassword] = useState(false);
     const [message, setMessage] = useState('');
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
@@ -47,6 +52,42 @@ function SecuritySettingsPage() {
             setTimeout(() => setMessage(''), 3000);
         } finally {
             setIsChangingPassword(false);
+        }
+    };
+
+    const handleSetLocalPassword = async (e) => {
+        e.preventDefault();
+        setIsSettingLocalPassword(true);
+        setMessage('');
+
+        // Validation
+        if (localPassword.length < 8) {
+            setMessage('Password must be at least 8 characters long.');
+            setIsSettingLocalPassword(false);
+            return;
+        }
+
+        if (localPassword !== confirmLocalPassword) {
+            setMessage('Passwords do not match.');
+            setIsSettingLocalPassword(false);
+            return;
+        }
+
+        try {
+            await apiService.setLocalPassword(localPassword);
+            
+            setMessage('Local password set successfully! You can now log in with your email and password.');
+            setLocalPassword('');
+            setConfirmLocalPassword('');
+            // Refresh user data to update has_local_password status
+            window.location.reload();
+            setTimeout(() => setMessage(''), 5000);
+        } catch (error) {
+            console.error('Failed to set local password:', error);
+            setMessage('Failed to set local password. Please try again.');
+            setTimeout(() => setMessage(''), 3000);
+        } finally {
+            setIsSettingLocalPassword(false);
         }
     };
 
@@ -107,7 +148,121 @@ function SecuritySettingsPage() {
                     </div>
                 )}
 
-                {/* Change Password Section */}
+                {/* Set Local Password Section - Only for OAuth users without local password */}
+                {user?.auth_provider && !user?.has_local_password && (
+                    <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+                        <div className="mb-6">
+                            <h2 className="text-2xl font-semibold text-white mb-2">Set a Password for Your Account</h2>
+                            <p className="text-slate-400">
+                                You signed up with {user.auth_provider}. If you'd like, you can also create a password to log in without {user.auth_provider}.
+                            </p>
+                        </div>
+
+                        <form onSubmit={handleSetLocalPassword} className="space-y-4">
+                            {/* New Password */}
+                            <div>
+                                <label className="block text-sm font-medium text-white mb-2">
+                                    New Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type={showLocalPassword ? 'text' : 'password'}
+                                        value={localPassword}
+                                        onChange={(e) => setLocalPassword(e.target.value)}
+                                        className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                        placeholder="Enter your new password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowLocalPassword(!showLocalPassword)}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showLocalPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
+                                            {!showLocalPassword && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />}
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div>
+                                <label className="block text-sm font-medium text-white mb-2">
+                                    Confirm New Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type={showConfirmLocalPassword ? 'text' : 'password'}
+                                        value={confirmLocalPassword}
+                                        onChange={(e) => setConfirmLocalPassword(e.target.value)}
+                                        className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                        placeholder="Confirm your new password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowConfirmLocalPassword(!showConfirmLocalPassword)}
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showConfirmLocalPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
+                                            {!showConfirmLocalPassword && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />}
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Password Requirements */}
+                            <div className="bg-slate-800/50 rounded-lg p-4">
+                                <h4 className="text-white font-medium mb-2">Password Requirements:</h4>
+                                <ul className="text-slate-400 text-sm space-y-1">
+                                    <li className="flex items-center">
+                                        <svg className={`w-4 h-4 mr-2 ${localPassword.length >= 8 ? 'text-emerald-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        At least 8 characters long
+                                    </li>
+                                    <li className="flex items-center">
+                                        <svg className={`w-4 h-4 mr-2 ${/[A-Z]/.test(localPassword) ? 'text-emerald-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        At least one uppercase letter
+                                    </li>
+                                    <li className="flex items-center">
+                                        <svg className={`w-4 h-4 mr-2 ${/[a-z]/.test(localPassword) ? 'text-emerald-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        At least one lowercase letter
+                                    </li>
+                                    <li className="flex items-center">
+                                        <svg className={`w-4 h-4 mr-2 ${/\d/.test(localPassword) ? 'text-emerald-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        At least one number
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={isSettingLocalPassword}
+                                className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isSettingLocalPassword && (
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                )}
+                                {isSettingLocalPassword ? 'Setting Password...' : 'Set Password'}
+                            </button>
+                        </form>
+                    </div>
+                )}
+
+                {/* Change Password Section - Only show if user has local password */}
+                {user?.has_local_password && (
                 <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
                     <div className="mb-6">
                         <h2 className="text-2xl font-semibold text-white mb-2">Change Password</h2>
@@ -244,6 +399,7 @@ function SecuritySettingsPage() {
                         </button>
                     </form>
                 </div>
+                )}
 
                 {/* Two-Factor Authentication */}
                 <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">

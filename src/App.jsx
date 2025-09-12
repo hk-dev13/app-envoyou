@@ -19,6 +19,8 @@ const RegisterSuccessPage = lazy(() => import('./pages/auth/RegisterSuccessPage'
 const OAuthCallbackPage = lazy(() => import('./pages/auth/OAuthCallbackPage'));
 const EmailVerificationPage = lazy(() => import('./pages/auth/EmailVerificationPage'));
 const SetPasswordPage = lazy(() => import('./pages/auth/SetPasswordPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage'));
 const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsPage'));
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
@@ -61,6 +63,8 @@ const AppContent = () => {
             <Route path="/auth/callback" element={<OAuthCallbackPage />} />
             <Route path="/auth/v1/callback" element={<OAuthCallbackPage />} />
             <Route path="/auth/set-password" element={<SetPasswordPage />} />
+            <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
             <Route path="/verify/:token" element={<EmailVerificationPage />} />
             
             {/* Protected dashboard routes */}

@@ -197,12 +197,16 @@ class APIService {
     return this.post('/v1/auth/set-password', { email, password });
   }
 
+  async setLocalPassword(password) {
+    return this.post('/v1/auth/set-local-password', { password });
+  }
+
   async forgotPassword(email) {
     return this.post('/v1/auth/forgot-password', { email });
   }
 
   async resetPassword(token, newPassword) {
-    return this.post('/v1/auth/reset-password', { token, new_password: newPassword });
+    return this.post('/v1/auth/reset-password', { token, password: newPassword });
   }
 
   async changePassword(currentPassword, newPassword) {
