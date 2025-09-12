@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import React, { Suspense, lazy, useEffect } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth';
@@ -17,6 +17,7 @@ const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 const RegisterSuccessPage = lazy(() => import('./pages/auth/RegisterSuccessPage'));
 const OAuthCallbackPage = lazy(() => import('./pages/auth/OAuthCallbackPage'));
+const EmailVerificationPage = lazy(() => import('./pages/auth/EmailVerificationPage'));
 const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsPage'));
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
@@ -34,16 +35,6 @@ const PageLoader = () => (
   </div>
 );
 
-// Email verification redirect component
-const EmailVerificationRedirect = () => {
-  const { token } = useParams();
-  useEffect(() => {
-    window.location.href = `https://envoyou.com/verify/${token}`;
-  }, [token]);
-  return <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white">Redirecting to email verification...</div>;
-};
-
-// Main App component that uses auth context
 const AppContent = () => {
   const { isAuthenticated } = useAuth();
 
@@ -68,7 +59,7 @@ const AppContent = () => {
             <Route path="/auth/register-success" element={<RegisterSuccessPage />} />
             <Route path="/auth/callback" element={<OAuthCallbackPage />} />
             <Route path="/auth/v1/callback" element={<OAuthCallbackPage />} />
-            <Route path="/verify/:token" element={<EmailVerificationRedirect />} />
+            <Route path="/verify/:token" element={<EmailVerificationPage />} />
             
             {/* Protected dashboard routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
