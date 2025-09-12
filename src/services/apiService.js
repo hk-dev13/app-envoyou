@@ -135,6 +135,11 @@ class APIService {
       });
     }
 
+    // If we get here, all attempts failed
+    if (!lastError) {
+      lastError = new Error('Request failed after all retry attempts');
+    }
+
     throw lastError;
   }
 

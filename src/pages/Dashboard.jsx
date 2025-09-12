@@ -14,6 +14,7 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserStats = async () => {
@@ -33,12 +34,13 @@ const Dashboard = () => {
         console.error('Failed to fetch user stats:', err);
         
         // Check if it's an authentication error
-        if (err.response?.status === 403 || err.response?.status === 401) {
+        if (err?.type === 'authentication_error' || err?.code === 'AUTH_REQUIRED') {
+          setError('Your session has expired. Please log in again.');
+          // Don't auto-redirect from dashboard, let user handle it
+        } else if (err?.code === 'ACCESS_DENIED') {
           setError('Please get an API key to view your usage statistics');
-        } else if (err.response?.status === 404) {
-          setError('User statistics not available yet');
         } else {
-          setError('Failed to load dashboard data');
+          setError(err?.message || 'Failed to load dashboard data');
         }
         
         // Keep dummy data as fallback

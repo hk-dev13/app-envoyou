@@ -247,20 +247,28 @@ class ErrorHandler {
       logger.info('Session cleared due to authentication error');
     }
 
-    // Redirect to login
+    // Only redirect if we're not already on a protected page
+    // Check if we're on dashboard or other protected routes
     if (typeof window !== 'undefined') {
       const currentPath = window.location.pathname;
-      const loginUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
+      const isOnProtectedPage = currentPath.startsWith('/dashboard') || 
+                               currentPath.startsWith('/settings') ||
+                               currentPath.includes('/verify/');
       
-      setTimeout(() => {
-        window.location.href = loginUrl;
-      }, 1000);
+      if (!isOnProtectedPage) {
+        const loginUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
+        
+        setTimeout(() => {
+          window.location.href = loginUrl;
+        }, 1000);
+      }
     }
 
     return {
       type: 'authentication_error',
       message: errorInfo.userMessage,
       action: 'redirect_to_login',
+      shouldRedirect: typeof window !== 'undefined' && !window.location.pathname.startsWith('/dashboard'),
     };
   }
 
