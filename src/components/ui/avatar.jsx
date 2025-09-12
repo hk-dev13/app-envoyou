@@ -1,45 +1,58 @@
-import * as React from "react"
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import React from 'react';
 
-import { cn } from "@/lib/utils"
-
-function Avatar({
-  className,
+const Avatar = React.forwardRef(({
+  className = '',
+  children,
   ...props
-}) {
+}, ref) => {
   return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
-      className={cn("relative flex size-8 shrink-0 overflow-hidden rounded-full", className)}
-      {...props} />
+    <div
+      ref={ref}
+      className={`relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full ${className}`}
+      {...props}
+    >
+      {children}
+    </div>
   );
-}
+});
 
-function AvatarImage({
-  className,
+Avatar.displayName = 'Avatar';
+
+const AvatarImage = React.forwardRef(({
+  className = '',
+  src,
+  alt = '',
   ...props
-}) {
+}, ref) => {
   return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
-      {...props} />
+    <img
+      ref={ref}
+      src={src}
+      alt={alt}
+      className={`aspect-square h-full w-full ${className}`}
+      {...props}
+    />
   );
-}
+});
 
-function AvatarFallback({
-  className,
+AvatarImage.displayName = 'AvatarImage';
+
+const AvatarFallback = React.forwardRef(({
+  className = '',
+  children,
   ...props
-}) {
+}, ref) => {
   return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
-      className={cn(
-        "bg-muted flex size-full items-center justify-center rounded-full",
-        className
-      )}
-      {...props} />
+    <div
+      ref={ref}
+      className={`flex h-full w-full items-center justify-center rounded-full bg-muted ${className}`}
+      {...props}
+    >
+      {children}
+    </div>
   );
-}
+});
 
-export { Avatar, AvatarImage, AvatarFallback }
+AvatarFallback.displayName = 'AvatarFallback';
+
+export { Avatar, AvatarImage, AvatarFallback };

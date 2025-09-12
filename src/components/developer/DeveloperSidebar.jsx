@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { cn } from '../../lib/utils';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
@@ -117,12 +116,11 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
             <Link
               key={item.id}
               to={item.path}
-              className={cn(
-                'flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+              className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 active
                   ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30'
                   : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-              )}
+              }`}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
