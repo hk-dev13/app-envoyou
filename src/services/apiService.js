@@ -329,6 +329,18 @@ class APIService {
     return this.get('/v1/user/stats');
   }
 
+  async getDeveloperStats() {
+    return this.get('/v1/developer/stats');
+  }
+
+  async getUsageAnalytics(params = {}) {
+    return this.get('/v1/developer/usage-analytics', { params });
+  }
+
+  async getRateLimits() {
+    return this.get('/v1/developer/rate-limits');
+  }
+
   async getCEVSData(companyName, country = null, apiKey = null) {
     if (!companyName) throw new Error('Company name is required for CEVS lookup');
     

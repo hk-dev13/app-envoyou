@@ -1,0 +1,19 @@
+import React from 'react';
+import DeveloperLayout from '../../../components/developer/DeveloperLayout';
+import CodeSnippets from '../../../components/developer/CodeSnippets';
+
+const SnippetsPage = () => {
+  return (
+    <DeveloperLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Code Snippets</h1>
+          <p className="text-slate-400 mt-2">Ready-to-use code examples for integrating with EnvoyOU API</p>
+        </div>
+        <CodeSnippets />
+      </div>
+    </DeveloperLayout>
+  );
+};
+
+export default SnippetsPage;

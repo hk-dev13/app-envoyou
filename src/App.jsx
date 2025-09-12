@@ -25,6 +25,14 @@ const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsP
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
 
+// Developer Dashboard pages
+const DeveloperDashboard = lazy(() => import('./pages/developer-dashboard/DeveloperDashboard'));
+const APIDocsPage = lazy(() => import('./pages/developer-dashboard/api-docs'));
+const APIKeysPage = lazy(() => import('./pages/developer-dashboard/api-keys'));
+const AnalyticsPage = lazy(() => import('./pages/developer-dashboard/analytics'));
+const SnippetsPage = lazy(() => import('./pages/developer-dashboard/snippets'));
+const RateLimitsPage = lazy(() => import('./pages/developer-dashboard/rate-limits'));
+
 // Import ProtectedRoute
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
@@ -75,6 +83,14 @@ const AppContent = () => {
             <Route path="/settings/profile" element={<ProtectedRoute><ProfileSettingsPage /></ProtectedRoute>} />
             <Route path="/settings/api-keys" element={<ProtectedRoute><APIKeysSettingsPage /></ProtectedRoute>} />
             <Route path="/settings/security" element={<ProtectedRoute><SecuritySettingsPage /></ProtectedRoute>} />
+            
+            {/* Developer Dashboard routes */}
+            <Route path="/developer" element={<ProtectedRoute><DeveloperDashboard /></ProtectedRoute>} />
+            <Route path="/developer/api-docs" element={<ProtectedRoute><APIDocsPage /></ProtectedRoute>} />
+            <Route path="/developer/api-keys" element={<ProtectedRoute><APIKeysPage /></ProtectedRoute>} />
+            <Route path="/developer/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
+            <Route path="/developer/snippets" element={<ProtectedRoute><SnippetsPage /></ProtectedRoute>} />
+            <Route path="/developer/rate-limits" element={<ProtectedRoute><RateLimitsPage /></ProtectedRoute>} />
             
             {/* Catch all - redirect to dashboard or login */}
             <Route 
