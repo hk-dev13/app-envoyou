@@ -20,7 +20,7 @@ const AUTH_ACTIONS = {
 const initialState = {
   user: null,
   token: null,
-  isLoading: true,
+  isLoading: false, // Start with false, set to true only when checking auth status
   error: null,
   isAuthenticated: false,
 };
@@ -88,9 +88,17 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const checkAuthStatus = useCallback(async () => {
+    dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
     try {
       const supabase = getSupabaseClient();
-      const response = await supabase.auth.getSession();
+
+      // Add timeout to Supabase getSession call
+      const response = await Promise.race([
+        supabase.auth.getSession(),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Supabase session timeout')), 10000)
+        )
+      ]);
 
       // Safe destructuring to handle null/undefined data
       const { data, error } = response;
@@ -103,9 +111,14 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (session?.user) {
-        // Get user profile from your API
+        // Get user profile from your API with timeout protection
         try {
-          const userData = await apiService.getUserProfile();
+          const userData = await Promise.race([
+            apiService.getUserProfile(),
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error('API timeout')), 5000)
+            )
+          ]);
 
           // Store both Supabase session and API token
           localStorage.setItem('envoyou_token', session.access_token);
@@ -126,8 +139,8 @@ export const AuthProvider = ({ children }) => {
           });
           logger.info('User session restored successfully.');
         } catch (apiError) {
-          console.error('Error fetching user profile:', apiError);
-          // Fallback to Supabase user data
+          console.warn('API call failed, falling back to Supabase user data:', apiError.message);
+          // Fallback to Supabase user data if API fails
           localStorage.setItem('envoyou_token', session.access_token);
           localStorage.setItem('envoyou_user', JSON.stringify(session.user));
 
@@ -144,6 +157,7 @@ export const AuthProvider = ({ children }) => {
               }
             },
           });
+          logger.info('User session restored with Supabase fallback.');
         }
       } else {
         // Clear any stored data if no session
@@ -153,6 +167,10 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Auth status check failed:', error);
+      // Handle both API errors and timeout errors gracefully
+      if (error.message.includes('timeout')) {
+        console.warn('Auth check timed out, proceeding without session');
+      }
       localStorage.removeItem('envoyou_token');
       localStorage.removeItem('envoyou_user');
       dispatch({ type: AUTH_ACTIONS.LOGOUT });
