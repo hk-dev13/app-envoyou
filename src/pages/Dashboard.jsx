@@ -108,6 +108,7 @@ const Dashboard = () => {
                 <Link to="/dashboard" className="text-emerald-400 font-medium">Dashboard</Link>
                 <Link to="/settings/api-keys" className="text-slate-300 hover:text-white transition-colors">API Keys</Link>
                 <Link to="/dashboard/usage" className="text-slate-300 hover:text-white transition-colors">Usage</Link>
+                <Link to="/developer" className="text-slate-300 hover:text-white transition-colors">Developer</Link>
                 <Link to="/settings/profile" className="text-slate-300 hover:text-white transition-colors">Settings</Link>
               </nav>
             </div>
