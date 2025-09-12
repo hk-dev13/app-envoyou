@@ -116,4 +116,3 @@ Maintained by [Husni Kusuma](https://github.com/hk-dev13)
 > <p style="text-align: center;">© 2025 <a href="https://envoyou.com">Envoyou</a> | All Rights Reserved</p>
 > <p style="text-align: center;">Empowering Global Environmental Transparency</p>
 
----
