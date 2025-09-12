@@ -111,71 +111,70 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (session?.user) {
-        // Get user profile from your API with timeout protection
+        // Try to get user profile from API, but don't fail if it doesn't exist
+        let userData = null;
         try {
-          const userData = await Promise.race([
+          userData = await Promise.race([
             apiService.getUserProfile(),
             new Promise((_, reject) =>
-              setTimeout(() => reject(new Error('API timeout')), 5000)
+              setTimeout(() => reject(new Error('API timeout')), 3000)
             )
           ]);
-
-          // Store both Supabase session and API token
-          localStorage.setItem('envoyou_token', session.access_token);
-          localStorage.setItem('envoyou_user', JSON.stringify(userData || session.user));
-
-          dispatch({
-            type: AUTH_ACTIONS.LOGIN_SUCCESS,
-            payload: {
-              token: session.access_token,
-              user: userData || {
-                id: session.user.id,
-                email: session.user.email,
-                name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
-                avatar_url: session.user.user_metadata?.avatar_url,
-                email_verified: session.user.email_confirmed_at ? true : false
-              }
-            },
-          });
-          logger.info('User session restored successfully.');
         } catch (apiError) {
-          console.warn('API call failed, falling back to Supabase user data:', apiError.message);
-          // Fallback to Supabase user data if API fails
-          localStorage.setItem('envoyou_token', session.access_token);
-          localStorage.setItem('envoyou_user', JSON.stringify(session.user));
-
-          dispatch({
-            type: AUTH_ACTIONS.LOGIN_SUCCESS,
-            payload: {
-              token: session.access_token,
-              user: {
-                id: session.user.id,
-                email: session.user.email,
-                name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
-                avatar_url: session.user.user_metadata?.avatar_url,
-                email_verified: session.user.email_confirmed_at ? true : false
-              }
-            },
-          });
-          logger.info('User session restored with Supabase fallback.');
+          console.warn('User profile API not available, using Supabase data:', apiError.message);
         }
+
+        // Store both Supabase session and API token
+        localStorage.setItem('envoyou_token', session.access_token);
+        
+        // Use API data if available, otherwise use Supabase data
+        const finalUserData = userData || {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.name || session.user.user_metadata?.full_name,
+          avatar_url: session.user.user_metadata?.avatar_url,
+          email_verified: session.user.email_confirmed_at ? true : false,
+          auth_provider: session.user.app_metadata?.provider || null,
+          has_local_password: false // Default to false, will be updated by API if available
+        };
+
+        localStorage.setItem('envoyou_user', JSON.stringify(finalUserData));
+
+        dispatch({
+          type: AUTH_ACTIONS.LOGIN_SUCCESS,
+          payload: {
+            token: session.access_token,
+            user: finalUserData
+          },
+        });
+        logger.info('User session restored successfully.');
       } else {
-        // Clear any stored data if no session
-        localStorage.removeItem('envoyou_token');
-        localStorage.removeItem('envoyou_user');
-        dispatch({ type: AUTH_ACTIONS.LOGOUT });
+        // Check if we have stored user data from a previous session
+        try {
+          const storedToken = localStorage.getItem('envoyou_token');
+          const storedUser = localStorage.getItem('envoyou_user');
+          
+          if (storedToken && storedUser) {
+            const userData = JSON.parse(storedUser);
+            dispatch({
+              type: AUTH_ACTIONS.LOGIN_SUCCESS,
+              payload: {
+                token: storedToken,
+                user: userData
+              },
+            });
+            logger.info('User session restored from localStorage.');
+            return;
+          }
+        } catch (storageError) {
+          console.warn('Error reading from localStorage:', storageError);
+        }
+        
+        // No valid session found
+        dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       }
     } catch (error) {
-      console.error('Auth status check failed:', error);
-      // Handle both API errors and timeout errors gracefully
-      if (error.message.includes('timeout')) {
-        console.warn('Auth check timed out, proceeding without session');
-      }
-      localStorage.removeItem('envoyou_token');
-      localStorage.removeItem('envoyou_user');
-      dispatch({ type: AUTH_ACTIONS.LOGOUT });
-    } finally {
-      // Ensure loading is always set to false
+      console.error('Auth check failed:', error);
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
     }
   }, []);
