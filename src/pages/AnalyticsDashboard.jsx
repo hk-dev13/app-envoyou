@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import LockedModule from '../components/LockedModule';
 import { usePlan } from '../hooks/usePlan';
 import ThemeToggle from '../components/ThemeToggle.jsx';
+import PlanStatus from '../components/PlanStatus.jsx';
 
 function ToggleMode({ mode, onChange }) {
   return (
@@ -116,6 +117,7 @@ export default function AnalyticsDashboard() {
             <p className="subtext">Unified {mode === 'investor' ? 'portfolio' : 'operational'} intelligence</p>
           </div>
           <div className="flex items-center gap-2">
+            <PlanStatus compact />
             <ToggleMode mode={mode} onChange={setMode} />
             <ThemeToggle compact />
           </div>
@@ -123,21 +125,21 @@ export default function AnalyticsDashboard() {
         {mode === 'investor' ? (
           <div className="grid-gap md:grid-cols-2 lg:grid-cols-3 mb-6">
             {portfolio.enabled ? <PortfolioAggregation /> : (
-              <LockedModule required={portfolio.required} current={plan} onUpgrade={openUpgrade}><PortfolioAggregation /></LockedModule>
+              <LockedModule featureKey="analyticsPortfolio" required={portfolio.required} current={plan} onUpgrade={openUpgrade}><PortfolioAggregation /></LockedModule>
             )}
             <RiskOutliers />
             {scenario.enabled ? <ScenarioAnalysis /> : (
-              <LockedModule required={scenario.required} current={plan} onUpgrade={openUpgrade}><ScenarioAnalysis /></LockedModule>
+              <LockedModule featureKey="analyticsScenario" required={scenario.required} current={plan} onUpgrade={openUpgrade}><ScenarioAnalysis /></LockedModule>
             )}
           </div>
         ) : (
           <div className="grid-gap md:grid-cols-2 lg:grid-cols-3 mb-6">
             {facility.enabled ? <FacilityBreakdown /> : (
-              <LockedModule required={facility.required} current={plan} onUpgrade={openUpgrade}><FacilityBreakdown /></LockedModule>
+              <LockedModule featureKey="facilityBenchmark" required={facility.required} current={plan} onUpgrade={openUpgrade}><FacilityBreakdown /></LockedModule>
             )}
             <CrossFacilityBenchmark />
             {efficiency.enabled ? <EfficiencyOpportunities /> : (
-              <LockedModule required={efficiency.required} current={plan} onUpgrade={openUpgrade}><EfficiencyOpportunities /></LockedModule>
+              <LockedModule featureKey="efficiencyOpportunities" required={efficiency.required} current={plan} onUpgrade={openUpgrade}><EfficiencyOpportunities /></LockedModule>
             )}
             <TargetsProgress />
           </div>

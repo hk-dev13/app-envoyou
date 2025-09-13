@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import LockedModule from '../components/LockedModule';
 import { usePlan } from '../hooks/usePlan';
 import ThemeToggle from '../components/ThemeToggle.jsx';
+import PlanStatus from '../components/PlanStatus.jsx';
 
 // Placeholder components (replace with real implementations later)
 function CEVSScorePanel() {
@@ -102,6 +103,7 @@ export default function MonitoringDashboard() {
             <p className="subtext">Real-time awareness & mitigation</p>
           </div>
           <div className="flex gap-2 items-center">
+            <PlanStatus compact />
             <button className="btn btn-outline">Refresh</button>
             <button className="btn btn-primary">Configure</button>
             <ThemeToggle compact />
@@ -110,12 +112,12 @@ export default function MonitoringDashboard() {
         <div className="grid-gap md:grid-cols-2 lg:grid-cols-4 mb-6">
           <CEVSScorePanel />
           {bench.enabled ? <CompetitorComparisonPanel /> : (
-            <LockedModule required={bench.required} current={plan} onUpgrade={openUpgrade}>
+            <LockedModule featureKey="benchmarks" required={bench.required} current={plan} onUpgrade={openUpgrade}>
               <CompetitorComparisonPanel />
             </LockedModule>
           )}
           {alerts.enabled ? <AlertsPanel /> : (
-            <LockedModule required={alerts.required} current={plan} onUpgrade={openUpgrade}>
+            <LockedModule featureKey="alerts" required={alerts.required} current={plan} onUpgrade={openUpgrade}>
               <AlertsPanel />
             </LockedModule>
           )}

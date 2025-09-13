@@ -7,7 +7,7 @@ import React, { useCallback } from 'react';
  * - role="group" to associate label + description
  * - Keyboard activation (Enter/Space) on container focusing the Upgrade button
  */
-export default function LockedModule({ required, current, children, onUpgrade, inline }) {
+export default function LockedModule({ required, current, featureKey, children, onUpgrade, inline }) {
   const upgradeRef = React.useRef(null);
   const onKey = useCallback((e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -32,8 +32,10 @@ export default function LockedModule({ required, current, children, onUpgrade, i
         <button
           ref={upgradeRef}
           onClick={(e) => {
+            const detail = { feature: featureKey || 'unknown', required, current, ts: Date.now() };
+            window.dispatchEvent(new CustomEvent('feature-upgrade-click', { detail }));
             if (onUpgrade) onUpgrade(e);
-            else window.dispatchEvent(new CustomEvent('open-upgrade-modal', { detail: { feature: 'unknown' } }));
+            else window.dispatchEvent(new CustomEvent('open-upgrade-modal', { detail }));
           }}
           className="btn btn-primary text-[11px] px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
           aria-label={`Upgrade to access feature requiring ${required} plan`}

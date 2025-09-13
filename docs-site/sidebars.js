@@ -65,7 +65,8 @@ const sidebars = {
         'faq',
         'changelog',
         'style-guide',
-        'contributing-docs'
+        'contributing-docs',
+        'daily-summary'
       ]
     }
   ]

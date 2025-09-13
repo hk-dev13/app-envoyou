@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import UpgradeModal from './UpgradeModal';
 import { usePlan } from '../hooks/usePlan';
+import { track } from '../analytics/track';
 
 const UpgradeContext = createContext(null);
 
@@ -23,11 +24,19 @@ export function UpgradeProvider({ children }) {
   }, [originFeature]);
 
   useEffect(() => {
-    function handler(e) {
+    function openHandler(e) {
       trigger(e.detail?.feature);
     }
-    window.addEventListener('open-upgrade-modal', handler);
-    return () => window.removeEventListener('open-upgrade-modal', handler);
+    function clickHandler(e) {
+      const d = e.detail || {};
+      track('feature_upgrade_click', d);
+    }
+    window.addEventListener('open-upgrade-modal', openHandler);
+    window.addEventListener('feature-upgrade-click', clickHandler);
+    return () => {
+      window.removeEventListener('open-upgrade-modal', openHandler);
+      window.removeEventListener('feature-upgrade-click', clickHandler);
+    };
   }, [trigger]);
 
   return (

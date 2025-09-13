@@ -2,6 +2,7 @@ import React from 'react';
 import LockedModule from '../components/LockedModule';
 import { usePlan } from '../hooks/usePlan';
 import ThemeToggle from '../components/ThemeToggle.jsx';
+import PlanStatus from '../components/PlanStatus.jsx';
 
 function ExportCard({ framework }) {
   return (
@@ -74,6 +75,7 @@ export default function ReportingDashboard() {
             <p className="subtext">Accelerate multi-framework exports</p>
           </div>
           <div className="flex gap-2 items-center">
+            <PlanStatus compact />
             <button className="btn btn-outline">History</button>
             <button className="btn btn-primary">Settings</button>
             <ThemeToggle compact />
@@ -81,21 +83,21 @@ export default function ReportingDashboard() {
         </div>
         <div className="grid-gap md:grid-cols-2 lg:grid-cols-4 mb-6">
           {exportsFeature.enabled ? <ExportCard framework="GRI" /> : (
-            <LockedModule required={exportsFeature.required} current={plan} onUpgrade={openUpgrade}><ExportCard framework="GRI" /></LockedModule>
+            <LockedModule featureKey="reportingExports" required={exportsFeature.required} current={plan} onUpgrade={openUpgrade}><ExportCard framework="GRI" /></LockedModule>
           )}
           {exportsFeature.enabled ? <ExportCard framework="SASB" /> : (
-            <LockedModule required={exportsFeature.required} current={plan} onUpgrade={openUpgrade}><ExportCard framework="SASB" /></LockedModule>
+            <LockedModule featureKey="reportingExports" required={exportsFeature.required} current={plan} onUpgrade={openUpgrade}><ExportCard framework="SASB" /></LockedModule>
           )}
           {exportsFeature.enabled ? <ExportCard framework="CSRD" /> : (
-            <LockedModule required={exportsFeature.required} current={plan} onUpgrade={openUpgrade}><ExportCard framework="CSRD" /></LockedModule>
+            <LockedModule featureKey="reportingExports" required={exportsFeature.required} current={plan} onUpgrade={openUpgrade}><ExportCard framework="CSRD" /></LockedModule>
           )}
           {taxonomy.enabled ? <TaxonomyMapping /> : (
-            <LockedModule required={taxonomy.required} current={plan} onUpgrade={openUpgrade}><TaxonomyMapping /></LockedModule>
+            <LockedModule featureKey="taxonomyMapping" required={taxonomy.required} current={plan} onUpgrade={openUpgrade}><TaxonomyMapping /></LockedModule>
           )}
         </div>
         <div className="grid-gap grid-cols-1 lg:grid-cols-3 mb-6">
           {webhooks.enabled ? <WebhookConfig /> : (
-            <LockedModule required={webhooks.required} current={plan} onUpgrade={openUpgrade}><WebhookConfig /></LockedModule>
+            <LockedModule featureKey="webhookDelivery" required={webhooks.required} current={plan} onUpgrade={openUpgrade}><WebhookConfig /></LockedModule>
           )}
           <RecentExports />
         </div>

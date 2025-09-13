@@ -35,6 +35,8 @@
     "md:fences:check": "grep -R '^```$' docs || true",
     "md:lint:changed": "git diff --name-only origin/main...HEAD | grep '^docs/' | xargs -r markdownlint-cli2",
     "md:fences:label": "grep -Rrl '^```$' docs | xargs -r perl -0777 -i -pe 's/^```$/```text/gm'"
+    ,"archive:summary": "node scripts/archive-summary.js"
+    ,"check:daily-summary": "node scripts/check-daily-summary.js"
   },
   "dependencies": {
     "@docusaurus/core": "^3.8.1",

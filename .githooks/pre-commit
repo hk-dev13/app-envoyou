@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Pre-commit hook: archive current DAILY_SUMMARY.md into docs + archive folder
+# Skip if summary not present
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+APP_DIR="$REPO_ROOT/app-envoyou"
+SUMMARY_FILE="$APP_DIR/DAILY_SUMMARY.md"
+
+if [ ! -f "$SUMMARY_FILE" ]; then
+  echo "[pre-commit] No DAILY_SUMMARY.md found, skipping archive"
+  exit 0
+fi
+
+pushd "$APP_DIR" >/dev/null || exit 0
+npm run --silent archive:summary || echo "[pre-commit] archive:summary failed (continuing)"
+popd >/dev/null || true
+
+# Continue with commit
+exit 0
