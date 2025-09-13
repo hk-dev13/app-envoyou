@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth.js';
 import DeveloperLayout from '../../components/developer/DeveloperLayout';
-import DeveloperStatsCards from '../../components/developer/DeveloperStatsCards';
-import UsageAnalytics from '../../components/developer/UsageAnalytics';
-import APIDocumentation from '../../components/developer/APIDocumentation';
-import APIKeyManager from '../../components/developer/APIKeyManager';
-import CodeSnippets from '../../components/developer/CodeSnippets';
-import RateLimitMonitor from '../../components/developer/RateLimitMonitor';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
-import { Separator } from '../../components/ui/separator';
 import {
   FileText,
   Key,
@@ -68,11 +61,11 @@ const DeveloperDashboard = () => {
 
   const quickActions = [
     {
-      title: 'API Documentation',
-      description: 'Interactive API docs with Swagger UI',
+      title: 'API Docs Portal',
+      description: 'Unified guides & reference (opens new tab)',
       icon: FileText,
-      href: '/developer/api-docs',
-      external: false,
+      href: 'https://docs.envoyou.com/',
+      external: true,
       color: 'bg-blue-600'
     },
     {
@@ -118,7 +111,7 @@ const DeveloperDashboard = () => {
                 Welcome back, {user?.name || 'Developer'}! 👋
               </h1>
               <p className="text-slate-400 mt-1">
-                Here's what's happening with your API today
+                Here&apos;s what&apos;s happening with your API today
               </p>
               <div className="flex items-center space-x-2 mt-2">
                 <Badge variant="secondary" className="bg-emerald-600/20 text-emerald-400 border-emerald-600/30">
@@ -219,7 +212,13 @@ const DeveloperDashboard = () => {
                 return (
                   <Link
                     key={index}
-                    to={action.href}
+                    to={action.external ? undefined : action.href}
+                    onClick={(e) => {
+                      if (action.external) {
+                        e.preventDefault();
+                        window.open(action.href, '_blank', 'noopener');
+                      }
+                    }}
                     className="flex items-center space-x-4 p-4 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-colors group"
                   >
                     <div className={`w-12 h-12 ${action.color} rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform`}>

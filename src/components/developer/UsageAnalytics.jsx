@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import UsageChart from '../UsageChart';
 import DateRangePicker from '../DateRangePicker';
 import apiService from '../../services/apiService';
@@ -14,11 +14,7 @@ const UsageAnalytics = () => {
     topEndpoints: []
   });
 
-  useEffect(() => {
-    fetchUsageData();
-  }, [dateRange]);
-
-  const fetchUsageData = async () => {
+  const fetchUsageData = useCallback(async () => {
     try {
       setLoading(true);
       // Fetch real data from API with date range
@@ -58,7 +54,11 @@ const UsageAnalytics = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dateRange]);
+
+  useEffect(() => {
+    fetchUsageData();
+  }, [fetchUsageData]);
 
   const generateMockUsageData = (range) => {
     const days = range === '7days' ? 7 : range === '30days' ? 30 : 90;

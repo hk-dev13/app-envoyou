@@ -1,6 +1,6 @@
-import { API_CONFIG, EXTERNAL_SERVICES } from '../config';
-import logger from './logger';
-import { handleError } from './errorHandler';
+import { API_CONFIG, EXTERNAL_SERVICES } from '../config/index.js';
+import logger from './logger.js';
+import { handleError } from './errorHandler.js';
 
 // Import Sentry conditionally for ESM compatibility
 let Sentry = null;

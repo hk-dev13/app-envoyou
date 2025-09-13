@@ -7,7 +7,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 // Core Services Integration
-import { APP_CONFIG, EXTERNAL_SERVICES } from './config';
+import { APP_CONFIG, EXTERNAL_SERVICES } from './config/index.js';
 import logger from './services/logger';
 // import { initializePerformanceMonitoring } from './services/performance';
 import { initializeGlobalErrorHandler } from './services/errorHandler';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SettingsLayout from '../../components/settings/SettingsLayout';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth.js';
 import apiService from '../../services/apiService';
 
 function ProfileSettingsPage() {

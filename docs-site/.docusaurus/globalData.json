@@ -1,0 +1,83 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "api/api-reference",
+              "path": "/docs/api/api-reference",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "api/authentication",
+              "path": "/docs/api/authentication",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "changelog",
+              "path": "/docs/changelog",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "faq",
+              "path": "/docs/faq",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started",
+              "path": "/docs/getting-started",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "guides/error-handling",
+              "path": "/docs/guides/error-handling",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "guides/rate-limiting",
+              "path": "/docs/guides/rate-limiting",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "guides/sdks-libraries",
+              "path": "/docs/guides/sdks-libraries",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "guides/webhooks",
+              "path": "/docs/guides/webhooks",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "intro",
+              "path": "/docs/intro",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "introduction",
+              "path": "/docs/introduction",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/docs/intro",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

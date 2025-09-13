@@ -1,0 +1,24 @@
+{
+  "id": "guides/webhooks",
+  "title": "Webhooks Integration Guide",
+  "description": "This guide covers how to integrate with EnvoyOU API webhooks for real-time notifications and event-driven workflows.",
+  "source": "@site/../docs/guides/webhooks.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/webhooks",
+  "permalink": "/docs/guides/webhooks",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/../docs/guides/webhooks.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Rate Limiting Guide",
+    "permalink": "/docs/guides/rate-limiting"
+  },
+  "next": {
+    "title": "SDK and Libraries Guide",
+    "permalink": "/docs/guides/sdks-libraries"
+  }
+}

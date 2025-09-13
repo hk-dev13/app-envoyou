@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth.js';
 import EmailVerificationBanner from '../components/EmailVerificationBanner';
 import StatCard from '../components/StatCard';
 import DateRangePicker from '../components/DateRangePicker';
@@ -18,7 +18,7 @@ const Dashboard = () => {
   });
   const [loading, setLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState([]);
-  const [error, setError] = useState(null);
+  // const [fetchError, setFetchError] = useState(null); // Not displayed yet
   const [dateRange, setDateRange] = useState('30days');
 
   // Mock data for sparklines and charts
@@ -65,12 +65,12 @@ const Dashboard = () => {
         
         // Check if it's an authentication error
         if (err?.type === 'authentication_error' || err?.code === 'AUTH_REQUIRED') {
-          setError('Your session has expired. Please log in again.');
+          // TODO: Surface session expiry to user
           // Don't auto-redirect from dashboard, let user handle it
         } else if (err?.code === 'ACCESS_DENIED') {
-          setError('Please get an API key to view your usage statistics');
+          // TODO: Surface missing API key message
         } else {
-          setError(err?.message || 'Failed to load dashboard data');
+          // TODO: Surface generic error message
         }
         
         // Keep dummy data as fallback

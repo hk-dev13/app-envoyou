@@ -1,0 +1,27 @@
+{
+  "id": "introduction",
+  "title": "Introduction",
+  "description": "What is EnvoyOU, Purpose, Value",
+  "source": "@site/../docs/introduction.md",
+  "sourceDirName": ".",
+  "slug": "/introduction",
+  "permalink": "/docs/introduction",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/../docs/introduction.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Welcome to EnvoyOU API Documentation",
+    "permalink": "/docs/intro"
+  },
+  "next": {
+    "title": "Getting Started",
+    "permalink": "/docs/getting-started"
+  }
+}

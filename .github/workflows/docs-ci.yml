@@ -1,0 +1,42 @@
+name: docs-ci
+
+on:
+  pull_request:
+    paths:
+      - 'app-envoyou/**'
+  push:
+    branches: [ main ]
+    paths:
+      - 'app-envoyou/**'
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app-envoyou
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: app-envoyou/package.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Validate OpenAPI
+        run: npm run openapi:validate
+
+      - name: Build Docs
+        run: npm run docs:build
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-build
+          path: app-envoyou/docs-site/build

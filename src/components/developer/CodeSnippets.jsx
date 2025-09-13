@@ -3,14 +3,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Separator } from '../ui/separator';
 import {
   Copy,
   Check,
   Code2,
   FileText,
   Key,
-  AlertTriangle,
   CheckCircle,
   Zap
 } from 'lucide-react';
@@ -848,7 +846,7 @@ func main() {
               </div>
             </div>
             <Badge variant="outline" className="text-slate-400 border-slate-600">
-              Don't forget to replace YOUR_API_KEY
+              Don&apos;t forget to replace YOUR_API_KEY
             </Badge>
           </div>
         </CardHeader>
@@ -920,7 +918,7 @@ func main() {
                 <div>
                   <h4 className="text-lg font-medium text-white mb-2">Get Your API Key</h4>
                   <p className="text-slate-300 mb-3">
-                    Create an API key from the API Keys section. You'll need this for authentication.
+                    Create an API key from the API Keys section. You&apos;ll need this for authentication.
                   </p>
                   <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
                     <code className="text-emerald-400 text-sm font-mono">

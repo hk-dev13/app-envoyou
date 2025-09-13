@@ -3,8 +3,8 @@
  * Centralized error handling and recovery for EnvoyOU application
  */
 
-import logger from './logger';
-import { ERROR_MESSAGES } from '../config';
+import logger from './logger.js';
+import { ERROR_MESSAGES } from '../config/index.js';
 
 // Error Types
 export const ERROR_TYPES = {

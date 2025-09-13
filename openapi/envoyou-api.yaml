@@ -1,0 +1,122 @@
+openapi: 3.0.3
+info:
+  title: EnvoyOU Core API
+  version: 0.1.0
+  description: >-
+    Early skeleton of the EnvoyOU public API specification. This is a draft and
+    will evolve. Endpoints and schemas are incomplete.
+servers:
+  - url: https://api.envoyou.com/v1
+    description: Production
+  - url: https://api-staging.envoyou.com/v1
+    description: Staging
+  - url: http://localhost:8000/v1
+    description: Local Dev
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+paths:
+  /auth/token:
+    post:
+      summary: Obtain access token
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                    example: bearer
+        '401':
+          description: Invalid credentials
+  /measurements:
+    get:
+      summary: List recent measurements
+      tags: [Measurements]
+      parameters:
+        - in: query
+          name: city
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+            maximum: 500
+      responses:
+        '200':
+          description: List of measurement objects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Measurement'
+        '400':
+          description: Bad request
+  /stations:
+    get:
+      summary: List stations
+      tags: [Stations]
+      responses:
+        '200':
+          description: Station list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Station'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Measurement:
+      type: object
+      properties:
+        station_id: { type: string }
+        pollutant: { type: string, example: pm25 }
+        value: { type: number }
+        unit: { type: string, example: "µg/m³" }
+        captured_at: { type: string, format: date-time }
+        quality_index: { type: integer }
+    Station:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        country: { type: string }
+        city: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        elevation_m: { type: number }

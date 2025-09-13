@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { useDarkMode } from '../../hooks/useDarkMode';
+import { useAuth } from '../../hooks/useAuth.js';
+import { useDarkMode } from '../../hooks/useDarkMode.js';
 import DeveloperSidebar from './DeveloperSidebar';
 import { Button } from '../ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet';

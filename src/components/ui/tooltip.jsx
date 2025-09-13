@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const TooltipProvider = ({ children }) => {
   return <>{children}</>;
@@ -28,7 +28,6 @@ TooltipTrigger.displayName = 'TooltipTrigger';
 
 const TooltipContent = React.forwardRef(({
   className = '',
-  sideOffset = 4,
   children,
   ...props
 }, ref) => {
