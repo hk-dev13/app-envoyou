@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import LockedModule from '../components/LockedModule';
 import { usePlan } from '../hooks/usePlan';
+import ThemeToggle from '../components/ThemeToggle.jsx';
 
 // Placeholder components (replace with real implementations later)
 function CEVSScorePanel() {
@@ -100,9 +101,10 @@ export default function MonitoringDashboard() {
             <h1>ESG Monitoring</h1>
             <p className="subtext">Real-time awareness & mitigation</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <button className="btn btn-outline">Refresh</button>
             <button className="btn btn-primary">Configure</button>
+            <ThemeToggle compact />
           </div>
         </div>
         <div className="grid-gap md:grid-cols-2 lg:grid-cols-4 mb-6">

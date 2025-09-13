@@ -1,6 +1,7 @@
 import React from 'react';
 import LockedModule from '../components/LockedModule';
 import { usePlan } from '../hooks/usePlan';
+import ThemeToggle from '../components/ThemeToggle.jsx';
 
 function ExportCard({ framework }) {
   return (
@@ -72,9 +73,10 @@ export default function ReportingDashboard() {
             <h1>Reporting & Disclosure</h1>
             <p className="subtext">Accelerate multi-framework exports</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <button className="btn btn-outline">History</button>
             <button className="btn btn-primary">Settings</button>
+            <ThemeToggle compact />
           </div>
         </div>
         <div className="grid-gap md:grid-cols-2 lg:grid-cols-4 mb-6">

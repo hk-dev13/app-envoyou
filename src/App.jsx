@@ -13,6 +13,9 @@ import { useAuth } from './hooks/useAuth.js';
 // Lazy load pages for better performance
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const DashboardUsage = lazy(() => import('./pages/DashboardUsage'));
+const MonitoringDashboard = lazy(() => import('./pages/MonitoringDashboard'));
+const AnalyticsDashboard = lazy(() => import('./pages/AnalyticsDashboard'));
+const ReportingDashboard = lazy(() => import('./pages/ReportingDashboard'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 const RegisterSuccessPage = lazy(() => import('./pages/auth/RegisterSuccessPage'));
@@ -78,6 +81,9 @@ const AppContent = () => {
             {/* Protected dashboard routes */}
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/dashboard/usage" element={<ProtectedRoute><DashboardUsage /></ProtectedRoute>} />
+            <Route path="/dashboard/monitoring" element={<ProtectedRoute><MonitoringDashboard /></ProtectedRoute>} />
+            <Route path="/dashboard/analytics" element={<ProtectedRoute><AnalyticsDashboard /></ProtectedRoute>} />
+            <Route path="/dashboard/reporting" element={<ProtectedRoute><ReportingDashboard /></ProtectedRoute>} />
             
             {/* Protected settings routes */}
             <Route path="/settings/profile" element={<ProtectedRoute><ProfileSettingsPage /></ProtectedRoute>} />

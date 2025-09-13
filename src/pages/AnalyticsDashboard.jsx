@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LockedModule from '../components/LockedModule';
 import { usePlan } from '../hooks/usePlan';
+import ThemeToggle from '../components/ThemeToggle.jsx';
 
 function ToggleMode({ mode, onChange }) {
   return (
@@ -114,7 +115,10 @@ export default function AnalyticsDashboard() {
             <h1>Analytics</h1>
             <p className="subtext">Unified {mode === 'investor' ? 'portfolio' : 'operational'} intelligence</p>
           </div>
-          <ToggleMode mode={mode} onChange={setMode} />
+          <div className="flex items-center gap-2">
+            <ToggleMode mode={mode} onChange={setMode} />
+            <ThemeToggle compact />
+          </div>
         </div>
         {mode === 'investor' ? (
           <div className="grid-gap md:grid-cols-2 lg:grid-cols-3 mb-6">
