@@ -1,0 +1,59 @@
+name: Spec & Schema Validation
+
+on:
+  pull_request:
+    paths:
+      - 'openapi/**'
+      - 'schemas/**'
+      - 'taxonomy/**'
+      - 'package.json'
+      - 'docs/guides/**'
+  push:
+    branches: [ main ]
+    paths:
+      - 'openapi/**'
+      - 'schemas/**'
+      - 'taxonomy/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+        working-directory: app-envoyou
+
+      - name: Validate OpenAPI
+        run: npm run openapi:validate
+        working-directory: app-envoyou
+
+      - name: Generate Types
+        run: npm run openapi:types
+        working-directory: app-envoyou
+
+      - name: Detect Types Drift
+        run: |
+          if ! git diff --exit-code --name-only | grep -q 'src/lib/generated-api-types.d.ts'; then
+            echo '❌ Detected uncommitted changes in generated API types. Run npm run openapi:types and commit.'
+            git diff --name-only
+            exit 1
+          else
+            echo '✅ No drift in generated types.'
+          fi
+        working-directory: app-envoyou
+
+      - name: Validate Schemas
+        run: npm run schema:validate
+        working-directory: app-envoyou
+
+      - name: Lint Docs (basic spell / structure placeholder)
+        run: echo "(Optional) Add markdown lint step later"

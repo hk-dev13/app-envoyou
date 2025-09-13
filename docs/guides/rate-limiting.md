@@ -13,16 +13,33 @@ The API implements different rate limits based on your subscription tier:
 | Pro | 10,000 | 1,000 | 2,000 |
 | Enterprise | Custom | Custom | Custom |
 
-## Rate Limit Headers
+## Rate Limit & Observability Headers
 
-Every API response includes rate limit information in the headers:
+Each API response includes rate limit and tracing headers. List endpoints also return pagination headers when more results exist.
 
-```
-X-RateLimit-Limit: 1000          # Maximum requests per hour
-X-RateLimit-Remaining: 999       # Remaining requests in current window
-X-RateLimit-Reset: 1640995200    # Unix timestamp when limit resets
-X-RateLimit-Retry-After: 3600    # Seconds until limit resets (only when exceeded)
-```
+```text
+X-RateLimit-Limit: 1000               # Max requests in current window
+X-RateLimit-Remaining: 999            # Remaining requests before throttling
+X-RateLimit-Reset: 1640995200         # Unix epoch seconds when window resets
+X-RateLimit-Retry-After: 3600         # Seconds until retry (429 responses only)
+X-Request-ID: req_8f3a92              # Unique request correlation ID
+X-Pagination-Limit: 50                # Effective page size (list endpoints)
+X-Pagination-Next: eyJvZmZzZXQiOjE1MH0  # Opaque cursor for next page (if present)
+```text
+
+### Header Reference
+
+| Header | Purpose | Notes |
+|--------|---------|-------|
+| `X-RateLimit-Limit` | Quota ceiling for your tier/window | May be contract-specific for Enterprise |
+| `X-RateLimit-Remaining` | Calls left before 429 | At 0 the next call is throttled |
+| `X-RateLimit-Reset` | Absolute reset time (epoch seconds) | Prefer over guessing retry intervals |
+| `X-RateLimit-Retry-After` | Retry delay in seconds | Only appears on 429 responses |
+| `X-Request-ID` | Trace/log correlation ID | Provide when opening support tickets |
+| `X-Pagination-Limit` | Effective per-page limit | May be lower than requested if capped |
+| `X-Pagination-Next` | Cursor for next page | Omitted when no more pages |
+
+All headers are defined once in the OpenAPI spec (`components.headers`) and reused via `$ref` to ensure consistency across endpoints.
 
 ## Understanding Rate Limiting
 
@@ -56,7 +73,7 @@ class RateLimitHandler {
     await new Promise(resolve => setTimeout(resolve, delay));
   }
 }
-```
+```text
 
 ### 2. Monitor Rate Limit Usage
 
@@ -95,7 +112,7 @@ class ApiClient {
     return response;
   }
 }
-```
+```text
 
 ### 3. Implement Request Queuing
 
@@ -145,7 +162,7 @@ class RequestQueue {
     this.processing = false;
   }
 }
-```
+```text
 
 ### 4. Use Request Batching
 
@@ -159,7 +176,7 @@ const user3 = await api.getUser(3);
 
 // Use batch endpoint:
 const users = await api.getUsers([1, 2, 3]);
-```
+```text
 
 ## Rate Limit Exceeded Response
 
@@ -168,6 +185,7 @@ When you exceed the rate limit, you'll receive:
 **Status Code**: `429 Too Many Requests`
 
 **Response Body**:
+
 ```json
 {
   "error": {
@@ -181,7 +199,7 @@ When you exceed the rate limit, you'll receive:
     }
   }
 }
-```
+```text
 
 ## Upgrading Your Plan
 
@@ -198,6 +216,7 @@ Contact our sales team for enterprise pricing and custom rate limits.
 ### Dashboard Metrics
 
 Monitor your API usage through the developer dashboard:
+
 - Current usage vs. limits
 - Historical usage patterns
 - Rate limit violations
@@ -206,6 +225,7 @@ Monitor your API usage through the developer dashboard:
 ### Alerts
 
 Set up alerts for:
+
 - 80% of rate limit reached
 - Rate limit exceeded
 - Consistent high usage patterns
@@ -219,17 +239,19 @@ function logRateLimitInfo(headers, requestContext) {
   const rateLimitData = {
     limit: headers.get('X-RateLimit-Limit'),
     remaining: headers.get('X-RateLimit-Remaining'),
-    reset: headers.get('X-RateLimit-Reset'),
+    reset: parseInt(headers.get('X-RateLimit-Reset')), // epoch seconds
+    request_id: headers.get('X-Request-ID'),
+    pagination_limit: headers.get('X-Pagination-Limit'),
+    pagination_next: headers.get('X-Pagination-Next'),
     timestamp: new Date().toISOString(),
     endpoint: requestContext.endpoint,
     method: requestContext.method,
     user_id: requestContext.userId
   };
 
-  // Send to analytics service
   analytics.track('api_rate_limit', rateLimitData);
 }
-```
+```text
 
 ## Common Rate Limiting Mistakes
 
@@ -279,6 +301,6 @@ async function loadTest(apiEndpoint, totalRequests = 1000, concurrent = 10) {
   await queue.waitForCompletion();
   return results;
 }
-```
+```text
 
 Remember: Rate limiting is designed to protect the API and ensure fair access for all users. Proper implementation will result in more reliable integrations.

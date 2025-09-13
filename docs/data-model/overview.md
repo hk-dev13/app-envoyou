@@ -26,7 +26,7 @@ This section describes the core data entities exposed by the EnvoyOU API.
   "city": "Jakarta",
   "quality_index": 112
 }
-```
+```text
 
 ## Next Topics
 - Field reference (coming soon)

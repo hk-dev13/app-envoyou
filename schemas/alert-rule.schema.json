@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://envoyou.com/schemas/alert-rule.schema.json",
+  "title": "Alert Rule",
+  "description": "Schema for defining an alert rule evaluating an environmental or ESG metric.",
+  "type": "object",
+  "required": ["name", "metric", "operator", "threshold", "window", "notify"],
+  "properties": {
+    "name": { "type": "string", "maxLength": 120 },
+    "metric": { "type": "string", "description": "Key of the metric being monitored (e.g., cevs_score, water_discharge_ppm)." },
+    "operator": { "type": "string", "enum": [">", ">=", "<", "<=", "==", "!=", "drop_percent", "rise_percent", "anomaly_zscore"] },
+    "threshold": { "type": "number" },
+    "window": { "type": "string", "pattern": "^[0-9]+(m|h|d)$", "examples": ["15m", "1h", "24h"] },
+    "notify": { "type": "array", "minItems": 1, "items": { "type": "string", "description": "Notification endpoint descriptor (email:, slack:, webhook:)" } },
+    "enabled": { "type": "boolean", "default": true },
+    "filters": {
+      "type": "object",
+      "description": "Optional dimension filters (facility, region, scope).",
+      "additionalProperties": { "type": ["string", "number"] }
+    },
+    "cooldown": { "type": "string", "pattern": "^[0-9]+(m|h|d)$", "description": "Minimum interval before the rule can fire again." },
+    "severity": { "type": "string", "enum": ["info", "warning", "critical"], "default": "warning" }
+  },
+  "additionalProperties": false
+}

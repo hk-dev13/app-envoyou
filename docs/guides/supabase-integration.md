@@ -8,9 +8,9 @@ This guide shows how to pair EnvoyOU API data with Supabase for storage, auth, a
 - Trigger edge functions on new environmental data.
 
 ## Architecture Overview
-```
+```text
 EnvoyOU API --> Worker/CRON --> Supabase (tables, auth, functions) --> Dashboard
-```
+```text
 
 ## Table Schema Example
 ```sql
@@ -24,7 +24,7 @@ create table if not exists measurements (
   inserted_at timestamptz default now()
 );
 create index on measurements (captured_at);
-```
+```text
 
 ## Fetch + Store Script (Node)
 ```javascript
@@ -54,7 +54,7 @@ async function syncLatest() {
 }
 
 syncLatest();
-```
+```text
 
 ## Security Notes
 - Use service role key only in secure server environment (not frontend).

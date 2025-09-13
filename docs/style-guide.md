@@ -22,6 +22,7 @@ This guide defines the writing and formatting standards for EnvoyOU documentatio
 - Numbered lists for sequences or procedures.
 
 ## Terminology
+
 | Term | Use | Avoid |
 |------|-----|-------|
 | EnvoyOU Platform | Consistent brand reference | The platform, our product |
@@ -34,7 +35,7 @@ Example:
 ```bash
 curl -H "Authorization: Bearer $API_KEY" \
   "https://api.envoyou.com/v1/air-quality?city=Jakarta"
-```
+```text
 
 ## Authentication Section Structure
 1. Overview
@@ -48,21 +49,21 @@ curl -H "Authorization: Bearer $API_KEY" \
 | `city` | string | No | City name filter |
 
 ## Changelog Format
-```
+```text
 ## 2025-09-13
 ### Added
 - New /v1/emissions endpoint
 ### Fixed
 - Corrected unit for PM2.5 concentration
-```
+```text
 
 ## Front Matter
 Each doc page should start with frontmatter when ordering or labeling is needed:
-```
+```text
 ---
 sidebar_position: 1
 ---
-```
+```text
 
 ## Prohibited
 - Local slang, idioms

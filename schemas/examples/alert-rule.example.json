@@ -1,0 +1,14 @@
+{
+  "name": "CEVS Score Drop",
+  "metric": "cevs_score",
+  "operator": "drop_percent",
+  "threshold": 5,
+  "window": "24h",
+  "notify": ["slack:#esg-risk"],
+  "enabled": true,
+  "filters": {
+    "region": "EU"
+  },
+  "cooldown": "1h",
+  "severity": "warning"
+}

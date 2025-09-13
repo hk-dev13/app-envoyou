@@ -21,7 +21,7 @@ Chosen Initial: Option A (faster to bootstrap).
 1. Install dependencies:
 ```bash
 npm install --save @docusaurus/plugin-content-docs @docusaurus/preset-classic redocusaurus
-```
+```text
 2. Create `openapi/envoyou-api.yaml`.
 3. Add to `docusaurus.config.js`:
 ```js
@@ -37,17 +37,17 @@ plugins: [
     }
   ]
 ]
-```
+```text
 4. Add sidebar link under API Reference pointing to `/api-spec/`.
 
 ## Phase 3 (Automation)
 Add script:
-```
+```text
 #!/usr/bin/env bash
 set -euo pipefail
 npx swagger-cli validate openapi/envoyou-api.yaml
 cp openapi/envoyou-api.yaml app-envoyou/docs/static/ # if needed
-```
+```text
 Optional GitHub Action: validate spec on PR.
 
 ## Phase 4 (Future)

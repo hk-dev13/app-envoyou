@@ -7,24 +7,24 @@
 ## Install
 ```bash
 npm ci
-```
+```text
 
 ## Run Local Docs
 ```bash
 npm run docs:start
-```
+```text
 Open: http://localhost:3000
 
 ## Build Production Docs
 ```bash
 npm run docs:build
-```
+```text
 Output: `docs-site/build`
 
 ## Serve Build (Preview)
 ```bash
 npm run docs:serve
-```
+```text
 
 ## OpenAPI Spec
 Location: `openapi/envoyou-api.yaml`
@@ -32,11 +32,11 @@ Location: `openapi/envoyou-api.yaml`
 Validate:
 ```bash
 npm run openapi:validate
-```
+```text
 Generate Types (TypeScript declarations):
 ```bash
 npm run openapi:types
-```
+```text
 Output: `src/lib/generated-api-types.d.ts`
 
 ## Redocusaurus API Spec Page

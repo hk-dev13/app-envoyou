@@ -9,23 +9,27 @@ Webhooks are HTTP callbacks that notify your application when specific events oc
 ## Supported Events
 
 ### User Events
+
 - `user.created` - New user registration
 - `user.updated` - User profile changes
 - `user.deleted` - User account deletion
 - `user.verified` - Email verification completed
 
 ### Authentication Events
+
 - `auth.login` - User login successful
 - `auth.logout` - User logout
 - `auth.failed` - Failed login attempt
 - `auth.password_reset` - Password reset requested
 
 ### API Usage Events
+
 - `api.rate_limit_exceeded` - Rate limit threshold reached
 - `api.quota_exceeded` - Monthly quota exceeded
 - `api.key_expired` - API key expiration
 
 ### System Events
+
 - `system.maintenance_start` - Maintenance window begins
 - `system.maintenance_end` - Maintenance window ends
 - `system.incident` - Service incident reported
@@ -58,7 +62,7 @@ app.post('/webhooks/envoyou', express.json(), async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-```
+```text
 
 ### 2. Register Webhook URL
 
@@ -74,7 +78,7 @@ curl -X POST https://api.envoyou.com/v1/webhooks \
     "secret": "your-webhook-secret",
     "active": true
   }'
-```
+```text
 
 ### 3. Configure Webhook Settings
 
@@ -98,7 +102,7 @@ curl -X POST https://api.envoyou.com/v1/webhooks \
     "X-Custom-Header": "your-custom-value"
   }
 }
-```
+```text
 
 ## Webhook Payload Structure
 
@@ -120,11 +124,12 @@ All webhook payloads follow a consistent structure:
   },
   "webhook_id": "wh_1234567890"
 }
-```
+```text
 
 ### Event Types and Payloads
 
 #### User Created Event
+
 ```json
 {
   "id": "evt_1234567890",
@@ -141,9 +146,10 @@ All webhook payloads follow a consistent structure:
     }
   }
 }
-```
+```text
 
 #### Authentication Events
+
 ```json
 {
   "id": "evt_1234567891",
@@ -162,7 +168,7 @@ All webhook payloads follow a consistent structure:
     }
   }
 }
-```
+```text
 
 ## Security and Verification
 
@@ -192,18 +198,65 @@ const isValid = verifySignature(
   req.headers['x-envoyou-timestamp'],
   process.env.ENVOYOU_WEBHOOK_SECRET
 );
-```
+```text
+
+#### Python Example
+
+```python
+import hmac, hashlib, json, time
+from fastapi import FastAPI, Request, Header, HTTPException
+
+app = FastAPI()
+WEBHOOK_SECRET = b"your_webhook_secret"
+ALLOWED_DRIFT = 300  # 5 minutes
+
+def canonical_json(data):
+  return json.dumps(data, separators=(',', ':'), sort_keys=True)
+
+def verify_signature(payload: dict, signature: str, timestamp: str) -> bool:
+  try:
+    ts = int(timestamp)
+  except (TypeError, ValueError):
+    return False
+  now = int(time.time())
+  if abs(now - ts) > ALLOWED_DRIFT:
+    return False
+  body = f"{timestamp}.".encode() + canonical_json(payload).encode()
+  digest = hmac.new(WEBHOOK_SECRET, body, hashlib.sha256).hexdigest()
+  expected = f"v1,{digest}"
+  try:
+    return hmac.compare_digest(signature, expected)
+  except Exception:
+    return False
+
+@app.post('/webhooks/envoyou')
+async def receive(request: Request, x_envoyou_signature: str = Header(None), x_envoyou_timestamp: str = Header(None)):
+  payload = await request.json()
+  if not verify_signature(payload, x_envoyou_signature, x_envoyou_timestamp):
+    raise HTTPException(status_code=401, detail='Invalid signature')
+  # enqueue task for async processing here
+  return {"received": True}
+```text
+
+#### Recommended Validation Steps
+
+- Require all security headers present (signature, timestamp, webhook id, event type).
+- Enforce timestamp drift (<= 5 minutes) to mitigate replay.
+- (Optional) Include a nonce header (`X-EnvoyOU-Nonce`) and store recently seen nonces (Redis TTL 10m) for replay rejection.
+- Reject requests with mismatched `Content-Type` or body reserialization differences.
+- Use constant-time comparison for signature strings.
 
 ### Security Headers
 
 Webhooks include security headers for verification:
 
-```
+```text
 X-EnvoyOU-Signature: v1,signature_here
 X-EnvoyOU-Timestamp: 1640995200
 X-EnvoyOU-Webhook-ID: wh_1234567890
 X-EnvoyOU-Event-Type: user.created
-```
+X-EnvoyOU-Nonce: 4f2c7a81-bc2a-4c2f-9a3d-91d7fa2d6c55
+```text
 
 ## Error Handling and Retries
 
@@ -251,7 +304,7 @@ async function processWebhookEvent(event) {
     }
   }
 }
-```
+```text
 
 ## Best Practices
 
@@ -277,7 +330,7 @@ async function processEvent(event) {
   // Persist processed event IDs to database
   await saveProcessedEventId(event.id);
 }
-```
+```text
 
 ### 2. Response Time
 
@@ -295,7 +348,7 @@ app.post('/webhooks/envoyou', async (req, res) => {
     });
   });
 });
-```
+```text
 
 ### 3. Logging and Monitoring
 
@@ -324,7 +377,7 @@ function logWebhookEvent(event, status, error = null) {
     status: status
   });
 }
-```
+```text
 
 ### 4. Testing Webhooks
 
@@ -347,17 +400,19 @@ curl -X POST https://your-app.com/webhooks/envoyou \
       }
     }
   }'
-```
+```text
 
 ### 5. Webhook Management
 
 #### List Webhooks
+
 ```bash
 curl -X GET https://api.envoyou.com/v1/webhooks \
   -H "Authorization: Bearer YOUR_API_KEY"
-```
+```text
 
 #### Update Webhook
+
 ```bash
 curl -X PUT https://api.envoyou.com/v1/webhooks/wh_1234567890 \
   -H "Authorization: Bearer YOUR_API_KEY" \
@@ -366,32 +421,37 @@ curl -X PUT https://api.envoyou.com/v1/webhooks/wh_1234567890 \
     "events": ["user.created", "user.updated", "auth.login", "api.rate_limit_exceeded"],
     "active": true
   }'
-```
+```text
 
 #### Delete Webhook
+
 ```bash
 curl -X DELETE https://api.envoyou.com/v1/webhooks/wh_1234567890 \
   -H "Authorization: Bearer YOUR_API_KEY"
-```
+```text
 
 ## Common Issues and Solutions
 
 ### Signature Verification Fails
+
 - Ensure webhook secret is correct
 - Check timestamp is within acceptable range (5 minutes)
 - Verify JSON payload formatting
 
 ### Webhooks Not Being Delivered
+
 - Confirm endpoint is publicly accessible
 - Check firewall and security group settings
 - Verify SSL certificate is valid
 
 ### Duplicate Events
+
 - Implement idempotency checks
 - Store processed event IDs
 - Handle out-of-order delivery
 
 ### Slow Response Times
+
 - Process webhooks asynchronously
 - Optimize database queries
 - Implement caching where appropriate
@@ -406,6 +466,7 @@ Track webhook performance:
 - **Event Volume**: Events per minute/hour/day
 
 Set up alerts for:
+
 - High error rates
 - Delivery failures
 - Unusual event volumes

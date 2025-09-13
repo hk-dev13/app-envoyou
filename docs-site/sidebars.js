@@ -42,9 +42,13 @@ const sidebars = {
       label: 'Guides',
       items: [
         'guides/error-handling',
+        'guides/error-catalog',
         'guides/rate-limiting',
+        'guides/observability',
+        'guides/pagination',
         'guides/webhooks',
-        'guides/sdks-libraries'
+        'guides/sdks-libraries',
+        'guides/user-applications'
       ]
     },
     {

@@ -28,7 +28,7 @@ EnvoyOU is a sophisticated API platform for global environmental data aggregatio
 curl -X GET "https://api.envoyou.com/v1/global/emissions?limit=10" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "X-API-Key: YOUR_API_KEY"
-```
+```text
 
 ## 📚 Documentation Structure
 

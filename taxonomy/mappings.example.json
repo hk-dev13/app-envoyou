@@ -1,0 +1,13 @@
+{
+  "version": "2025.2",
+  "generatedAt": "2025-09-13T10:30:00Z",
+  "framework": "GRI",
+  "mappings": [
+    { "key": "cevs_score", "code": "GRI:2-23", "description": "Overall composite ESG performance score" },
+    { "key": "water_discharge_ppm", "code": "GRI:303-4", "description": "Water discharge pollutant concentration" },
+    { "key": "scope1_emissions_tco2e", "code": "GRI:305-1", "description": "Direct GHG emissions (Scope 1)" },
+    { "key": "scope2_emissions_tco2e", "code": "GRI:305-2", "description": "Energy indirect GHG emissions (Scope 2)" },
+    { "key": "waste_generated_tons", "code": "GRI:306-3", "description": "Total waste generated" }
+  ],
+  "hash": "example123hash"
+}

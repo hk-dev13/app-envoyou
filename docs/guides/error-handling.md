@@ -67,7 +67,7 @@ All API errors follow a consistent format:
   "timestamp": "2024-01-01T00:00:00Z",
   "request_id": "unique-request-identifier"
 }
-```
+```text
 
 ## Best Practices for Error Handling
 
@@ -106,7 +106,7 @@ async function apiRequest(url, options, maxRetries = 3) {
     }
   }
 }
-```
+```text
 
 ### 2. Log Errors Appropriately
 
@@ -125,7 +125,7 @@ function handleApiError(error, context) {
     extra: context
   });
 }
-```
+```text
 
 ### 3. Provide User-Friendly Messages
 
@@ -142,7 +142,7 @@ function getUserFriendlyErrorMessage(statusCode, errorCode) {
 
   return errorMessages[statusCode] || 'An unexpected error occurred. Please try again.';
 }
-```
+```text
 
 ## Rate Limiting
 

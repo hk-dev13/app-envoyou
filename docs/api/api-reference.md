@@ -21,7 +21,7 @@ Register a new user account.
   "company": "string (optional)",
   "job_title": "string (optional)"
 }
-```
+```text
 
 **Response (200)**:
 ```json
@@ -30,14 +30,14 @@ Register a new user account.
   "message": "Registration successful. Please check your email to verify your account.",
   "email_sent": true
 }
-```
+```text
 
 **Response (400)**:
 ```json
 {
   "detail": "Password must be at least 8 characters with uppercase, lowercase, and number"
 }
-```
+```text
 
 ## Endpoint /v1/auth/login
 
@@ -53,7 +53,7 @@ Authenticate user and get tokens.
   "email": "string (required)",
   "password": "string (required)"
 }
-```
+```text
 
 **Response (200)**:
 ```json
@@ -68,14 +68,14 @@ Authenticate user and get tokens.
     "company": "string"
   }
 }
-```
+```text
 
 **Response (401)**:
 ```json
 {
   "detail": "Invalid email or password"
 }
-```
+```text
 
 ## Other Data Endpoints
 
@@ -108,7 +108,7 @@ Get US emissions data.
   "source": "epa",
   "total": 1
 }
-```
+```text
 
 ### /v1/global/eea/renewables
 
@@ -144,4 +144,4 @@ All requests use JSON. Responses always in format:
   "message": "string (optional)",
   "error": "string (optional)"
 }
-```
+```text

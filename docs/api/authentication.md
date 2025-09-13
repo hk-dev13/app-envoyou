@@ -24,7 +24,7 @@ POST /v1/auth/login
   "email": "user@example.com",
   "password": "Password123"
 }
-```
+```text
 
 **Login Response**:
 ```json
@@ -39,4 +39,4 @@ POST /v1/auth/login
     "company": "Example Corp"
   }
 }
-```
+```text

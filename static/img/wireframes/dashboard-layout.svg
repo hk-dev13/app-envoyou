@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520" viewBox="0 0 920 520" font-family="Arial, sans-serif">
+  <style>
+    .panel { fill:#f8f9fa; stroke:#444; stroke-width:1.2; }
+    .title { font-size:14px; font-weight:bold; }
+    .label { font-size:12px; }
+  </style>
+  <rect x="10" y="10" width="900" height="70" class="panel"/>
+  <text x="20" y="40" class="title">KPI Header (CEVS Score + Delta + Percentile)</text>
+
+  <rect x="10" y="90" width="360" height="180" class="panel"/>
+  <text x="20" y="110" class="title">Trend & Benchmarks</text>
+
+  <rect x="380" y="90" width="270" height="180" class="panel"/>
+  <text x="390" y="110" class="title">Alerts & Anomalies</text>
+
+  <rect x="660" y="90" width="250" height="180" class="panel"/>
+  <text x="670" y="110" class="title">Regulations Feed</text>
+
+  <rect x="10" y="280" width="900" height="230" class="panel"/>
+  <text x="20" y="300" class="title">Facility Drilldown (Map / Table + Filters)</text>
+
+  <text x="10" y="515" class="label">Envoyou Monitoring Dashboard Wireframe v0.1</text>
+</svg>

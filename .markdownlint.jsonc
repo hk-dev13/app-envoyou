@@ -1,0 +1,16 @@
+{
+  // Base configuration for docs quality
+  "default": true,
+  "MD013": false, // Line length handled by editors / wrap in renderer
+  "MD033": false, // Allow inline HTML for badges / custom formatting
+  "MD041": false, // Allow missing h1 in partial includes
+  // Temporarily suppress structural spacing rules during bulk migration
+  "MD022": false, // Headings surrounded by blank lines
+  "MD031": false, // Blank lines around fenced code blocks
+  "MD032": false, // Blank lines around lists
+  "MD004": { "style": "dash" },
+  "MD007": { "indent": 2 },
+  // Allow repeated headings in changelog style sections (Added/Changed/etc.)
+  "MD024": { "siblings_only": true },
+  "MD029": { "style": "one" }
+}
