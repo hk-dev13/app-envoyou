@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth.js';
 import apiService from '../services/apiService';
 
 const DashboardUsage = () => {
@@ -12,7 +12,7 @@ const DashboardUsage = () => {
     activeKeys: 0
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [fetchError, setFetchError] = useState(null); // Not displayed yet
 
   useEffect(() => {
     const fetchUserStats = async () => {
@@ -32,12 +32,12 @@ const DashboardUsage = () => {
         
         // Check if it's an authentication error
         if (err?.type === 'authentication_error' || err?.code === 'AUTH_REQUIRED') {
-          setError('Your session has expired. Please log in again.');
+          // TODO: Surface session expiry to user
           // Don't auto-redirect from dashboard, let user handle it
         } else if (err?.code === 'ACCESS_DENIED') {
-          setError('Please get an API key to view your usage statistics');
+          // TODO: Surface missing API key message
         } else {
-          setError(err?.message || 'Failed to load usage data');
+          // TODO: Surface generic error message
         }
         
         // Keep dummy data as fallback

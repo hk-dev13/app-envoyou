@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SettingsLayout from '../../components/settings/SettingsLayout';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth.js';
 import apiService from '../../services/apiService';
 
 function SecuritySettingsPage() {
@@ -154,7 +154,7 @@ function SecuritySettingsPage() {
                         <div className="mb-6">
                             <h2 className="text-2xl font-semibold text-white mb-2">Set a Password for Your Account</h2>
                             <p className="text-slate-400">
-                                You signed up with {user.auth_provider}. If you'd like, you can also create a password to log in without {user.auth_provider}.
+                                You signed up with {user.auth_provider}. If you&apos;d like, you can also create a password to log in without {user.auth_provider}.
                             </p>
                         </div>
 

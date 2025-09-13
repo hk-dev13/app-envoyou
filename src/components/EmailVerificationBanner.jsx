@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth.js';
 import apiService from '../services/apiService';
 
 const EmailVerificationBanner = () => {
@@ -68,7 +68,7 @@ const EmailVerificationBanner = () => {
       )}
       <div className="mt-3 text-sm text-yellow-300">
         <p>
-          Haven't received the email? Check your spam folder or{' '}
+          Haven&apos;t received the email? Check your spam folder or{' '}
           <button
             onClick={handleResendVerification}
             className="font-medium underline hover:text-yellow-200"

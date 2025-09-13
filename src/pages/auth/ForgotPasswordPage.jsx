@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import apiService from '../../services/apiService';
 
@@ -70,7 +70,7 @@ const ForgotPasswordPage = () => {
             Reset Password
           </h2>
           <p className="mt-2 text-center text-sm text-slate-400">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
         </div>
 
@@ -135,7 +135,7 @@ const ForgotPasswordPage = () => {
               Back to Login
             </Link>
             <div className="text-sm text-slate-400">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 to="/auth/register"
                 className="text-emerald-400 hover:text-emerald-300 underline"

@@ -1,0 +1,23 @@
+{
+  "id": "intro",
+  "title": "Welcome to EnvoyOU API Documentation",
+  "description": "Welcome to the comprehensive documentation for EnvoyOU API - your gateway to global environmental data and verification services.",
+  "source": "@site/../docs/intro.md",
+  "sourceDirName": ".",
+  "slug": "/intro",
+  "permalink": "/docs/intro",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/../docs/intro.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "next": {
+    "title": "Introduction",
+    "permalink": "/docs/introduction"
+  }
+}

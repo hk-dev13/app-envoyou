@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { API_CONFIG } from '../../config';
+import { useAuth } from '../../hooks/useAuth.js';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({

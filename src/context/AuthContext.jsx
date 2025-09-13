@@ -81,7 +81,7 @@ const authReducer = (state, action) => {
 const AuthContext = createContext();
 
 // useAuth hook moved to separate file for better fast refresh support
-// import { useAuth } from '../hooks/useAuth';
+// import { useAuth } from './hooks/useAuth.js';
 
 // Auth provider component
 export const AuthProvider = ({ children }) => {
@@ -263,7 +263,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const supabase = getSupabaseClient();
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+  const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/v1/callback`
@@ -291,7 +291,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const supabase = getSupabaseClient();
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
+  const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
           redirectTo: `${window.location.origin}/auth/v1/callback`

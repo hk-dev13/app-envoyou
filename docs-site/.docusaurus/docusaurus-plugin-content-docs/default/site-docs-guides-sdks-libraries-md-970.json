@@ -1,0 +1,24 @@
+{
+  "id": "guides/sdks-libraries",
+  "title": "SDK and Libraries Guide",
+  "description": "This guide covers the official and community SDKs available for integrating with the EnvoyOU API, along with best practices for library usage.",
+  "source": "@site/../docs/guides/sdks-libraries.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/sdks-libraries",
+  "permalink": "/docs/guides/sdks-libraries",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/../docs/guides/sdks-libraries.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Webhooks Integration Guide",
+    "permalink": "/docs/guides/webhooks"
+  },
+  "next": {
+    "title": "Frequently Asked Questions (FAQ)",
+    "permalink": "/docs/faq"
+  }
+}

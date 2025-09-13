@@ -1,0 +1,15 @@
+{
+  "id": "changelog",
+  "title": "Changelog",
+  "description": "All notable changes to the EnvoyOU API will be documented in this file.",
+  "source": "@site/docs/changelog.md",
+  "sourceDirName": ".",
+  "slug": "/changelog",
+  "permalink": "/docs/changelog",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/docs/changelog.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

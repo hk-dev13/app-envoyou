@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { AuthProvider } from './context/AuthContext';
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from './hooks/useAuth.js';
 // // import ErrorBoundary from './components/ErrorBoundary';
 // import ServiceWorkerManager from './components/ServiceWorkerManager';
 // import PushNotificationManager from './components/PushNotificationManager';

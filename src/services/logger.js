@@ -3,7 +3,7 @@
  * Centralized logging system for EnvoyOU application
  */
 
-import { APP_CONFIG, DEV_CONFIG, EXTERNAL_SERVICES } from '../config';
+import { APP_CONFIG, DEV_CONFIG, EXTERNAL_SERVICES } from '../config/index.js';
 
 // Log Levels
 export const LOG_LEVELS = {

@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
   {
-    ignores: ['dist/**', 'node_modules/**', 'dev-dist/**'],
+    ignores: ['dist/**', 'node_modules/**', 'dev-dist/**', '.docusaurus/**', 'docs-site/.docusaurus/**'],
   },
   js.configs.recommended,
   {
@@ -39,6 +39,7 @@ export default [
         AbortController: 'readonly',
         Blob: 'readonly',
         PerformanceObserver: 'readonly',
+        require: 'readonly',
       },
       parserOptions: {
         ecmaVersion: 'latest',

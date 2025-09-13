@@ -1,0 +1,15 @@
+{
+  "id": "faq",
+  "title": "Frequently Asked Questions (FAQ)",
+  "description": "This page contains answers to the most commonly asked questions about the EnvoyOU API.",
+  "source": "@site/docs/faq.md",
+  "sourceDirName": ".",
+  "slug": "/faq",
+  "permalink": "/docs/faq",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/docs/faq.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

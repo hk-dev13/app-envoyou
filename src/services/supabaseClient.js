@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { EXTERNAL_SERVICES } from '../config';
+import { EXTERNAL_SERVICES } from '../config/index.js';
 
 let supabaseClient = null;
 

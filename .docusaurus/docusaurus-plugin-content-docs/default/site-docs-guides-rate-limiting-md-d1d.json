@@ -1,0 +1,15 @@
+{
+  "id": "guides/rate-limiting",
+  "title": "Rate Limiting Guide",
+  "description": "This guide explains how rate limiting works in the EnvoyOU API and best practices for handling rate limits effectively.",
+  "source": "@site/docs/guides/rate-limiting.md",
+  "sourceDirName": "guides",
+  "slug": "/guides/rate-limiting",
+  "permalink": "/docs/guides/rate-limiting",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/hk-dev13/envoyou-page-react/tree/main/docs/guides/rate-limiting.md",
+  "tags": [],
+  "version": "current",
+  "frontMatter": {}
+}

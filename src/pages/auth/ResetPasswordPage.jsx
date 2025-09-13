@@ -242,7 +242,7 @@ const ResetPasswordPage = () => {
               Back to Login
             </Link>
             <div className="text-sm text-slate-400">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 to="/auth/register"
                 className="text-emerald-400 hover:text-emerald-300 underline"

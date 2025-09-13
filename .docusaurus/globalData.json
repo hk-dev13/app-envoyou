@@ -1,0 +1,65 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "api/api-reference",
+          "docs": [
+            {
+              "id": "api/api-reference",
+              "path": "/docs/api/api-reference"
+            },
+            {
+              "id": "api/authentication",
+              "path": "/docs/api/authentication"
+            },
+            {
+              "id": "changelog",
+              "path": "/docs/changelog"
+            },
+            {
+              "id": "faq",
+              "path": "/docs/faq"
+            },
+            {
+              "id": "getting-started",
+              "path": "/docs/getting-started"
+            },
+            {
+              "id": "guides/error-handling",
+              "path": "/docs/guides/error-handling"
+            },
+            {
+              "id": "guides/rate-limiting",
+              "path": "/docs/guides/rate-limiting"
+            },
+            {
+              "id": "guides/sdks-libraries",
+              "path": "/docs/guides/sdks-libraries"
+            },
+            {
+              "id": "guides/webhooks",
+              "path": "/docs/guides/webhooks"
+            },
+            {
+              "id": "intro",
+              "path": "/docs/intro"
+            },
+            {
+              "id": "introduction",
+              "path": "/docs/introduction"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {}
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}
