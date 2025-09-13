@@ -1,11 +1,13 @@
 # Documentation Automation Plan
 
 ## Goals
+
 - Keep API reference synced with actual backend.
 - Prevent drift in authentication + rate limit docs.
 - Auto-validate OpenAPI before merge.
 
 ## Candidates
+
 | Automation | Tool | Priority | Notes |
 |------------|------|----------|-------|
 | OpenAPI validation | swagger-cli | High | Blocks PR if invalid |
@@ -15,21 +17,25 @@
 | API schema diff report | custom script + saved baseline | Low | Later |
 
 ## Scripts (Proposed)
+
 `scripts/validate-openapi.sh`
+
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 npx swagger-cli validate openapi/envoyou-api.yaml
-```
+```text
 
 `scripts/lint-markdown.sh`
+
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
 npx remark . --frail
-```
+```text
 
 ## GitHub Actions Outline
+
 ```yaml
 name: docs-ci
 on: [pull_request]
@@ -44,9 +50,10 @@ jobs:
       - run: npm ci
       - run: bash scripts/validate-openapi.sh
       - run: npm run docs:build
-```
+```text
 
 ## Future
+
 - Generate TypeScript client: `openapi-typescript` → `sdk/`
 - Publish package to npm (optional)
 

@@ -14,7 +14,7 @@ The official EnvoyOU JavaScript SDK provides a complete, type-safe interface for
 npm install @envoyou/sdk
 # or
 yarn add @envoyou/sdk
-```
+```text
 
 #### Basic Usage
 
@@ -40,7 +40,7 @@ const updatedUser = await client.users.update({
   name: 'New Name',
   metadata: { customField: 'value' }
 });
-```
+```text
 
 #### Advanced Configuration
 
@@ -59,7 +59,7 @@ const client = new EnvoyOUClient({
     burstLimit: 20
   }
 });
-```
+```text
 
 ### Python SDK
 
@@ -69,7 +69,7 @@ Official Python SDK with async support and comprehensive error handling.
 
 ```bash
 pip install envoyou-sdk
-```
+```text
 
 #### Basic Usage
 
@@ -92,7 +92,7 @@ updated_user = client.users.update(
     name='New Name',
     metadata={'custom_field': 'value'}
 )
-```
+```text
 
 #### Async Usage
 
@@ -113,7 +113,7 @@ async def main():
     user = await client.users.get_current_user()
 
 asyncio.run(main())
-```
+```text
 
 ### Go SDK
 
@@ -123,7 +123,7 @@ High-performance Go SDK optimized for concurrent requests.
 
 ```bash
 go get github.com/envoyou/go-sdk
-```
+```text
 
 #### Basic Usage
 
@@ -161,7 +161,7 @@ func main() {
 
     fmt.Printf("User: %+v\n", user)
 }
-```
+```text
 
 ## Community SDKs
 
@@ -169,7 +169,7 @@ func main() {
 
 ```bash
 composer require envoyou/php-sdk
-```
+```text
 
 ```php
 use EnvoyOU\Client;
@@ -187,7 +187,7 @@ $authResponse = $client->auth()->login([
 
 // Get user profile
 $user = $client->users()->getCurrentUser();
-```
+```text
 
 ### Ruby SDK
 
@@ -208,7 +208,7 @@ auth_response = client.auth.login(
 
 # Get user profile
 user = client.users.get_current_user
-```
+```text
 
 ### .NET SDK
 
@@ -232,7 +232,7 @@ var authResponse = await client.Auth.LoginAsync(new LoginRequest
 
 // Get user profile
 var user = await client.Users.GetCurrentUserAsync();
-```
+```text
 
 ## HTTP Client Libraries
 
@@ -250,7 +250,7 @@ curl -X POST https://api.envoyou.com/v1/auth/login \
 # Get user profile (using API key)
 curl -X GET https://api.envoyou.com/v1/users/me \
   -H "Authorization: Bearer YOUR_API_KEY"
-```
+```text
 
 ### Python Requests
 
@@ -282,7 +282,7 @@ class EnvoyOUAPI:
 # Usage
 api = EnvoyOUAPI('your-api-key')
 user = api.get_user()
-```
+```text
 
 ### JavaScript Fetch
 
@@ -329,7 +329,7 @@ class EnvoyOUAPI {
 // Usage
 const api = new EnvoyOUAPI('your-api-key');
 const user = await api.getUser();
-```
+```text
 
 ## Best Practices
 
@@ -350,7 +350,7 @@ try {
     throw error;
   }
 }
-```
+```text
 
 ### 2. Rate Limiting
 
@@ -373,7 +373,7 @@ for user_id in user_ids:
         time.sleep(e.retry_after)
         user = client.users.get(user_id)
         users.append(user)
-```
+```text
 
 ### 3. Connection Pooling
 
@@ -390,7 +390,7 @@ client := envoyou.NewClient(&envoyou.Config{
         Timeout: 30 * time.Second,
     },
 })
-```
+```text
 
 ### 4. Logging and Monitoring
 
@@ -405,7 +405,7 @@ const client = new EnvoyOUClient({
     error: (message, meta) => console.error(message, meta)
   }
 });
-```
+```text
 
 ### 5. Testing
 
@@ -428,7 +428,7 @@ describe('UserService', () => {
     expect(user.name).toBe('Test User');
   });
 });
-```
+```text
 
 ## SDK Maintenance and Updates
 
@@ -449,7 +449,7 @@ const compatibility = client.checkCompatibility();
 if (!compatibility.supported) {
   console.warn('SDK version may not be compatible with API version');
 }
-```
+```text
 
 ### Migration Guides
 

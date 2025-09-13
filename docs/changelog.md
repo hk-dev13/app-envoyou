@@ -8,23 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - New webhook events for user profile updates
 - Enhanced rate limiting with burst allowance
 - Improved error messages with detailed context
 - New SDK versions for Python and Go with async support
 
 ### Changed
+
 - Updated authentication flow to support OAuth 2.0 PKCE
 - Modified rate limit headers to include more detailed information
 - Enhanced webhook retry logic with exponential backoff
 
 ### Deprecated
+
 - Legacy authentication endpoints (use new OAuth flow)
 - Old webhook payload format (migrate to new structured format)
 
 ## [1.2.0] - 2024-01-15
 
 ### Added
+
 - Webhook signature verification for enhanced security
 - Bulk user import API for enterprise customers
 - Advanced filtering options for user search endpoints
@@ -32,11 +36,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for custom user metadata fields
 
 ### Changed
+
 - Improved error response format with consistent structure
 - Updated rate limiting algorithm to sliding window
 - Enhanced API documentation with interactive examples
 
 ### Fixed
+
 - Race condition in concurrent user creation
 - Memory leak in webhook processing
 - Incorrect rate limit calculations under high load
@@ -44,12 +50,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.5] - 2024-01-01
 
 ### Fixed
+
 - Security vulnerability in JWT token validation (CVE-2024-001)
 - Incorrect handling of special characters in user names
 - Timeout issues with large bulk operations
 - Webhook delivery failures under high load
 
 ### Security
+
 - Updated dependencies to address security vulnerabilities
 - Enhanced input validation for all endpoints
 - Improved encryption for sensitive data storage
@@ -57,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2023-12-15
 
 ### Added
+
 - New user management endpoints for enterprise features
 - Support for SAML authentication
 - Advanced audit logging capabilities
@@ -64,28 +73,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Custom domain support for enterprise accounts
 
 ### Changed
+
 - Updated SDK versions across all supported languages
 - Improved performance for bulk operations
 - Enhanced error handling with more descriptive messages
 
 ### Deprecated
+
 - Legacy bulk import format (use new JSON format)
 
 ## [1.0.5] - 2023-12-01
 
 ### Fixed
+
 - Incorrect pagination in user list endpoints
 - Missing CORS headers for web applications
 - Database connection pool exhaustion under load
 - Incorrect timezone handling in timestamps
 
 ### Security
+
 - Fixed potential information disclosure in error messages
 - Updated SSL/TLS configuration for better security
 
 ## [1.0.0] - 2023-11-15
 
 ### Added
+
 - Initial release of EnvoyOU API
 - User authentication and management
 - JWT token-based authorization
@@ -96,18 +110,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Developer dashboard and analytics
 
 ### Changed
+
 - N/A (initial release)
 
 ### Deprecated
+
 - N/A (initial release)
 
 ### Removed
+
 - N/A (initial release)
 
 ### Fixed
+
 - N/A (initial release)
 
 ### Security
+
 - Implemented comprehensive security measures
 - SOC 2 Type II compliance
 - GDPR compliance features
@@ -134,6 +153,7 @@ We use [Semantic Versioning](https://semver.org/):
 ### Migrating from 1.1.x to 1.2.x
 
 #### Authentication Changes
+
 - OAuth 2.0 PKCE is now required for public clients
 - Legacy authentication endpoints are deprecated
 - New token refresh flow implemented
@@ -148,9 +168,10 @@ const authCode = await client.auth.authorize({
   scope: 'read write',
   code_challenge: generateCodeChallenge()
 });
-```
+```text
 
 #### Webhook Payload Changes
+
 - New structured payload format
 - Enhanced event types
 - Signature verification required
@@ -175,11 +196,12 @@ const authCode = await client.auth.authorize({
     }
   }
 }
-```
+```text
 
 ### Migrating from 1.0.x to 1.1.x
 
 #### Bulk Operations
+
 - New bulk import format required
 - Enhanced error reporting for failed operations
 
@@ -201,17 +223,19 @@ const result = await client.users.bulkImport({
     send_welcome_email: false
   }
 });
-```
+```text
 
 ## Upcoming Changes
 
 ### Version 2.0.0 (Q2 2024)
+
 - GraphQL API support
 - Enhanced real-time capabilities
 - Advanced user segmentation
 - Machine learning-powered analytics
 
 ### Version 1.3.0 (Q1 2024)
+
 - Mobile SDK improvements
 - Enhanced security features
 - Performance optimizations
