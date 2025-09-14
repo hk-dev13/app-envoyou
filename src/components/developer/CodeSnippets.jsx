@@ -905,7 +905,7 @@ func main() {
             Quick Start Guide
           </CardTitle>
           <CardDescription>
-            Get up and running with the EnvoyOU API in minutes
+            Get up and running with the Envoyou API in minutes
           </CardDescription>
         </CardHeader>
         <CardContent>

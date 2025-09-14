@@ -89,7 +89,7 @@ const DeveloperNavigation = () => {
                 </svg>
               </div>
               <div>
-                <span className="text-xl font-bold text-white">EnvoyOU</span>
+                <span className="text-xl font-bold text-white">Envoyou</span>
                 <span className="text-sm text-slate-400 block -mt-1">Developer Portal</span>
               </div>
             </Link>

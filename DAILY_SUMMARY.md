@@ -1,61 +1,75 @@
 # Daily Summary (2025-09-14)
 
 ## Ringkasan Pekerjaan Hari Ini
-- Integrasi fitur gating lanjutan: `LockedModule` sekarang mengirim event `feature-upgrade-click` dan `open-upgrade-modal` dengan payload detail (feature, required, current, timestamp).
-- Tambah analitik: Utility `track(event, data)` + listener di `UpgradeProvider.jsx` untuk mencatat klik upgrade.
-- Fetch rencana (plan) nyata dari backend: `usePlan.js` sekarang melakukan fetch `/api/plan` (fallback ke derived plan, exposed `loadingPlan`, `planError`, `remote`).
-- UX status plan: Komponen baru `PlanStatus.jsx` menampilkan status (loading / error / final) dan ditambahkan ke header 3 dashboard (Monitoring, Analytics, Reporting).
-- Penambahan properti `featureKey` di setiap pemakaian `<LockedModule>` agar event analitik & modal tahu konteks asal.
-- Build sukses setelah semua perubahan (verifikasi Vite production build tanpa error).
+### 1. Gating & Monetization Foundation
+- `LockedModule` mengirim `feature-upgrade-click` & `open-upgrade-modal` dengan payload (feature, required, current, ts).
+- `track(event,data)` util + listener di `UpgradeProvider.jsx` untuk log klik upgrade (dev: console fallback).
+- `usePlan.js` fetch `/api/plan` (fallback derive) expose: `plan`, `loadingPlan`, `planError`, `remote`.
+- `PlanStatus.jsx` menampilkan status & fallback label `(derived)` bila remote belum ada.
+- Properti `featureKey` diterapkan di pemakaian `<LockedModule>` agar event punya konteks asal.
 
-## Struktur Event Baru
-- `feature-upgrade-click`: dipicu setiap user klik tombol Upgrade pada modul terkunci.
-- `open-upgrade-modal`: membuka modal upgrade; sekarang membawa detail feature yang memicu.
+### 2. Navigation & Layout
+- Global `AppLayout` dengan grouping menu Dashboards & Developer + Profile dropdown.
+- Pindahkan Settings ke Profile, hapus header duplikat di halaman Dashboard.
+- Perbaiki flicker dropdown (delay close 160ms saat hover keluar).
 
-## File-File Kunci yang Diubah / Ditambahkan
+### 3. API Docs Visual Contrast
+- Redoc theme diperluas: warna teks `#e2e8f0`, secondary `#94a3b8`, primary brand hijau, panel kanan gelap.
+- Tambah override CSS (tables, code, link hover) agar konten terbaca di background gelap.
+
+### 4. CI Workflow Maintenance
+- Perbaikan workflow `Daily Summary Check`: hapus `working-directory: app-envoyou` yang menyebabkan path ganda & kegagalan `npm ci`.
+
+## Struktur Event (Aktif)
+- `feature-upgrade-click` (klik tombol upgrade). Listener: track + open modal fallback.
+- `open-upgrade-modal` (permintaan buka modal langsung). Listener: membuka modal & set origin feature.
+
+## File Perubahan Utama
 - `src/components/LockedModule.jsx`
 - `src/components/UpgradeProvider.jsx`
-- `src/analytics/track.js` (baru)
-- `src/components/PlanStatus.jsx` (baru)
-- `src/hooks/usePlan.js` (fetch backend plan)
-- `src/pages/*Dashboard.jsx` (inject `featureKey` + `PlanStatus`)
+- `src/components/UpgradeProviderContext.js`
+- `src/analytics/track.js`
+- `src/hooks/usePlan.js`
+- `src/components/PlanStatus.jsx`
+- `src/components/layout/AppLayout.jsx`
+- `docs-site/src/pages/api-spec/index.jsx` & `docusaurus-theme/css/custom.css`
+- `.github/workflows/daily-summary.yml`
 
 ## Kondisi Saat Ini
-Semua infrastruktur gating + modal + analitik dasar sudah siap. Belum ada integrasi billing / upgrade redirect nyata. Endpoint `/api/plan` diasumsikan tersedia (kalau belum, perlu dibuat di backend). Tidak ada penanganan toast untuk error plan (saat ini inline text saja).
+Fondasi gating & event analitik klik sudah stabil. Belum ada billing/redirect nyata & belum ada tracking impression modal. Error plan tampil inline tanpa toast. Kontras API Spec sudah membaik. Workflow daily summary kembali hijau (diharapkan) setelah path diperbaiki.
 
-## Backlog / TODO Besok
-1. Backend endpoint `/api/plan` (kalau belum) mengembalikan `{ "plan": "BUILD" }` dsb + auth.
-1. Tambah redirect /handler nyata di `selectPlan` (misal ke `/billing?plan=...`).
-1. Tambah listener analitik untuk impression modal (`open-upgrade-modal`).
-1. Tampilkan badge khusus bila plan hasil fallback (derived) agar user tahu perlu refresh / login.
-1. Tambah toast / notification untuk `planError` (retry button).
-1. Guard Sentry load hanya di production (jika belum dibatasi).
-1. Implement real chart lazy load & code splitting untuk panel berat.
-1. Tambah event tracking untuk sukses upgrade (future billing callback hook).
-1. Dokumentasi internal: perbarui README atau buat `MONETIZATION_FLOW.md` jelaskan arsitektur gating.
-1. (Opsional) Local storage cache plan dengan TTL pendek (misal 60s) untuk kurangi latency.
+## Backlog / Prioritas Berikutnya
+1. Backend endpoint `/api/plan` final (auth + response `{ plan: "BUILD" }`).
+2. Billing / redirect nyata di `selectPlan` (misal navigate `/billing?origin=feature&target=PLAN`).
+3. Tracking impression modal: `track('open_upgrade_modal', { feature })` saat modal pertama kali muncul.
+4. Badge visual (chip warna) khusus untuk plan fallback `(derived)` agar lebih jelas dari teks kecil.
+5. Toast + retry action untuk `planError` (misal `fetch` ulang).
+6. Chart heavy components lazy + suspense boundary (optimisasi initial TTI).
+7. Event tracking sukses upgrade (menunggu integrasi billing/platform pilihan).
+8. Dokumentasi `MONETIZATION_FLOW.md` jelaskan arsitektur gating + event.
+9. Optional: Local storage cache plan TTL 60s untuk turunkan latency / flicker.
+10. (Optional) Integrasi Sentry (guard hanya production) jika observability dibutuhkan.
 
 ## Risiko / Catatan
-- Jika `/api/plan` return lambat, dashboard sementara menampilkan label `(derived)` — mungkin perlu skeleton berbeda.
-- Tanpa auth kuat, user bisa manipulasi UI; gating final tetap harus server-side untuk actions kritikal.
-- Event analitik saat ini hanya console di non-production; perlu integrasi service final.
+- Lambatnya `/api/plan` masih menyebabkan status derived—bisa tambahkan skeleton berbeda.
+- Tanpa server gating tambahan, user bisa mem-bypass UI (perlu enforcement backend untuk aksi kritikal).
+- Analytics hanya dev-console saat ga ada gtag/dataLayer.
 
-## Langkah Update Harian Berikutnya
-Setiap awal hari:
-1. Salin bagian "Ringkasan Pekerjaan Hari Ini" jadi arsip (opsional) atau overwrite langsung.
-1. Pindahkan "Backlog / TODO Besok" yang selesai ke ringkasan.
-1. Perbarui tanggal di judul utama dan sections.
+## Rutinitas Harian (Wajib)
+1. Setelah coding selesai: update bagian "Ringkasan Pekerjaan Hari Ini" & reorganize backlog (pindahkan yang selesai).
+2. Commit file ini bersama perubahan kode lain agar workflow daily summary dapat memverifikasi.
+3. Jika tidak ada perubahan signifikan, tetap update tanggal & konfirmasi status (hindari stagnan >1 hari kerja).
 
-### Template Quick Replace
+### Template Quick Replace (Referensi)
 ```markdown
 # Daily Summary (YYYY-MM-DD)
 
 ## Ringkasan Pekerjaan Hari Ini
 - ...
 
-## Backlog / TODO Besok
+## Backlog / Prioritas Berikutnya
 1. ...
 ```
 
 ---
-_Dokumen ini dimaksudkan sebagai file tunggal yang di-update harian (rolling) untuk status engineering & prioritas._
+_Dokumen ini adalah log berjalan (rolling). Gunakan commit harian agar historinya tercatat di Git._

@@ -1,6 +1,6 @@
 /**
  * Logger Service
- * Centralized logging system for EnvoyOU application
+ * Centralized logging system for Envoyou application
  */
 
 import { APP_CONFIG, DEV_CONFIG, EXTERNAL_SERVICES } from '../config/index.js';

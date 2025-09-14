@@ -80,7 +80,7 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
           <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">E</span>
           </div>
-          <span className="text-white font-semibold">EnvoyOU</span>
+          <span className="text-white font-semibold">Envoyou</span>
         </Link>
       </div>
 

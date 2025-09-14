@@ -1,6 +1,6 @@
 /**
  * Error Handling Service
- * Centralized error handling and recovery for EnvoyOU application
+ * Centralized error handling and recovery for Envoyou application
  */
 
 import logger from './logger.js';

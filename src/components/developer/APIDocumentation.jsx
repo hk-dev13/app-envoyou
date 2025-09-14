@@ -5,7 +5,7 @@ const APIDocumentation = () => {
   return (
     <div className="max-w-none">
       <div className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-        <h1 className="text-3xl font-bold text-white mb-6">EnvoyOU API Documentation</h1>
+        <h1 className="text-3xl font-bold text-white mb-6">Envoyou API Documentation</h1>
         <div className="text-slate-300 mb-6">
           <p className="mb-4">The in-app embedded markdown has been deprecated. Visit the unified documentation portal for the latest guides, authentication details, endpoint reference, data model, and changelog.</p>
           <a

@@ -18,10 +18,8 @@ jobs:
         with:
           node-version: 20
       - name: Install deps (minimal)
-        working-directory: app-envoyou
         run: npm ci --no-audit --no-fund
       - name: Run daily summary check
-        working-directory: app-envoyou
         run: npm run check:daily-summary
       - name: Create issue when summary missing (scheduled only)
         if: ${{ failure() && github.event_name == 'schedule' }}

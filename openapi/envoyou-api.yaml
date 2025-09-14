@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: EnvoyOU Core API
+  title: Envoyou Core API
   version: 0.1.0
   description: >-
-    Early skeleton of the EnvoyOU public API specification. This is a draft and
+    Early skeleton of the Envoyou public API specification. This is a draft and
     will evolve. Endpoints and schemas are incomplete.
 servers:
   - url: https://api.envoyou.com/v1

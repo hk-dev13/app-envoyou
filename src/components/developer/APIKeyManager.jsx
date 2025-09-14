@@ -110,7 +110,7 @@ const APIKeyManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">API Key Management</h2>
-          <p className="text-slate-400 mt-1">Create and manage your API keys for accessing EnvoyOU services</p>
+          <p className="text-slate-400 mt-1">Create and manage your API keys for accessing Envoyou services</p>
         </div>
         <button
           onClick={() => setShowCreateForm(true)}
@@ -278,7 +278,7 @@ const APIKeyManager = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
             <h3 className="text-lg font-medium text-white mb-2">No API Keys</h3>
-            <p className="text-slate-400 mb-4">Create your first API key to start using the EnvoyOU API</p>
+            <p className="text-slate-400 mb-4">Create your first API key to start using the Envoyou API</p>
             <button
               onClick={() => setShowCreateForm(true)}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors"

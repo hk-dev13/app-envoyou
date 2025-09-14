@@ -117,7 +117,7 @@ function APIKeysSettingsPage() {
                         <div>
                             <h2 className="text-2xl font-semibold text-white mb-2">API Keys</h2>
                             <p className="text-slate-400">
-                                Manage your API keys for accessing EnvoyOU&apos;s CV Enhancement API.
+                                Manage your API keys for accessing Envoyou&apos;s CV Enhancement API.
                             </p>
                         </div>
                         <button
