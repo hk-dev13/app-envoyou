@@ -33,6 +33,23 @@
 - Fix API connectivity dengan mengupdate `VITE_API_BASE_URL` ke `http://localhost:10000`.
 - Update `usePlan` hook untuk menggunakan full API URL dengan `API_CONFIG`.
 
+### 7. OpenAPI Documentation Complete Overhaul
+- **MASALAH**: Dokumentasi API di docs.envoyou.com hanya menampilkan 10 endpoint dari total 78 endpoint yang sudah diimplementasi.
+- **ANALISIS**: Melakukan inventory lengkap terhadap semua route files di backend, menemukan 78 endpoint aktual vs 10 yang didokumentasikan.
+- **PENYELESAIAN**: Melakukan update komprehensif terhadap `openapi/envoyou-api.yaml`:
+  - ✅ Authentication endpoints (24): login, register, OAuth (Google/GitHub), 2FA, password reset
+  - ✅ User management (10): profile, API keys, sessions, billing plan
+  - ✅ Global data (7): emissions, CAMPD, EEA, EDGAR, ISO, CEVS datasets
+  - ✅ Permits (7): search, statistics, filtering by type/company
+  - ✅ Notifications (17): CRUD operations, preferences, events, billing notifications
+  - ✅ Health (1): readiness check endpoint
+  - ✅ Admin (4): demo keys, API key management, statistics
+  - ✅ External (1): service status
+- Menambahkan schema definitions lengkap untuk APIKey, User, Notification, Permit, GlobalData.
+- Membersihkan content lama dari spesifikasi OpenAPI yang tidak relevan.
+- Validasi YAML syntax dan struktur - semua valid.
+- **HASIL**: Dokumentasi API sekarang akurat dan lengkap, siap untuk deployment ke docs.envoyou.com.
+
 ## Struktur Event (Aktif)
 - `feature-upgrade-click` (klik tombol upgrade). Listener: track + open modal fallback.
 - `open-upgrade-modal` (permintaan buka modal langsung). Listener: membuka modal & set origin feature.
@@ -60,12 +77,16 @@ Fondasi gating & event analitik klik sudah stabil. Error linting sudah diperbaik
 4. Dokumentasi `MONETIZATION_FLOW.md` jelaskan arsitektur gating + event.
 5. Optional: Local storage cache plan TTL 60s untuk turunkan latency / flicker.
 6. (Optional) Integrasi Sentry (guard hanya production) jika observability dibutuhkan.
+7. **OpenAPI Documentation Deployment**: Deploy updated API docs (78 endpoints) ke docs.envoyou.com via Netlify.
+8. **Documentation Testing**: Test rendering di Docusaurus/Redocusaurus sebelum production deployment.
+9. **Endpoint Verification**: Cross-reference final 78 documented endpoints dengan actual route implementations.
 
 ## Risiko / Catatan
 - Lambatnya `/api/plan` masih menyebabkan status derived—bisa tambahkan skeleton berbeda.
 - Tanpa server gating tambahan, user bisa mem-bypass UI (perlu enforcement backend untuk aksi kritikal).
 - Analytics hanya dev-console saat ga ada gtag/dataLayer.
 - Deprecation warnings di dependencies perlu monitoring untuk update keamanan.
+- **OpenAPI Gap**: Dokumentasi API sekarang sudah lengkap, tapi perlu deployment untuk efektif.
 
 ## Rutinitas Harian (Wajib)
 1. Setelah coding selesai: update bagian "Ringkasan Pekerjaan Hari Ini" & reorganize backlog (pindahkan yang selesai).
