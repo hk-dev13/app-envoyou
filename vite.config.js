@@ -33,47 +33,7 @@ export default defineConfig({
     
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // React ecosystem
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-vendor';
-          }
-          
-          // Routing
-          if (id.includes('node_modules/react-router-dom')) {
-            return 'router';
-          }
-          
-          // Supabase
-          if (id.includes('node_modules/@supabase')) {
-            return 'supabase';
-          }
-          
-          // UI libraries
-          if (id.includes('node_modules/lucide-react')) {
-            return 'ui-icons';
-          }
-          
-          // Charts
-          if (id.includes('node_modules/chart.js') || id.includes('node_modules/react-chartjs-2')) {
-            return 'ui-charts';
-          }
-          
-          // Animation libraries
-          if (id.includes('node_modules/aos') || id.includes('node_modules/framer-motion')) {
-            return 'animations';
-          }
-          
-          // Sentry
-          if (id.includes('node_modules/@sentry')) {
-            return 'analytics';
-          }
-          
-          // Other node_modules
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        },
+        // Removed custom manualChunks to avoid potential runtime issue with react-is export object
       },
     },
     
