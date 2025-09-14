@@ -67,43 +67,7 @@ const Dashboard = () => {
   const quotaPercentage = (stats.thisMonth / stats.quota) * 100;
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <header className="bg-slate-900 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center">
-                <img src="/svg/logo-full-nb.svg" alt="Envoyou" className="h-8 w-auto mr-3" />
-              </Link>
-              <nav className="hidden md:flex space-x-8 ml-10">
-                <Link to="/dashboard" className="text-emerald-400 font-medium">Overview</Link>
-                <Link to="/dashboard/monitoring" className="text-slate-300 hover:text-white transition-colors">Monitoring</Link>
-                <Link to="/dashboard/analytics" className="text-slate-300 hover:text-white transition-colors">Analytics</Link>
-                <Link to="/dashboard/reporting" className="text-slate-300 hover:text-white transition-colors">Reporting</Link>
-                <Link to="/settings/api-keys" className="text-slate-300 hover:text-white transition-colors">API Keys</Link>
-                <Link to="/developer" className="text-slate-300 hover:text-white transition-colors">Developer</Link>
-                <Link to="/settings/profile" className="text-slate-300 hover:text-white transition-colors">Settings</Link>
-              </nav>
-            </div>
-            <div className="flex items-center space-x-4">
-              <DateRangePicker selectedRange={dateRange} onRangeChange={setDateRange} />
-              <a href="https://envoyou.com/documentation" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-              </a>
-              <div className="relative">
-                <Link to="/settings/profile" className="flex items-center space-x-3 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                  <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center"><span className="text-white font-medium">{user?.name?.[0] || user?.email?.[0] || 'U'}</span></div>
-                  <span className="text-white font-medium hidden md:block">{user?.name}</span>
-                </Link>
-              </div>
-              <button onClick={async () => { try { await logout(); } catch(e){ console.error(e);} }} className="text-slate-400 hover:text-white transition-colors" title="Sign out">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-white">Platform Overview</h1>
           <p className="mt-1 text-sm text-slate-400">Snapshot of usage & quick access to specialized dashboards.</p>
@@ -135,7 +99,6 @@ const Dashboard = () => {
             <RecentActivity />
           </div>
         </div>
-      </main>
     </div>
   );
 };
