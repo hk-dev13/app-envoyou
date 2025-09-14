@@ -9,6 +9,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 
 // Core Services Integration
 import { APP_CONFIG, EXTERNAL_SERVICES } from './config/index.js';
+import initPWA from './pwa/registerPWA.js';
 import logger from './services/logger';
 // import { initializePerformanceMonitoring } from './services/performance';
 import { initializeGlobalErrorHandler } from './services/errorHandler';
@@ -74,18 +75,9 @@ logger.info('Global error handler initialized.');
 
 bootstrapSidecar();
 
-// --- PWA Service Worker Registration ---
-if ('serviceWorker' in navigator && (APP_CONFIG.isProduction || APP_CONFIG.isDevelopment)) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
-        logger.info('Service Worker registered successfully.', { scope: registration.scope });
-      })
-      .catch((registrationError) => {
-        logger.warn('Service Worker registration failed (possibly incognito mode).', { error: registrationError });
-        // Don't throw error, app should still work without service worker
-      });
-  });
+// --- PWA Registration (deferred update) ---
+if ('serviceWorker' in navigator) {
+  initPWA();
 }
 
 // --- React App Rendering ---

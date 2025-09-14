@@ -16,11 +16,11 @@ const AUTH_ACTIONS = {
   CLEAR_ERROR: 'CLEAR_ERROR',
 };
 
-// Initial state
+// Initial state (start loading true to allow hydration before UI guards)
 const initialState = {
   user: null,
   token: null,
-  isLoading: false, // Start with false, set to true only when checking auth status
+  isLoading: true,
   error: null,
   isAuthenticated: false,
 };
@@ -100,7 +100,6 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const checkAuthStatus = useCallback(async () => {
-    dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
     try {
       const supabase = getSupabaseClient();
 
@@ -122,7 +121,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      if (session?.user) {
+  if (session?.user) {
         // Try to get user profile from API, but don't fail if it doesn't exist
         let userData = null;
         try {
@@ -182,7 +181,22 @@ export const AuthProvider = ({ children }) => {
           console.warn('Error reading from localStorage:', storageError);
         }
         
-        // No valid session found
+        // No valid session found via Supabase; attempt localStorage direct restore
+        try {
+          const storedToken = localStorage.getItem('envoyou_token') || localStorage.getItem('envoyou_auth_token');
+          const storedUser = localStorage.getItem('envoyou_user') || localStorage.getItem('envoyou_user_data');
+          if (storedToken && storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            dispatch({
+              type: AUTH_ACTIONS.LOGIN_SUCCESS,
+              payload: { token: storedToken, user: parsedUser }
+            });
+            logger.info('Auth restored from localStorage (no Supabase session).');
+            return;
+          }
+        } catch (lsErr) {
+          console.warn('Local restore failed:', lsErr);
+        }
         dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
       }
     } catch (error) {
@@ -389,12 +403,29 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus,
   };
 
-  // Load user from localStorage on app start and listen for auth changes
+  // Initial hydration + auth change listener
   useEffect(() => {
     let timeoutId;
 
     const initializeAuth = async () => {
       try {
+        // Prehydrate immediately to reduce flicker
+        try {
+          const preToken = localStorage.getItem('envoyou_token') || localStorage.getItem('envoyou_auth_token');
+          const preUser = localStorage.getItem('envoyou_user') || localStorage.getItem('envoyou_user_data');
+          if (preToken && preUser) {
+            const parsed = JSON.parse(preUser);
+            dispatch({
+              type: AUTH_ACTIONS.LOGIN_SUCCESS,
+              payload: { token: preToken, user: parsed }
+            });
+            // Keep loading true until verification completes below
+            dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
+          }
+        } catch (preErr) {
+          console.warn('Prehydrate failed:', preErr);
+        }
+
         // Set a timeout to ensure loading doesn't get stuck
         timeoutId = setTimeout(() => {
           console.warn('Auth initialization timeout - forcing loading to false');
