@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import './styles/theme.css';
 import App from './App.jsx';
-import { UpgradeProvider } from './components/UpgradeProvider.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 
@@ -87,9 +86,7 @@ if (rootElement) {
     <StrictMode>
       <AuthProvider>
         <ErrorBoundary>
-          <UpgradeProvider>
-            <App />
-          </UpgradeProvider>
+          <App />
         </ErrorBoundary>
       </AuthProvider>
     </StrictMode>

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import React, { Suspense, lazy } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth.js';
+import { UpgradeProvider } from './components/UpgradeProvider.jsx';
 // // import ErrorBoundary from './components/ErrorBoundary';
 // import ServiceWorkerManager from './components/ServiceWorkerManager';
 // import PushNotificationManager from './components/PushNotificationManager';
@@ -130,7 +131,9 @@ function App() {
       // <ToastProvider>
         <AuthProvider>
           <Router>
-            <AppContent />
+            <UpgradeProvider>
+              <AppContent />
+            </UpgradeProvider>
           </Router>
         </AuthProvider>
       // </ToastProvider>

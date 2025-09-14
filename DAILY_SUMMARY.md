@@ -26,6 +26,13 @@
 - Menambahkan tracking `track('open_upgrade_modal', { feature })` saat modal pertama kali muncul.
 - useEffect yang memantau perubahan state `open` dan `originFeature`.
 
+### 6. Router Context Fix - Critical Bug Fix
+- **MASALAH**: Error "Something went wrong" karena `useNavigate()` dipanggil di luar Router context.
+- **PENYELESAIAN**: Memindahkan `UpgradeProvider` dari `main.jsx` ke dalam `App.jsx` (di dalam Router).
+- Update struktur komponen untuk memastikan Router context tersedia.
+- Fix API connectivity dengan mengupdate `VITE_API_BASE_URL` ke `http://localhost:10000`.
+- Update `usePlan` hook untuk menggunakan full API URL dengan `API_CONFIG`.
+
 ## Struktur Event (Aktif)
 - `feature-upgrade-click` (klik tombol upgrade). Listener: track + open modal fallback.
 - `open-upgrade-modal` (permintaan buka modal langsung). Listener: membuka modal & set origin feature.
@@ -36,6 +43,8 @@
 - `src/main.jsx`
 - `src/pages/Dashboard.jsx`
 - `src/components/UpgradeProvider.jsx`
+- `src/hooks/usePlan.js`
+- `src/App.jsx`
 - `app/models/user.py`
 - `app/routes/user.py`
 - `migration_add_plan_column.sql`
@@ -45,13 +54,12 @@
 Fondasi gating & event analitik klik sudah stabil. Error linting sudah diperbaiki, build process kembali normal. Backend endpoint `/api/plan` sudah berfungsi dengan autentikasi. Billing redirect sudah mengarah ke `/billing` page. Tracking impression modal sudah aktif. Belum ada billing/redirect nyata & belum ada tracking impression modal. Error plan tampil inline tanpa toast. Kontras API Spec sudah membaik. Workflow daily summary kembali hijau setelah path diperbaiki.
 
 ## Backlog / Prioritas Berikutnya
-1. Badge visual (chip warna) khusus untuk plan fallback `(derived)` agar lebih jelas dari teks kecil.
-2. Toast + retry action untuk `planError` (misal `fetch` ulang).
-3. Chart heavy components lazy + suspense boundary (optimisasi initial TTI).
-4. Event tracking sukses upgrade (menunggu integrasi billing/platform pilihan).
-5. Dokumentasi `MONETIZATION_FLOW.md` jelaskan arsitektur gating + event.
-6. Optional: Local storage cache plan TTL 60s untuk turunkan latency / flicker.
-7. (Optional) Integrasi Sentry (guard hanya production) jika observability dibutuhkan.
+1. Toast + retry action untuk `planError` (misal `fetch` ulang).
+2. Chart heavy components lazy + suspense boundary (optimisasi initial TTI).
+3. Event tracking sukses upgrade (menunggu integrasi billing/platform pilihan).
+4. Dokumentasi `MONETIZATION_FLOW.md` jelaskan arsitektur gating + event.
+5. Optional: Local storage cache plan TTL 60s untuk turunkan latency / flicker.
+6. (Optional) Integrasi Sentry (guard hanya production) jika observability dibutuhkan.
 
 ## Risiko / Catatan
 - Lambatnya `/api/plan` masih menyebabkan status derived—bisa tambahkan skeleton berbeda.
