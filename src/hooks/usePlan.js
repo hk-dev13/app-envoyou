@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState, useCallback } from 'react';
 import { FEATURE_MIN_TIER, LIMITS_BY_TIER, TIERS, tierRank } from '../config/plans';
 import { useAuth } from './useAuth';
 
@@ -40,21 +40,21 @@ export function usePlan() {
     }
     fetchPlan();
     return () => { abort = true; };
-  }, [user]);
+  }, [user, fallbackPlan]);
 
   const plan = remotePlan || fallbackPlan;
   const limits = LIMITS_BY_TIER[plan];
 
-  function hasFeature(featureKey) {
+  const hasFeature = useCallback((featureKey) => {
     const required = FEATURE_MIN_TIER[featureKey] || 'FREE';
     return tierRank(plan) >= tierRank(required);
-  }
+  }, [plan]);
 
-  function featureInfo(featureKey) {
+  const featureInfo = useCallback((featureKey) => {
     const required = FEATURE_MIN_TIER[featureKey] || 'FREE';
     return { required, enabled: hasFeature(featureKey) };
-  }
+  }, [hasFeature]);
 
-  const value = useMemo(() => ({ plan, limits, hasFeature, featureInfo, tiers: TIERS, loadingPlan: loading, planError: error, remote: !!remotePlan }), [plan, loading, error, remotePlan]);
+  const value = useMemo(() => ({ plan, limits, hasFeature, featureInfo, tiers: TIERS, loadingPlan: loading, planError: error, remote: !!remotePlan }), [plan, limits, hasFeature, featureInfo, loading, error, remotePlan]);
   return value;
 }

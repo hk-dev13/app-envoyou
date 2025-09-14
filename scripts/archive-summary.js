@@ -31,7 +31,7 @@ if (fs.existsSync(indexFile)) {
 }
 let previous = index.entries.filter(e => e.date < dateStr).sort((a,b) => a.date.localeCompare(b.date)).pop() || null;
 let currentCommit = '';
-try { currentCommit = execSync('git rev-parse HEAD',{cwd:root}).toString().trim(); } catch {}
+try { currentCommit = execSync('git rev-parse HEAD',{cwd:root}).toString().trim(); } catch { /* ignore */ }
 
 if (!fs.existsSync(archiveFile)) {
   fs.writeFileSync(archiveFile, content, 'utf8');

@@ -18,7 +18,6 @@ const Dashboard = () => {
     activeKeys: 0
   });
   const [loading, setLoading] = useState(true);
-  const [apiKeys, setApiKeys] = useState([]);
   const [dateRange, setDateRange] = useState('30days');
 
   const [sparklineData] = useState({
@@ -55,7 +54,6 @@ const Dashboard = () => {
           quota: userStats.quota || 5000,
             activeKeys: keys.length || 0
         });
-        setApiKeys(keys);
       } catch (err) {
         console.error('Failed to fetch user stats:', err);
         setStats({ apiCalls: 1247, thisMonth: 89, quota: 5000, activeKeys: 2 });

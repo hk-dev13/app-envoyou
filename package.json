@@ -18,11 +18,7 @@
     "build:netlify": "NODE_ENV=production npm run build",
     "type-check": "echo \"Type checking not configured\"",
     "validate": "npm run lint && npm run type-check || echo 'Type checking not configured - skipping'",
-    "docusaurus": "docusaurus",
-    "docs:start": "docusaurus start docs-site",
-    "docs:build": "docusaurus build docs-site",
-    "docs:serve": "docusaurus serve docs-site",
-    "docs:clear": "docusaurus clear docs-site",
+    
     "prepare": "npm run validate",
     "openapi:validate": "swagger-cli validate openapi/envoyou-api.yaml",
     "openapi:types": "openapi-typescript openapi/envoyou-api.yaml -o src/lib/generated-api-types.d.ts",
@@ -39,11 +35,6 @@
     ,"check:daily-summary": "node scripts/check-daily-summary.js"
   },
   "dependencies": {
-    "@docusaurus/core": "^3.8.1",
-    "@docusaurus/module-type-aliases": "^3.8.1",
-    "@docusaurus/preset-classic": "^3.8.1",
-    "@docusaurus/tsconfig": "^3.8.1",
-    "@docusaurus/types": "^3.8.1",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-separator": "^1.1.7",

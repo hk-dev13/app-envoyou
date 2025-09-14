@@ -33,9 +33,9 @@ export default function LockedModule({ required, current, featureKey, children, 
           ref={upgradeRef}
           onClick={(e) => {
             const detail = { feature: featureKey || 'unknown', required, current, ts: Date.now() };
-            window.dispatchEvent(new CustomEvent('feature-upgrade-click', { detail }));
+            window.dispatchEvent(new window.CustomEvent('feature-upgrade-click', { detail }));
             if (onUpgrade) onUpgrade(e);
-            else window.dispatchEvent(new CustomEvent('open-upgrade-modal', { detail }));
+            else window.dispatchEvent(new window.CustomEvent('open-upgrade-modal', { detail }));
           }}
           className="btn btn-primary text-[11px] px-3 py-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
           aria-label={`Upgrade to access feature requiring ${required} plan`}

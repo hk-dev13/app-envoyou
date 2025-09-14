@@ -12,11 +12,10 @@ export function track(event, data = {}) {
         return;
       }
     }
-  } catch (e) {
+  } catch {
     // Swallow analytics errors
   }
   if (process.env.NODE_ENV !== 'production') {
-    // eslint-disable-next-line no-console
     console.debug('[track]', event, data);
   }
 }

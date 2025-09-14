@@ -1,9 +1,8 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import UpgradeModal from './UpgradeModal';
 import { usePlan } from '../hooks/usePlan';
 import { track } from '../analytics/track';
-
-const UpgradeContext = createContext(null);
+import { UpgradeContext } from './UpgradeProviderContext';
 
 export function UpgradeProvider({ children }) {
   const { plan } = usePlan();
@@ -47,6 +46,3 @@ export function UpgradeProvider({ children }) {
   );
 }
 
-export function useUpgrade() {
-  return useContext(UpgradeContext);
-}
