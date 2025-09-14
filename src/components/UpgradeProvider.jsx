@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UpgradeModal from './UpgradeModal';
 import { usePlan } from '../hooks/usePlan';
 import { track } from '../analytics/track';
@@ -6,6 +7,7 @@ import { UpgradeContext } from './UpgradeProviderContext';
 
 export function UpgradeProvider({ children }) {
   const { plan } = usePlan();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [originFeature, setOriginFeature] = useState(null);
 
@@ -17,10 +19,21 @@ export function UpgradeProvider({ children }) {
   const close = useCallback(() => setOpen(false), []);
 
   const selectPlan = useCallback((targetPlan) => {
-    // Placeholder: integrate billing redirect here
-    console.log('Selected plan', targetPlan, 'origin feature', originFeature);
+    // Navigate to billing page with origin and target plan
+    const params = new URLSearchParams({
+      origin: originFeature || 'unknown',
+      target: targetPlan
+    });
+    navigate(`/billing?${params.toString()}`);
     setOpen(false);
-  }, [originFeature]);
+  }, [originFeature, navigate]);
+
+  // Track modal impression when it opens
+  useEffect(() => {
+    if (open && originFeature) {
+      track('open_upgrade_modal', { feature: originFeature });
+    }
+  }, [open, originFeature]);
 
   useEffect(() => {
     function openHandler(e) {
