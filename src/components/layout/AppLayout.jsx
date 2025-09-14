@@ -11,11 +11,30 @@ function useActive(path) {
 
 const Dropdown = ({ label, children }) => {
   const [open, setOpen] = React.useState(false);
+  const closeTimeout = React.useRef(null);
+
+  const clearClose = () => {
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
+      closeTimeout.current = null;
+    }
+  };
+
+  const scheduleClose = () => {
+    clearClose();
+    closeTimeout.current = setTimeout(() => setOpen(false), 160); // small delay so pointer can traverse gap
+  };
+
+  React.useEffect(() => () => clearClose(), []);
+
   return (
-    <div className="relative" onMouseLeave={() => setOpen(false)}>
+    <div
+      className="relative"
+      onMouseEnter={() => { clearClose(); setOpen(true); }}
+      onMouseLeave={scheduleClose}
+    >
       <button
         onClick={() => setOpen(o => !o)}
-        onMouseEnter={() => setOpen(true)}
         className="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
         aria-haspopup="menu"
         aria-expanded={open}
@@ -24,7 +43,12 @@ const Dropdown = ({ label, children }) => {
         <svg className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
       </button>
       {open && (
-        <div className="absolute z-40 mt-2 w-48 rounded-md border border-slate-800 bg-slate-900/95 backdrop-blur-sm shadow-lg py-2" role="menu">
+        <div
+          className="absolute z-40 mt-2 w-48 rounded-md border border-slate-800 bg-slate-900/95 backdrop-blur-sm shadow-lg py-2"
+          role="menu"
+          onMouseEnter={clearClose}
+          onMouseLeave={scheduleClose}
+        >
           {children}
         </div>
       )}
