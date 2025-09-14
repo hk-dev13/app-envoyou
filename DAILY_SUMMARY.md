@@ -1,42 +1,28 @@
-# Daily Summary (2025-09-14)
+# Daily Summary (2025-09-15)
 
 ## Ringkasan Pekerjaan Hari Ini
-### 1. Gating & Monetization Foundation
-- `LockedModule` mengirim `feature-upgrade-click` & `open-upgrade-modal` dengan payload (feature, required, current, ts).
-- `track(event,data)` util + listener di `UpgradeProvider.jsx` untuk log klik upgrade (dev: console fallback).
-- `usePlan.js` fetch `/api/plan` (fallback derive) expose: `plan`, `loadingPlan`, `planError`, `remote`.
-- `PlanStatus.jsx` menampilkan status & fallback label `(derived)` bila remote belum ada.
-- Properti `featureKey` diterapkan di pemakaian `<LockedModule>` agar event punya konteks asal.
+### 1. ESLint Error Fixes
+- Memperbaiki 2 error linting yang menghambat `npm ci`: empty block statements di `AuthContext.jsx` dan `main.jsx`, serta unused variables di beberapa file.
+- Menambahkan `// eslint-disable-line` untuk catch blocks yang sengaja kosong.
+- Menghapus import dan variabel yang tidak digunakan di `Dashboard.jsx` (DateRangePicker, useAuth destructuring, dateRange state).
+- Hasil: `npm run lint` sekarang clean tanpa error.
 
-### 2. Navigation & Layout
-- Global `AppLayout` dengan grouping menu Dashboards & Developer + Profile dropdown.
-- Pindahkan Settings ke Profile, hapus header duplikat di halaman Dashboard.
-- Perbaiki flicker dropdown (delay close 160ms saat hover keluar).
-
-### 3. API Docs Visual Contrast
-- Redoc theme diperluas: warna teks `#e2e8f0`, secondary `#94a3b8`, primary brand hijau, panel kanan gelap.
-- Tambah override CSS (tables, code, link hover) agar konten terbaca di background gelap.
-
-### 4. CI Workflow Maintenance
-- Perbaikan workflow `Daily Summary Check`: hapus `working-directory: app-envoyou` yang menyebabkan path ganda & kegagalan `npm ci`.
+### 2. Maintenance & Code Quality
+- Verifikasi bahwa prepare script (`npm run validate`) sekarang berjalan sukses setelah perbaikan linting.
+- Pembersihan kode untuk memastikan build process stabil.
 
 ## Struktur Event (Aktif)
 - `feature-upgrade-click` (klik tombol upgrade). Listener: track + open modal fallback.
 - `open-upgrade-modal` (permintaan buka modal langsung). Listener: membuka modal & set origin feature.
 
 ## File Perubahan Utama
-- `src/components/LockedModule.jsx`
-- `src/components/UpgradeProvider.jsx`
-- `src/components/UpgradeProviderContext.js`
-- `src/analytics/track.js`
-- `src/hooks/usePlan.js`
-- `src/components/PlanStatus.jsx`
-- `src/components/layout/AppLayout.jsx`
-- `docs-site/src/pages/api-spec/index.jsx` & `docusaurus-theme/css/custom.css`
-- `.github/workflows/daily-summary.yml`
+- `src/components/ErrorBoundary.jsx`
+- `src/context/AuthContext.jsx`
+- `src/main.jsx`
+- `src/pages/Dashboard.jsx`
 
 ## Kondisi Saat Ini
-Fondasi gating & event analitik klik sudah stabil. Belum ada billing/redirect nyata & belum ada tracking impression modal. Error plan tampil inline tanpa toast. Kontras API Spec sudah membaik. Workflow daily summary kembali hijau (diharapkan) setelah path diperbaiki.
+Fondasi gating & event analitik klik sudah stabil. Error linting sudah diperbaiki, build process kembali normal. Belum ada billing/redirect nyata & belum ada tracking impression modal. Error plan tampil inline tanpa toast. Kontras API Spec sudah membaik. Workflow daily summary kembali hijau setelah path diperbaiki.
 
 ## Backlog / Prioritas Berikutnya
 1. Backend endpoint `/api/plan` final (auth + response `{ plan: "BUILD" }`).
@@ -54,6 +40,7 @@ Fondasi gating & event analitik klik sudah stabil. Belum ada billing/redirect ny
 - Lambatnya `/api/plan` masih menyebabkan status derived—bisa tambahkan skeleton berbeda.
 - Tanpa server gating tambahan, user bisa mem-bypass UI (perlu enforcement backend untuk aksi kritikal).
 - Analytics hanya dev-console saat ga ada gtag/dataLayer.
+- Deprecation warnings di dependencies perlu monitoring untuk update keamanan.
 
 ## Rutinitas Harian (Wajib)
 1. Setelah coding selesai: update bagian "Ringkasan Pekerjaan Hari Ini" & reorganize backlog (pindahkan yang selesai).

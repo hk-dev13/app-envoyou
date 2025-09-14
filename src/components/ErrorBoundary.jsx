@@ -31,7 +31,7 @@ class ErrorBoundary extends React.Component {
         componentStack: errorInfo.componentStack,
         time: new Date().toISOString()
       };
-    } catch (_) {
+    } catch (_) { // eslint-disable-line no-unused-vars
       // no-op
     }
 

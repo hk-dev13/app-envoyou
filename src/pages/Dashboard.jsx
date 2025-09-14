@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.js';
 import EmailVerificationBanner from '../components/EmailVerificationBanner';
 import StatCard from '../components/StatCard';
-import DateRangePicker from '../components/DateRangePicker';
 import UsageChart from '../components/UsageChart';
 import RecentActivity from '../components/RecentActivity';
 import apiService from '../services/apiService';
 
 // Hub dashboard: overview + navigation to specialized dashboards
 const Dashboard = () => {
-  const { user, logout } = useAuth();
   const [stats, setStats] = useState({
     apiCalls: 0,
     thisMonth: 0,
@@ -18,7 +15,6 @@ const Dashboard = () => {
     activeKeys: 0
   });
   const [loading, setLoading] = useState(true);
-  const [dateRange, setDateRange] = useState('30days');
 
   const [sparklineData] = useState({
     apiCalls: [1200, 1150, 1180, 1220, 1190, 1247, 1210],

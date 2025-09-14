@@ -87,7 +87,7 @@ if (typeof window !== 'undefined') {
   try {
     window.__envoyouAuthContextModule = window.__envoyouAuthContextModule || [];
     window.__envoyouAuthContextModule.push(import.meta.url);
-  } catch (_) {}
+  } catch (_) {} // eslint-disable-line no-unused-vars, no-empty
 } else {
   AuthContext = createContext();
 }

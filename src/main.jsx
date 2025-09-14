@@ -63,7 +63,7 @@ try {
     sentryEnabled: EXTERNAL_SERVICES.sentry.enabled && !!EXTERNAL_SERVICES.sentry.dsn,
     build: import.meta?.env?.VITE_COMMIT_HASH || 'unknown'
   };
-} catch (_) {}
+} catch (_) {} // eslint-disable-line no-unused-vars, no-empty
 
 // Initialize Global Error Handler
 initializeGlobalErrorHandler();
