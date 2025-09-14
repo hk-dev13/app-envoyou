@@ -26,11 +26,11 @@
     "docs:spec": "npm run openapi:validate && echo 'Spec OK'",
     "schema:validate": "ajv validate --spec=draft2020 -s schemas/alert-rule.schema.json -d schemas/examples/alert-rule.example.json",
     "validate:all": "npm run openapi:validate && npm run schema:validate && npm run openapi:types && npm run md:lint",
-    "md:lint": "markdownlint-cli2 'docs/**/*.md' 'docs/**/*.mdx'",
-    "md:lint:fix": "markdownlint-cli2 --fix 'docs/**/*.md' 'docs/**/*.mdx'",
-    "md:fences:check": "grep -R '^```$' docs || true",
-    "md:lint:changed": "git diff --name-only origin/main...HEAD | grep '^docs/' | xargs -r markdownlint-cli2",
-    "md:fences:label": "grep -Rrl '^```$' docs | xargs -r perl -0777 -i -pe 's/^```$/```text/gm'"
+  "md:lint": "echo 'Docs removed - skipping markdown lint'",
+  "md:lint:fix": "echo 'Docs removed - nothing to fix'",
+  "md:fences:check": "echo 'Docs removed - no fences to check'",
+  "md:lint:changed": "echo 'Docs removed - no changed docs'",
+  "md:fences:label": "echo 'Docs removed - no fences to relabel'"
     ,"archive:summary": "node scripts/archive-summary.js"
     ,"check:daily-summary": "node scripts/check-daily-summary.js"
   },
@@ -78,7 +78,6 @@
     "vite": "^7.1.2",
     "swagger-cli": "^4.0.4",
     "openapi-typescript": "^7.4.1",
-    "redocusaurus": "^2.1.1",
     "ajv-cli": "^5.0.0",
     "markdownlint": "^0.32.1",
     "markdownlint-cli2": "^0.15.0",
