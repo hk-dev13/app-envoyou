@@ -38,6 +38,7 @@ const RateLimitsPage = lazy(() => import('./pages/developer-dashboard/rate-limit
 
 // Import ProtectedRoute
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AppLayout from './components/layout/AppLayout.jsx';
 
 // Loading component for Suspense fallback
 const PageLoader = () => (
@@ -79,24 +80,24 @@ const AppContent = () => {
             <Route path="/verify/:token" element={<EmailVerificationPage />} />
             
             {/* Protected dashboard routes */}
-            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/dashboard/usage" element={<ProtectedRoute><DashboardUsage /></ProtectedRoute>} />
-            <Route path="/dashboard/monitoring" element={<ProtectedRoute><MonitoringDashboard /></ProtectedRoute>} />
-            <Route path="/dashboard/analytics" element={<ProtectedRoute><AnalyticsDashboard /></ProtectedRoute>} />
-            <Route path="/dashboard/reporting" element={<ProtectedRoute><ReportingDashboard /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/usage" element={<ProtectedRoute><AppLayout><DashboardUsage /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/monitoring" element={<ProtectedRoute><AppLayout><MonitoringDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/analytics" element={<ProtectedRoute><AppLayout><AnalyticsDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/reporting" element={<ProtectedRoute><AppLayout><ReportingDashboard /></AppLayout></ProtectedRoute>} />
             
             {/* Protected settings routes */}
-            <Route path="/settings/profile" element={<ProtectedRoute><ProfileSettingsPage /></ProtectedRoute>} />
-            <Route path="/settings/api-keys" element={<ProtectedRoute><APIKeysSettingsPage /></ProtectedRoute>} />
-            <Route path="/settings/security" element={<ProtectedRoute><SecuritySettingsPage /></ProtectedRoute>} />
+            <Route path="/settings/profile" element={<ProtectedRoute><AppLayout><ProfileSettingsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/settings/api-keys" element={<ProtectedRoute><AppLayout><APIKeysSettingsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/settings/security" element={<ProtectedRoute><AppLayout><SecuritySettingsPage /></AppLayout></ProtectedRoute>} />
             
             {/* Developer Dashboard routes */}
-            <Route path="/developer" element={<ProtectedRoute><DeveloperDashboard /></ProtectedRoute>} />
-            <Route path="/developer/api-docs" element={<ProtectedRoute><APIDocsPage /></ProtectedRoute>} />
-            <Route path="/developer/api-keys" element={<ProtectedRoute><APIKeysPage /></ProtectedRoute>} />
-            <Route path="/developer/analytics" element={<ProtectedRoute><AnalyticsPage /></ProtectedRoute>} />
-            <Route path="/developer/snippets" element={<ProtectedRoute><SnippetsPage /></ProtectedRoute>} />
-            <Route path="/developer/rate-limits" element={<ProtectedRoute><RateLimitsPage /></ProtectedRoute>} />
+            <Route path="/developer" element={<ProtectedRoute><AppLayout><DeveloperDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/developer/api-docs" element={<ProtectedRoute><AppLayout><APIDocsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/developer/api-keys" element={<ProtectedRoute><AppLayout><APIKeysPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/developer/analytics" element={<ProtectedRoute><AppLayout><AnalyticsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/developer/snippets" element={<ProtectedRoute><AppLayout><SnippetsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/developer/rate-limits" element={<ProtectedRoute><AppLayout><RateLimitsPage /></AppLayout></ProtectedRoute>} />
             
             {/* Catch all - redirect to dashboard or login */}
             <Route 
