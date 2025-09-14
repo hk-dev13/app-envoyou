@@ -77,8 +77,16 @@ const authReducer = (state, action) => {
   }
 };
 
-// Create Auth Context
-const AuthContext = createContext();
+// Create Auth Context (singleton safe)
+let AuthContext;
+if (typeof window !== 'undefined') {
+  if (!window.__envoyouAuthContext) {
+    window.__envoyouAuthContext = createContext();
+  }
+  AuthContext = window.__envoyouAuthContext;
+} else {
+  AuthContext = createContext();
+}
 
 // useAuth hook moved to separate file for better fast refresh support
 // import { useAuth } from './hooks/useAuth.js';
