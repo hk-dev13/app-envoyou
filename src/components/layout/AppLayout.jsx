@@ -56,10 +56,13 @@ export default function AppLayout({ children }) {
       {/* Top Navigation */}
       <header className="fixed top-0 inset-x-0 h-16 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur flex items-center z-30">
         <div className="max-w-7xl mx-auto w-full px-6 flex items-center gap-6">
-          <Link to="/dashboard" className="text-white font-semibold tracking-wide text-sm flex items-center gap-2">
-            <span className="bg-emerald-600 text-white px-2 py-1 rounded-md text-xs font-bold">ENV</span>
-            <span>Envoyou</span>
-          </Link>
+            <Link to="/dashboard" className="flex items-center space-x-1 hover:opacity-80 transition-opacity">
+                <img 
+                    src="/svg/logo-full-nb.svg" 
+                    alt="Envoyou" 
+                    className="h-8 w-auto text-emerald-400"
+                  />
+            </Link>
           <nav className="flex items-center gap-1 text-sm">
             <Link
               to="/dashboard"
