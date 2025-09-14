@@ -1,0 +1,37 @@
+name: Daily Summary Check
+
+on:
+  push:
+    branches: [ main, dacosaurus ]
+  schedule:
+    - cron: '15 8 * * 1-5' # 08:15 UTC weekdays
+  workflow_dispatch:
+
+jobs:
+  check-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install deps (minimal)
+        working-directory: app-envoyou
+        run: npm ci --no-audit --no-fund
+      - name: Run daily summary check
+        working-directory: app-envoyou
+        run: npm run check:daily-summary
+      - name: Create issue when summary missing (scheduled only)
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "Daily Summary Missing for ${{ github.run_id }}"
+          content-filepath: app-envoyou/DAILY_SUMMARY.md
+          labels: daily-summary,needs-update
+          assignees: ${{ github.actor }}
+          body: |
+            Daily summary check failed in scheduled run. Please update DAILY_SUMMARY.md for today.
+            Run ID: ${{ github.run_id }}
+            Workflow: ${{ github.workflow }}

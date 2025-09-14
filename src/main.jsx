@@ -1,10 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
+import './styles/theme.css';
 import App from './App.jsx';
+import { UpgradeProvider } from './components/UpgradeProvider.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
 // Core Services Integration
 import { APP_CONFIG, EXTERNAL_SERVICES } from './config/index.js';
@@ -12,35 +12,42 @@ import logger from './services/logger';
 // import { initializePerformanceMonitoring } from './services/performance';
 import { initializeGlobalErrorHandler } from './services/errorHandler';
 
-// --- Sentry Error Monitoring ---
-import * as Sentry from "@sentry/react";
-import { browserTracingIntegration, replayIntegration } from "@sentry/react";
+// --- Sentry + AOS dynamic bootstrap to trim initial bundle ---
+async function bootstrapSidecar() {
+  // Dynamic Sentry load
+  if (EXTERNAL_SERVICES.sentry.enabled && EXTERNAL_SERVICES.sentry.dsn) {
+    try {
+      const SentryMod = await import(/* webpackChunkName: "sentry" */ '@sentry/react');
+      const { browserTracingIntegration, replayIntegration } = await import('@sentry/react');
+      SentryMod.init({
+        dsn: EXTERNAL_SERVICES.sentry.dsn,
+        environment: APP_CONFIG.environment,
+        sendDefaultPii: true,
+        integrations: [
+          browserTracingIntegration(),
+          replayIntegration({ maskAllText: true, blockAllMedia: true }),
+        ],
+        tracesSampleRate: APP_CONFIG.isProduction ? 0.1 : 1.0,
+        replaysSessionSampleRate: APP_CONFIG.isProduction ? 0.1 : 1.0,
+        replaysOnErrorSampleRate: 1.0,
+      });
+      logger.info('Sentry dynamically initialized.');
+    } catch (e) {
+      logger.warn('Sentry dynamic import failed', { error: e });
+    }
+  } else {
+    logger.info('Sentry disabled or missing DSN (skipped).');
+  }
 
-// Initialize Sentry if enabled and DSN is available
-if (EXTERNAL_SERVICES.sentry.enabled && EXTERNAL_SERVICES.sentry.dsn) {
-  Sentry.init({
-    dsn: EXTERNAL_SERVICES.sentry.dsn,
-    environment: APP_CONFIG.environment,
-    // Setting this option to true will send default PII data to Sentry
-    sendDefaultPii: true,
-    // Enable performance monitoring
-    integrations: [
-      browserTracingIntegration(),
-      replayIntegration({
-        maskAllText: true,
-        blockAllMedia: true,
-      }),
-    ],
-    // Performance monitoring
-    tracesSampleRate: APP_CONFIG.isProduction ? 0.1 : 1.0,
-    // Session replay
-    replaysSessionSampleRate: APP_CONFIG.isProduction ? 0.1 : 1.0,
-    replaysOnErrorSampleRate: 1.0,
-  });
-
-  logger.info('Sentry error monitoring initialized.');
-} else {
-  logger.info('Sentry not enabled or DSN not configured.');
+  // Dynamic AOS load
+  try {
+    const AOSMod = await import('aos');
+    await import('aos/dist/aos.css');
+    AOSMod.default.init({ duration: 1200, once: true, offset: 100 });
+    logger.info('AOS dynamically initialized.');
+  } catch (e) {
+    logger.warn('AOS dynamic import failed', { error: e });
+  }
 }
 
 // --- Service Initialization ---
@@ -54,13 +61,7 @@ logger.info('Global error handler initialized.');
 // initializePerformanceMonitoring();
 // logger.info('Performance monitoring initialized.');
 
-// Initialize AOS Animation Library
-AOS.init({
-  duration: 1200,
-  once: true,
-  offset: 100,
-});
-logger.info('AOS animation library initialized.');
+bootstrapSidecar();
 
 // --- PWA Service Worker Registration ---
 if ('serviceWorker' in navigator && (APP_CONFIG.isProduction || APP_CONFIG.isDevelopment)) {
@@ -82,7 +83,9 @@ if (rootElement) {
   const app = (
     <StrictMode>
       <ErrorBoundary>
-        <App />
+        <UpgradeProvider>
+          <App />
+        </UpgradeProvider>
       </ErrorBoundary>
     </StrictMode>
   );
