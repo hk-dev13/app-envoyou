@@ -5,6 +5,7 @@ import './styles/theme.css';
 import App from './App.jsx';
 import { UpgradeProvider } from './components/UpgradeProvider.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
 
 // Core Services Integration
 import { APP_CONFIG, EXTERNAL_SERVICES } from './config/index.js';
@@ -92,11 +93,13 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   const app = (
     <StrictMode>
-      <ErrorBoundary>
-        <UpgradeProvider>
-          <App />
-        </UpgradeProvider>
-      </ErrorBoundary>
+      <AuthProvider>
+        <ErrorBoundary>
+          <UpgradeProvider>
+            <App />
+          </UpgradeProvider>
+        </ErrorBoundary>
+      </AuthProvider>
     </StrictMode>
   );
 

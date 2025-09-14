@@ -84,6 +84,10 @@ if (typeof window !== 'undefined') {
     window.__envoyouAuthContext = createContext();
   }
   AuthContext = window.__envoyouAuthContext;
+  try {
+    window.__envoyouAuthContextModule = window.__envoyouAuthContextModule || [];
+    window.__envoyouAuthContextModule.push(import.meta.url);
+  } catch (_) {}
 } else {
   AuthContext = createContext();
 }
