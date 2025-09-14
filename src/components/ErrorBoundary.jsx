@@ -23,6 +23,18 @@ class ErrorBoundary extends React.Component {
       componentStack: errorInfo.componentStack
     });
 
+    // Expose last error globally for production diagnostics
+    try {
+      window.__envoyouLastError = {
+        message: error.message,
+        stack: error.stack,
+        componentStack: errorInfo.componentStack,
+        time: new Date().toISOString()
+      };
+    } catch (_) {
+      // no-op
+    }
+
     this.setState({
       error: error,
       errorInfo: errorInfo
@@ -51,6 +63,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
+      const showDebug = typeof window !== 'undefined' && (window.location.search.includes('debug=1') || process.env.NODE_ENV === 'development');
       return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4">
           <div className="max-w-md w-full space-y-8 text-center">
@@ -69,15 +82,16 @@ class ErrorBoundary extends React.Component {
             >
               Refresh Page
             </button>
-            {process.env.NODE_ENV === 'development' && (
+            {showDebug && (
               <details className="mt-4 text-left">
-                <summary className="text-slate-400 cursor-pointer">Error Details (Development)</summary>
-                <pre className="mt-2 text-xs text-red-400 bg-slate-900 p-4 rounded overflow-auto">
-                  {this.state.error && this.state.error.toString()}
-                  <br />
-                  {this.state.errorInfo.componentStack}
+                <summary className="text-slate-400 cursor-pointer">Error Details (Debug)</summary>
+                <pre className="mt-2 text-xs text-red-400 bg-slate-900 p-4 rounded overflow-auto whitespace-pre-wrap break-all">
+{this.state.error && this.state.error.toString()}\n\nStack:\n{this.state.error?.stack}\n\nComponent Stack:\n{this.state.errorInfo?.componentStack}
                 </pre>
               </details>
+            )}
+            {showDebug && (
+              <p className="text-xs text-slate-500">Append ?debug=1 to URL to view details.</p>
             )}
           </div>
         </div>

@@ -52,6 +52,16 @@ async function bootstrapSidecar() {
 
 // --- Service Initialization ---
 logger.info('Application starting...', { environment: APP_CONFIG.environment });
+// Expose limited env diagnostics (non-secret) for debugging
+try {
+  window.__envoyouEnv = {
+    env: APP_CONFIG.environment,
+    hasSupabaseUrl: !!EXTERNAL_SERVICES.supabase.url,
+    hasSupabaseAnon: !!EXTERNAL_SERVICES.supabase.anonKey,
+    sentryEnabled: EXTERNAL_SERVICES.sentry.enabled && !!EXTERNAL_SERVICES.sentry.dsn,
+    build: import.meta?.env?.VITE_COMMIT_HASH || 'unknown'
+  };
+} catch (_) {}
 
 // Initialize Global Error Handler
 initializeGlobalErrorHandler();
