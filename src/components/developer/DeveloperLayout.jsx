@@ -27,7 +27,7 @@ const DeveloperLayout = ({ children }) => {
           <Button
             variant="ghost"
             size="sm"
-            className="lg:hidden fixed top-4 left-4 z-50 bg-slate-900/80 backdrop-blur-sm border border-slate-800"
+            className="lg:hidden fixed top-4 left-4 z-50 bg-transparent backdrop-blur-sm border border-slate-800"
           >
             <Menu className="h-5 w-5 text-white" />
           </Button>

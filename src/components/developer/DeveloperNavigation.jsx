@@ -76,7 +76,7 @@ const DeveloperNavigation = () => {
   };
 
   return (
-    <nav className="bg-slate-900/50 border-b border-slate-700">
+    <nav className="bg-transparent border-b border-slate-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo/Brand */}
@@ -103,8 +103,8 @@ const DeveloperNavigation = () => {
                 to={item.path}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   isActive(item.path)
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                    ? 'text-slate-600 border border-slate-600'
+                    : 'text-slate-600 hover:text-slate-400'
                 }`}
               >
                 {item.icon}

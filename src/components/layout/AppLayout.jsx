@@ -45,7 +45,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
     >
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-800/50 transition-colors"
+        className="flex items-center space-x-2 p-2 rounded-lg hover:bg-transparent transition-colors"
         aria-haspopup="menu"
         aria-expanded={open}
       >
@@ -73,7 +73,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
           </div>
           <Link
             to="/settings/profile"
-            className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-800/70 hover:text-white"
+            className="block px-4 py-2 text-sm text-slate-300 hover:bg-transparent hover:text-white"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -81,7 +81,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
           </Link>
           <Link
             to="/settings/notifications"
-            className="block px-4 py-2 text-sm text-slate-300 hover:bg-slate-800/70 hover:text-white"
+            className="block px-4 py-2 text-sm text-slate-300 hover:bg-transparent hover:text-white"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -90,7 +90,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
           <div className="border-t border-slate-800 my-1" />
           <button
             onClick={() => { setOpen(false); onLogout(); }}
-            className="block w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-slate-800/70 hover:text-white"
+            className="block w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-transparent hover:text-white"
             role="menuitem"
           >
             Sign Out
@@ -201,8 +201,8 @@ export default function AppLayout({ children }) {
               to={item.path}
               className={`group flex items-center px-3 py-3 rounded-lg transition-all duration-200 ${
                 item.active
-                  ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                  ? 'text-slate-600 border border-slate-600'
+                  : 'text-slate-600 hover:text-slate-400'
               }`}
             >
               <div className="flex-shrink-0">
@@ -238,7 +238,7 @@ export default function AppLayout({ children }) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/50"
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-transparent"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -249,7 +249,7 @@ export default function AppLayout({ children }) {
           <div className="md:hidden">
             <Link to="/dashboard" className="flex items-center space-x-2">
               <img
-                src="/svg/logo-full-nb.svg"
+                src="/svg/logo-nb.svg"
                 alt="Envoyou"
                 className="h-6 w-auto"
               />

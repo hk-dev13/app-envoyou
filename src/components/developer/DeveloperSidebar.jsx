@@ -73,7 +73,7 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
   };
 
   return (
-    <div className="flex h-full w-64 flex-col bg-slate-900/50 border-r border-slate-800">
+    <div className="flex h-full w-64 flex-col bg-transparent border-r border-slate-800">
       {/* Header */}
       <div className="flex h-16 items-center px-6 border-b border-slate-800">
         <Link to="/" className="flex items-center space-x-2">
@@ -118,14 +118,14 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
               to={item.path}
               className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                 active
-                  ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                  ? 'text-slate-600 border border-slate-600'
+                  : 'text-slate-600 hover:text-slate-400'
               }`}
             >
               <Icon className="h-5 w-5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="truncate">{item.label}</div>
-                <div className="text-xs text-slate-500 truncate">{item.description}</div>
+                <div className="text-xs text-slate-600 truncate">{item.description}</div>
               </div>
             </Link>
           );
@@ -140,7 +140,7 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
           variant="ghost"
           size="sm"
           onClick={toggleDarkMode}
-          className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800/50"
+          className="w-full justify-start text-slate-600 hover:text-slate-400 hover:bg-transparent"
         >
           {isDarkMode ? (
             <Sun className="h-4 w-4 mr-2" />
@@ -154,7 +154,7 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800/50"
+            className="w-full justify-start text-slate-600 hover:text-slate-400 hover:bg-transparent"
           >
             <User className="h-4 w-4 mr-2" />
             Profile Settings
@@ -164,7 +164,7 @@ const DeveloperSidebar = ({ user, isDarkMode, toggleDarkMode }) => {
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800/50"
+          className="w-full justify-start text-slate-600 hover:text-slate-400 hover:bg-transparent"
         >
           <Settings className="h-4 w-4 mr-2" />
           Preferences

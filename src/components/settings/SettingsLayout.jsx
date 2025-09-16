@@ -17,7 +17,7 @@ function SettingsLayout({ children }) {
                     name: 'Profile',
                     path: '/settings/profile',
                     icon: (
-                        <svg className="w-5 h-5 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     )
@@ -26,7 +26,7 @@ function SettingsLayout({ children }) {
                     name: 'Notifications',
                     path: '/settings/notifications',
                     icon: (
-                        <svg className="w-5 h-5 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.868 12.683A17.925 17.925 0 012 21h4.462c.276 0 .5.224.5.5v.5c0 .276-.224.5-.5.5H2c-.276 0-.5-.224-.5-.5v-.5c0-2.99.94-5.806 2.594-8.093l.874-.874z" />
                         </svg>
                     )
@@ -41,7 +41,7 @@ function SettingsLayout({ children }) {
                     name: 'Security',
                     path: '/settings/security',
                     icon: (
-                        <svg className="w-5 h-5 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     )
@@ -56,7 +56,7 @@ function SettingsLayout({ children }) {
                     name: 'API Keys',
                     path: '/settings/api-keys',
                     icon: (
-                        <svg className="w-5 h-5 text-slate-500 group-hover:text-slate-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-slate-600 group-hover:text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                         </svg>
                     )
@@ -94,7 +94,7 @@ function SettingsLayout({ children }) {
                     <div className="flex flex-col lg:flex-row gap-8">
                         {/* Sidebar Navigation */}
                         <div className="lg:w-64 flex-shrink-0">
-                            <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+                            <div className="bg-transparent rounded-none border-none p-0">
                                 {/* User Info */}
                                 <div className="flex items-center space-x-3 mb-6 pb-6 border-b border-slate-800">
                                     <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center">
@@ -129,8 +129,8 @@ function SettingsLayout({ children }) {
                                                         to={item.path}
                                                         className={`group flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 ${
                                                             isActive(item.path)
-                                                                ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30'
-                                                                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                                                                ? 'text-slate-600 border border-slate-600'
+                                                                : 'text-slate-600 hover:text-slate-400'
                                                         }`}
                                                     >
                                                         {item.icon}
