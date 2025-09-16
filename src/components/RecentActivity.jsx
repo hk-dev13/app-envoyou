@@ -86,8 +86,8 @@ const RecentActivity = ({ activities = [], loading = false }) => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-medium text-white">Recent API Calls</h3>
         <Link
-          to="/dashboard/usage"
-          className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
+          to="/developer/analytics"
+          className="text-slate-400 hover:text-slate-300 text-sm font-medium transition-colors"
         >
           View all
         </Link>

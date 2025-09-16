@@ -83,7 +83,7 @@ const AppContent = () => {
             
             {/* Protected dashboard routes */}
             <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
-            <Route path="/dashboard/usage" element={<ProtectedRoute><AppLayout><DashboardUsage /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/usage" element={<Navigate to="/developer/analytics" replace />} />
             <Route path="/dashboard/monitoring" element={<ProtectedRoute><AppLayout><MonitoringDashboard /></AppLayout></ProtectedRoute>} />
             <Route path="/dashboard/analytics" element={<ProtectedRoute><AppLayout><AnalyticsDashboard /></AppLayout></ProtectedRoute>} />
             <Route path="/dashboard/reporting" element={<ProtectedRoute><AppLayout><ReportingDashboard /></AppLayout></ProtectedRoute>} />
@@ -91,7 +91,7 @@ const AppContent = () => {
             {/* Protected settings routes */}
             <Route path="/settings/profile" element={<ProtectedRoute><AppLayout><ProfileSettingsPage /></AppLayout></ProtectedRoute>} />
             <Route path="/settings/notifications" element={<ProtectedRoute><AppLayout><NotificationsSettingsPage /></AppLayout></ProtectedRoute>} />
-            <Route path="/settings/api-keys" element={<ProtectedRoute><AppLayout><APIKeysSettingsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/settings/api-keys" element={<Navigate to="/developer/api-keys" replace />} />
             <Route path="/settings/security" element={<ProtectedRoute><AppLayout><SecuritySettingsPage /></AppLayout></ProtectedRoute>} />
             
             {/* Developer Dashboard routes */}
