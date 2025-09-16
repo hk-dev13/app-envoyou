@@ -28,6 +28,7 @@ const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage'));
 const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsPage'));
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
+const NotificationsSettingsPage = lazy(() => import('./pages/settings/NotificationsSettingsPage'));
 
 // Developer Dashboard pages
 const DeveloperDashboard = lazy(() => import('./pages/developer-dashboard/DeveloperDashboard'));
@@ -89,6 +90,7 @@ const AppContent = () => {
             
             {/* Protected settings routes */}
             <Route path="/settings/profile" element={<ProtectedRoute><AppLayout><ProfileSettingsPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/settings/notifications" element={<ProtectedRoute><AppLayout><NotificationsSettingsPage /></AppLayout></ProtectedRoute>} />
             <Route path="/settings/api-keys" element={<ProtectedRoute><AppLayout><APIKeysSettingsPage /></AppLayout></ProtectedRoute>} />
             <Route path="/settings/security" element={<ProtectedRoute><AppLayout><SecuritySettingsPage /></AppLayout></ProtectedRoute>} />
             

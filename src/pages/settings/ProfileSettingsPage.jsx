@@ -14,7 +14,8 @@ function ProfileSettingsPage() {
         email: '',
         company: '',
         job_title: '',
-        timezone: ''
+        timezone: '',
+        language: 'en'
     });
 
     // Load user profile data
@@ -30,7 +31,8 @@ function ProfileSettingsPage() {
                 email: profileData.email || '',
                 company: profileData.company || '',
                 job_title: profileData.job_title || '',
-                timezone: profileData.timezone || 'UTC'
+                timezone: profileData.timezone || 'UTC',
+                language: profileData.language || 'en'
             });
         } catch (error) {
             console.error('Failed to load profile:', error);
@@ -72,7 +74,8 @@ function ProfileSettingsPage() {
             email: user?.email || '',
             company: user?.company || '',
             job_title: user?.job_title || '',
-            timezone: user?.timezone || 'UTC'
+            timezone: user?.timezone || 'UTC',
+            language: user?.language || 'en'
         });
         setIsEditing(false);
         setMessage('');
@@ -235,6 +238,33 @@ function ProfileSettingsPage() {
                             <option value="Asia/Tokyo">Tokyo</option>
                             <option value="Asia/Shanghai">Shanghai</option>
                             <option value="Australia/Sydney">Sydney</option>
+                        </select>
+                    </div>
+
+                    {/* Language */}
+                    <div>
+                        <label className="block text-sm font-medium text-white mb-2">
+                            Language
+                        </label>
+                        <select
+                            name="language"
+                            value={formData.language}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <option value="en">English</option>
+                            <option value="es">Español</option>
+                            <option value="fr">Français</option>
+                            <option value="de">Deutsch</option>
+                            <option value="it">Italiano</option>
+                            <option value="pt">Português</option>
+                            <option value="ru">Русский</option>
+                            <option value="ja">日本語</option>
+                            <option value="ko">한국어</option>
+                            <option value="zh">中文</option>
+                            <option value="ar">العربية</option>
+                            <option value="hi">हिन्दी</option>
                         </select>
                     </div>
                 </div>
