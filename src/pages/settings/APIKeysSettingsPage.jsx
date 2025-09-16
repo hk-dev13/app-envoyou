@@ -95,7 +95,7 @@ function APIKeysSettingsPage() {
                 {message && (
                     <div className={`p-4 rounded-lg ${
                         message.includes('successfully') || message.includes('copied')
-                            ? 'bg-emerald-600/20 border border-emerald-600/30 text-emerald-400'
+                            ? 'bg-slate-600/20 border border-slate-600/30 text-slate-300'
                             : 'bg-red-600/20 border border-red-600/30 text-red-400'
                     }`}>
                         <div className="flex items-center">
@@ -122,7 +122,7 @@ function APIKeysSettingsPage() {
                         </div>
                         <button
                             onClick={() => setShowCreateForm(!showCreateForm)}
-                            className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                            className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors"
                         >
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -145,7 +145,7 @@ function APIKeysSettingsPage() {
                                         type="text"
                                         value={newKeyName}
                                         onChange={(e) => setNewKeyName(e.target.value)}
-                                        className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                        className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-slate-600 focus:border-transparent"
                                         placeholder="e.g., Production API Key"
                                         required
                                     />
@@ -158,7 +158,7 @@ function APIKeysSettingsPage() {
                                     <select
                                         value={newKeyEnvironment}
                                         onChange={(e) => setNewKeyEnvironment(e.target.value)}
-                                        className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                        className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-slate-600 focus:border-transparent"
                                     >
                                         <option value="development">Development (1,000 requests/month)</option>
                                         <option value="production">Production (5,000 requests/month)</option>
@@ -170,7 +170,7 @@ function APIKeysSettingsPage() {
                                 <button
                                     type="submit"
                                     disabled={isCreatingKey || !newKeyName.trim()}
-                                    className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isCreatingKey && (
                                         <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@ function APIKeysSettingsPage() {
                     <div className="space-y-4">
                         {isLoading ? (
                             <div className="text-center py-12">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-400 mx-auto mb-4"></div>
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-400 mx-auto mb-4"></div>
                                 <p className="text-slate-300">Loading API keys...</p>
                             </div>
                         ) : apiKeys.length === 0 ? (
@@ -209,7 +209,7 @@ function APIKeysSettingsPage() {
                                 </p>
                                 <button
                                     onClick={() => setShowCreateForm(true)}
-                                    className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                                    className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors"
                                 >
                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -229,7 +229,7 @@ function APIKeysSettingsPage() {
                                                 <h3 className="text-lg font-medium text-white">{apiKey.name}</h3>
                                                 <span className={`px-2 py-1 text-xs rounded-full ${
                                                     apiKey.status === 'active' 
-                                                        ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-600/30'
+                                                        ? 'bg-slate-600/20 text-slate-300 border border-slate-600/30'
                                                         : 'bg-slate-600/20 text-slate-400 border border-slate-600/30'
                                                 }`}>
                                                     {apiKey.status}

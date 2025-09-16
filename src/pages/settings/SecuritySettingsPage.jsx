@@ -132,7 +132,7 @@ function SecuritySettingsPage() {
                 {message && (
                     <div className={`p-4 rounded-lg ${
                         message.includes('successfully') 
-                            ? 'bg-emerald-600/20 border border-emerald-600/30 text-emerald-400'
+                            ? 'bg-slate-600/20 border border-slate-600/30 text-slate-300'
                             : 'bg-red-600/20 border border-red-600/30 text-red-400'
                     }`}>
                         <div className="flex items-center">
@@ -247,7 +247,7 @@ function SecuritySettingsPage() {
                             <button
                                 type="submit"
                                 disabled={isSettingLocalPassword}
-                                className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSettingLocalPassword && (
                                     <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
@@ -387,7 +387,7 @@ function SecuritySettingsPage() {
                         <button
                             type="submit"
                             disabled={isChangingPassword}
-                            className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isChangingPassword && (
                                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">

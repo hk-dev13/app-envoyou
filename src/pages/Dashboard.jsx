@@ -80,16 +80,16 @@ const Dashboard = () => {
             <h3 className="text-sm font-semibold text-slate-300 mb-2">Usage Overview</h3>
             <UsageChart data={usageData} />
             <div className="mt-4 text-right">
-              <Link to="/dashboard/monitoring" className="text-xs text-emerald-400 hover:text-emerald-300 font-medium">Go to Monitoring →</Link>
+              <Link to="/dashboard/monitoring" className="text-xs text-slate-400 hover:text-slate-300 font-medium">Go to Monitoring →</Link>
             </div>
           </div>
           <div className="space-y-4">
             <div className="p-5 bg-slate-800/50 border border-slate-700 rounded-lg">
               <h4 className="text-xs font-semibold tracking-wide text-slate-400 mb-2">Specialized Dashboards</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/dashboard/monitoring" className="text-emerald-400 hover:text-emerald-300">ESG Monitoring</Link><p className="text-[11px] text-slate-500">Real-time score, alerts, regulations</p></li>
-                <li><Link to="/dashboard/analytics" className="text-emerald-400 hover:text-emerald-300">Analytics (Investor / Company)</Link><p className="text-[11px] text-slate-500">Portfolio & facility intelligence</p></li>
-                <li><Link to="/dashboard/reporting" className="text-emerald-400 hover:text-emerald-300">Reporting & Disclosure</Link><p className="text-[11px] text-slate-500">Exports, mappings, webhooks</p></li>
+                <li><Link to="/dashboard/monitoring" className="text-slate-400 hover:text-slate-300">ESG Monitoring</Link><p className="text-[11px] text-slate-500">Real-time score, alerts, regulations</p></li>
+                <li><Link to="/dashboard/analytics" className="text-slate-400 hover:text-slate-300">Analytics (Investor / Company)</Link><p className="text-[11px] text-slate-500">Portfolio & facility intelligence</p></li>
+                <li><Link to="/dashboard/reporting" className="text-slate-400 hover:text-slate-300">Reporting & Disclosure</Link><p className="text-[11px] text-slate-500">Exports, mappings, webhooks</p></li>
               </ul>
             </div>
             <RecentActivity />

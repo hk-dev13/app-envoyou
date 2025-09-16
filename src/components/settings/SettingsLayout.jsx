@@ -70,17 +70,6 @@ function SettingsLayout({ children }) {
             {/* Header Spacing */}
             <div className="pt-20">
                 <div className="max-w-7xl mx-auto px-6 py-8">
-                    {/* Breadcrumb */}
-                    <nav className="flex items-center space-x-2 text-sm text-slate-400 mb-8">
-                        <Link to="/dashboard" className="hover:text-emerald-400 transition-colors">
-                            Dashboard
-                        </Link>
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                        <span className="text-white">Settings</span>
-                    </nav>
-
                     {/* Header */}
                     <div className="mb-8">
                         <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent mb-2">
@@ -146,6 +135,17 @@ function SettingsLayout({ children }) {
 
                         {/* Main Content */}
                         <div className="flex-1">
+                            {/* Breadcrumb inside main content */}
+                            <nav className="flex items-center space-x-2 text-sm text-slate-400 mb-6">
+                                <Link to="/dashboard" className="hover:text-slate-400 transition-colors">
+                                    Dashboard
+                                </Link>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                                <span className="text-white">Settings</span>
+                            </nav>
+
                             {children}
                         </div>
                     </div>
