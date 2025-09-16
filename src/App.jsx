@@ -13,7 +13,6 @@ import { UpgradeProvider } from './components/UpgradeProvider.jsx';
 
 // Lazy load pages for better performance
 const Dashboard = lazy(() => import('./pages/Dashboard'));
-const DashboardUsage = lazy(() => import('./pages/DashboardUsage'));
 const MonitoringDashboard = lazy(() => import('./pages/MonitoringDashboard'));
 const AnalyticsDashboard = lazy(() => import('./pages/AnalyticsDashboard'));
 const ReportingDashboard = lazy(() => import('./pages/ReportingDashboard'));
@@ -25,7 +24,6 @@ const EmailVerificationPage = lazy(() => import('./pages/auth/EmailVerificationP
 const SetPasswordPage = lazy(() => import('./pages/auth/SetPasswordPage'));
 const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage'));
-const APIKeysSettingsPage = lazy(() => import('./pages/settings/APIKeysSettingsPage'));
 const ProfileSettingsPage = lazy(() => import('./pages/settings/ProfileSettingsPage'));
 const SecuritySettingsPage = lazy(() => import('./pages/settings/SecuritySettingsPage'));
 const NotificationsSettingsPage = lazy(() => import('./pages/settings/NotificationsSettingsPage'));

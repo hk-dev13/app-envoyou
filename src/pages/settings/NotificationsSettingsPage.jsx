@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SettingsLayout from '../../components/settings/SettingsLayout';
-import { useAuth } from '../../hooks/useAuth.js';
-import apiService from '../../services/apiService';
 
 function NotificationsSettingsPage() {
-    const { user } = useAuth();
     const [isSaving, setIsSaving] = useState(false);
     const [message, setMessage] = useState('');
 

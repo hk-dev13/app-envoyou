@@ -4,11 +4,6 @@ import { useAuth } from '../../hooks/useAuth.js';
 import ThemeToggle from '../ThemeToggle.jsx';
 import PlanStatus from '../PlanStatus.jsx';
 
-function useActive(path) {
-  const location = useLocation();
-  return location.pathname === path || (path !== '/' && location.pathname.startsWith(path));
-}
-
 const ProfileMenu = ({ user, onLogout, compact = false }) => {
   const [open, setOpen] = React.useState(false);
   const closeTimeout = React.useRef(null);

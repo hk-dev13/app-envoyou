@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.js';
 import apiService from '../services/apiService';
 
 const DashboardUsage = () => {
-  const { user, logout } = useAuth();
   const [stats, setStats] = useState({
     apiCalls: 0,
     thisMonth: 0,
