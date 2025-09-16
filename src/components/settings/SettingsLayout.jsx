@@ -97,7 +97,7 @@ function SettingsLayout({ children }) {
                             <div className="bg-transparent rounded-none border-none p-0">
                                 {/* User Info */}
                                 <div className="flex items-center space-x-3 mb-6 pb-6 border-b border-slate-800">
-                                    <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center">
+                                    <div className="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center">
                                         <span className="text-white font-medium">
                                             {user?.name?.[0] || user?.email?.[0] || 'U'}
                                         </span>

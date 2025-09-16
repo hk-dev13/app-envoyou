@@ -4,8 +4,8 @@
   --color-surface: #161b22;
   --color-border: #2C3E50;
   --color-border-subtle: #1f2a33;
-  --color-accent: #2ECC71;
-  --color-accent-hover: #27AE60;
+  --color-accent: #64748b; /* Changed from green to grey */
+  --color-accent-hover: #94a3b8; /* Changed from green to lighter grey */
   --color-text: #FFFFFF;
   --color-text-muted: #95A5A6;
   --radius-sm: 4px;

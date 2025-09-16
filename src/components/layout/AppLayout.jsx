@@ -30,7 +30,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
   if (compact) {
     return (
       <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+        <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
       </div>
@@ -49,7 +49,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+        <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
         <div className="text-left">
