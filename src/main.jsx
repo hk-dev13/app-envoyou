@@ -8,7 +8,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 
 // Core Services Integration
 import { APP_CONFIG, EXTERNAL_SERVICES } from './config/index.js';
-import initPWA from './pwa/registerPWA.js';
+// import initPWA from './pwa/registerPWA.js';
 import logger from './services/logger';
 // import { initializePerformanceMonitoring } from './services/performance';
 import { initializeGlobalErrorHandler } from './services/errorHandler';
@@ -75,9 +75,9 @@ logger.info('Global error handler initialized.');
 bootstrapSidecar();
 
 // --- PWA Registration (deferred update) ---
-if ('serviceWorker' in navigator) {
-  initPWA();
-}
+// if ('serviceWorker' in navigator) {
+//   initPWA();
+// }
 
 // --- React App Rendering ---
 const rootElement = document.getElementById('root');

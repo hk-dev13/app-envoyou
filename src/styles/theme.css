@@ -110,11 +110,11 @@ button.ghost:hover, .btn-ghost:hover {
 
 h1,h2,h3,h4,h5,h6 { font-weight: 600; letter-spacing: .5px; }
 
-/* Icons unify color */
-svg, .icon, .dashboard-icon {
+/* Icons - removed global color override to allow Tailwind classes */
+/* svg, .icon, .dashboard-icon {
   stroke: var(--color-accent);
   color: var(--color-accent);
-}
+} */
 
 /* Remove colored icon wrappers */
 .icon-wrapper, .icon-circle, .icon-bg, .icon-tile {
