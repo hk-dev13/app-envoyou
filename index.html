@@ -83,6 +83,42 @@
     <!-- Google Analytics 4 with Consent Mode v2 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HJPHVX4X02"></script>
     <script src="/google-analytics.js"></script>
+
+      <style>
+      /* Atur warna latar belakang default ke gelap */
+      body {
+        background-color: #0d1117; /* Warna gelap utama dari tema Anda */
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      /* Style untuk loader awal sebelum React dimuat */
+      .initial-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #cbd5e1; /* Warna teks abu-abu terang */
+      }
+      
+      .initial-loader .spinner {
+        width: 48px;
+        height: 48px;
+        border: 2px solid #475569; /* Warna border spinner */
+        border-bottom-color: #34d399; /* Warna aksen spinner */
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+
+      @keyframes rotation {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
 </head>
   <body>
     <div id="root"></div>

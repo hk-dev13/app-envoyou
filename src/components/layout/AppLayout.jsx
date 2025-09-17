@@ -46,7 +46,7 @@ const ProfileMenu = ({ user, onLogout }) => {
       {open && (
         <div
           ref={menuRef}
-          className="absolute bottom-full left-0 w-48 z-40 mb-2 rounded-md border border-border bg-popover/95 backdrop-blur-sm shadow-lg py-1"
+          className="absolute bottom-full left-0 w-48 z-40 mb-2 rounded-md border border-border bg-popover shadow-lg py-1"
           role="menu"
         >
           <Link

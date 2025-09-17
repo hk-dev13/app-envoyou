@@ -203,3 +203,15 @@ a.button-link:hover { border-color: var(--color-accent); color: var(--color-acce
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
+
+/* PERBAIKAN TOOLTIP TRANSPARAN */
+[role="tooltip"] {
+  background-color: var(--color-surface) !important;
+  backdrop-filter: none !important;
+  color: var(--color-text) !important;
+}
+
+/* === UNTUK PERBAIKAN FOTO PROFIL === */
+.rounded-full {
+  border-radius: 9999px !important;
+}

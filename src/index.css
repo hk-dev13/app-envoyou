@@ -2,17 +2,17 @@
 @import "tw-animate-css";
 
 /* Envoyou Color Palette */
-:root {
+/* :root { */
   /* Primary Colors */
-  --envoyou-dark: #0D1117;
+  /* --envoyou-dark: #0D1117;
   --envoyou-green: #2ECC71;
   --envoyou-green-hover: #27AE60;
   --envoyou-white: #FFFFFF;
   --envoyou-gray: #95A5A6;
-  --envoyou-border: #2C3E50;
+  --envoyou-border: #2C3E50; */
 
   /* Extended Palette for UI Elements */
-  --envoyou-dark-light: #1a202c;
+  /* --envoyou-dark-light: #1a202c;
   --envoyou-dark-lighter: #2d3748;
   --envoyou-green-light: rgba(46, 204, 113, 0.1);
   --envoyou-green-lighter: rgba(46, 204, 113, 0.05);
@@ -39,9 +39,9 @@
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --chart-5: oklch(0.769 0.188 70.08); */
 /* Custom sidebar variables - removed conflicting menu colors */
-  --sidebar: oklch(0.985 0.002 247.839);
+  /* --sidebar: oklch(0.985 0.002 247.839);
   --sidebar-foreground: oklch(0.13 0.028 261.692);
   --sidebar-primary: oklch(0.21 0.034 264.665);
   --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
@@ -49,7 +49,7 @@
   --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
   --sidebar-border: oklch(0.928 0.006 264.531);
   --sidebar-ring: oklch(0.707 0.022 261.325);
-}
+} */
 
 [data-theme="dark"] {
   --background: oklch(0.13 0.028 261.692);
@@ -306,20 +306,3 @@
   background: #64748b;
 }
 
-/* Custom scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #1e293b;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #475569;
-  border-radius: 3px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
-}
