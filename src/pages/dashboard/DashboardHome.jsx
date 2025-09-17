@@ -27,7 +27,7 @@ export default function DashboardHome() {
         <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-background to-muted/30">
           <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(600px 200px at 20% -20%, rgba(16,185,129,0.15), transparent), radial-gradient(600px 200px at 80% -40%, rgba(59,130,246,0.15), transparent)"}} />
           <div className="relative p-6 md:p-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">Platform Overview</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-primary-foreground">Platform Overview</h1>
             <p className="text-muted-foreground mt-1">Snapshot of usage & quick access to tools</p>
             <div className="mt-6"><QuickActions /></div>
           </div>
@@ -44,7 +44,7 @@ export default function DashboardHome() {
         {/* Activity & Placeholder for charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="bg-card border border-border rounded-xl p-6">
-            <h2 className="text-foreground font-semibold">Recent Activity</h2>
+            <h2 className="text-primary-foreground font-semibold">Recent Activity</h2>
             <p className="text-muted-foreground text-sm mb-4">Latest events from your API usage</p>
             <RecentActivity items={stats.totalRequests ? [
               { title: 'API key generated', time: '2 hours ago', color: 'bg-emerald-400' },
@@ -53,7 +53,7 @@ export default function DashboardHome() {
             ] : []} />
           </div>
           <div className="bg-card border border-border rounded-xl p-6 min-h-[280px]">
-            <h2 className="text-foreground font-semibold">Usage Overview</h2>
+            <h2 className="text-primary-foreground font-semibold">Usage Overview</h2>
             <p className="text-muted-foreground text-sm">Coming soon: charts & insights</p>
             <div className="mt-6 h-40 rounded-lg border border-dashed border-border/80 flex items-center justify-center text-muted-foreground text-sm">Charts placeholder</div>
           </div>

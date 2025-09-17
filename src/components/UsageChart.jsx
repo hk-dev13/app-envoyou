@@ -5,10 +5,10 @@ const UsageChart = ({ data, title = "API Usage Over Time", height = 300 }) => {
     return (
       <div className={`h-${height/16} flex items-center justify-center border-2 border-dashed border-slate-600 rounded-lg`}>
         <div className="text-center">
-          <svg className="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-12 h-12 text-muted-foreground mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-          <p className="text-slate-400">No usage data available</p>
+          <p className="text-muted-foreground">No usage data available</p>
           <p className="text-sm text-slate-500 mt-1">Data will appear here once you start using the API</p>
         </div>
       </div>
@@ -30,13 +30,13 @@ const UsageChart = ({ data, title = "API Usage Over Time", height = 300 }) => {
   const areaPoints = points + ` 100,90 0,90`;
 
   return (
-    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+    <div className="bg-card/50 border border-border rounded-lg p-6">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-medium text-white">{title}</h3>
+        <h3 className="text-lg font-medium text-primary-foreground">{title}</h3>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
-            <span className="text-slate-400">API Calls</span>
+            <span className="text-muted-foreground">API Calls</span>
           </div>
         </div>
       </div>
@@ -108,20 +108,20 @@ const UsageChart = ({ data, title = "API Usage Over Time", height = 300 }) => {
       </div>
 
       {/* Summary stats */}
-      <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-700">
+      <div className="grid grid-cols-3 gap-4 mt-6 pt-4 border-t border-border">
         <div className="text-center">
-          <p className="text-2xl font-bold text-white">{data.reduce((sum, d) => sum + d.value, 0).toLocaleString()}</p>
-          <p className="text-xs text-slate-400">Total Calls</p>
+          <p className="text-2xl font-bold text-primary-foreground">{data.reduce((sum, d) => sum + d.value, 0).toLocaleString()}</p>
+          <p className="text-xs text-muted-foreground">Total Calls</p>
         </div>
         <div className="text-center">
           <p className="text-2xl font-bold text-emerald-400">
             +{Math.round((data[data.length - 1]?.value - data[0]?.value) / data[0]?.value * 100) || 0}%
           </p>
-          <p className="text-xs text-slate-400">Growth</p>
+          <p className="text-xs text-muted-foreground">Growth</p>
         </div>
         <div className="text-center">
           <p className="text-2xl font-bold text-blue-400">{Math.round(data.reduce((sum, d) => sum + d.value, 0) / data.length)}</p>
-          <p className="text-xs text-slate-400">Daily Avg</p>
+          <p className="text-xs text-muted-foreground">Daily Avg</p>
         </div>
       </div>
     </div>

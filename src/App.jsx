@@ -39,7 +39,7 @@ import AppLayout from './components/layout/AppLayout.jsx';
 
 // Loading component for Suspense fallback
 const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-slate-900">
+  <div className="min-h-screen flex items-center justify-center bg-background">
     <div className="text-center">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-400 mx-auto mb-4"></div>
       <p className="text-slate-300">Loading...</p>
@@ -51,8 +51,8 @@ const AppContent = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-900">
-      <main className="flex-grow">
+            <div className="min-h-screen flex flex-col bg-background">
+            <main className="flex-grow">
         <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Redirect root to dashboard if authenticated, otherwise to login */}
@@ -83,38 +83,38 @@ const AppContent = () => {
             {/* Catch-all route for production domain redirects */}
             <Route path="*" element={
               window.location.hostname === 'envoyou.com' ? (
-                <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4">
+                <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
                   <div className="max-w-md w-full space-y-6 text-center">
                     <div className="bg-red-600 rounded-full p-4 w-16 h-16 mx-auto flex items-center justify-center">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-8 h-8 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                       </svg>
                     </div>
-                    <h1 className="text-2xl font-bold text-white">Wrong Domain</h1>
-                    <p className="text-slate-400">
+                    <h1 className="text-2xl font-bold text-primary-foreground">Wrong Domain</h1>
+                    <p className="text-muted-foreground">
                       You&apos;re on the production domain. Please use your local development server instead.
                     </p>
-                    <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 text-left">
+                    <div className="bg-card p-4 rounded-lg border border-border text-left">
                       <p className="text-slate-300 text-sm mb-2">To access the application:</p>
-                      <ol className="text-slate-400 text-sm space-y-1 list-decimal list-inside">
+                      <ol className="text-muted-foreground text-sm space-y-1 list-decimal list-inside">
                         <li>Go to: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173</code></li>
                         <li>If you&apos;re verifying email, use: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173/verify/[token]</code></li>
                       </ol>
                     </div>
                     <button
                       onClick={() => window.location.href = 'http://localhost:5173'}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                      className="bg-blue-600 hover:bg-blue-700 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors"
                     >
                       Go to Local Development
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                <div className="min-h-screen bg-background flex items-center justify-center">
                   <div className="text-center">
-                    <h1 className="text-2xl font-bold text-white mb-4">Page Not Found</h1>
-                    <p className="text-slate-400 mb-6">The page you&apos;re looking for doesn&apos;t exist.</p>
-                    <Link to="/" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <h1 className="text-2xl font-bold text-primary-foreground mb-4">Page Not Found</h1>
+                    <p className="text-muted-foreground mb-6">The page you&apos;re looking for doesn&apos;t exist.</p>
+                    <Link to="/" className="bg-blue-600 hover:bg-blue-700 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors">
                       Go Home
                     </Link>
                   </div>

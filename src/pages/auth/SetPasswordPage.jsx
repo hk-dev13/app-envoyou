@@ -92,14 +92,14 @@ const SetPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-primary-foreground">
             Set Password
           </h2>
-          <p className="mt-2 text-center text-sm text-slate-400">
+          <p className="mt-2 text-center text-sm text-muted-foreground">
             Add a password to your social login account for traditional login access
           </p>
         </div>
@@ -130,7 +130,7 @@ const SetPasswordPage = () => {
                 required
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   validationErrors.email ? 'border-red-500' : 'border-slate-600'
-                } placeholder-slate-400 text-white bg-slate-800 rounded-t-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
+                } placeholder-slate-400 text-primary-foreground bg-card rounded-t-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
@@ -153,7 +153,7 @@ const SetPasswordPage = () => {
                 required
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   validationErrors.password ? 'border-red-500' : 'border-slate-600'
-                } placeholder-slate-400 text-white bg-slate-800 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
+                } placeholder-slate-400 text-primary-foreground bg-card focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
                 placeholder="Password (min 8 chars, uppercase, lowercase, number)"
                 value={formData.password}
                 onChange={handleChange}
@@ -164,11 +164,11 @@ const SetPasswordPage = () => {
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
                   </svg>
                 ) : (
-                  <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
@@ -192,7 +192,7 @@ const SetPasswordPage = () => {
                 required
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   validationErrors.confirmPassword ? 'border-red-500' : 'border-slate-600'
-                } placeholder-slate-400 text-white bg-slate-800 rounded-b-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
+                } placeholder-slate-400 text-primary-foreground bg-card rounded-b-md focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
@@ -203,11 +203,11 @@ const SetPasswordPage = () => {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
-                  <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
                   </svg>
                 ) : (
-                  <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
@@ -224,7 +224,7 @@ const SetPasswordPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center">

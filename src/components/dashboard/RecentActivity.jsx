@@ -21,7 +21,7 @@ export default function RecentActivity({ items = [] }) {
         <div key={idx} className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${it.color || 'bg-emerald-400'}`}></div>
           <div className="flex-1">
-            <p className="text-sm text-foreground">{it.title}</p>
+            <p className="text-sm text-primary-foreground">{it.title}</p>
             <p className="text-xs text-muted-foreground">{it.time}</p>
           </div>
         </div>

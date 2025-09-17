@@ -46,7 +46,7 @@ body {
   line-height: 1;
 }
 
-.text-white {
+.text-primary-foreground {
   color: #ffffff;
 }
 
@@ -54,7 +54,7 @@ body {
   color: #34d399;
 }
 
-.text-slate-400 {
+.text-muted-foreground {
   color: #94a3b8;
 }
 
@@ -121,7 +121,7 @@ body {
   border: 1px solid;
 }
 
-.border-slate-700 {
+.border-border {
   border-color: #334155;
 }
 

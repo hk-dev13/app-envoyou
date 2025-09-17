@@ -72,7 +72,7 @@ function NotificationsSettingsPage() {
     const NotificationSection = ({ title, description, children }) => (
         <div className="bg-card rounded-xl border border-border p-6">
             <div className="mb-6">
-                <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
+                <h3 className="text-lg font-semibold text-primary-foreground mb-2">{title}</h3>
                 <p className="text-muted-foreground text-sm">{description}</p>
             </div>
             <div className="space-y-4">
@@ -84,7 +84,7 @@ function NotificationsSettingsPage() {
     const NotificationToggle = ({ label, description, checked, onChange, disabled = false }) => (
         <div className="flex items-center justify-between py-3">
             <div className="flex-1">
-                <div className="text-foreground font-medium">{label}</div>
+                <div className="text-primary-foreground font-medium">{label}</div>
                 {description && (
                     <div className="text-muted-foreground text-sm mt-1">{description}</div>
                 )}
@@ -107,7 +107,7 @@ function NotificationsSettingsPage() {
             <div className="max-w-4xl space-y-8">
                 {/* Header */}
                 <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-2">Notifications</h2>
+                    <h2 className="text-2xl font-bold text-primary-foreground mb-2">Notifications</h2>
                     <p className="text-muted-foreground">
                         Choose how you want to be notified about important updates and activities.
                     </p>
@@ -220,19 +220,19 @@ function NotificationsSettingsPage() {
                         disabled={true}
                     />
 
-                    <div className="mt-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                        <p className="text-slate-400 text-sm">
+                    <div className="mt-4 p-3 bg-card/50 rounded-lg border border-border">
+                        <p className="text-muted-foreground text-sm">
                             Push notifications are currently in development and will be available in a future update.
                         </p>
                     </div>
                 </NotificationSection>
 
                 {/* Save Button */}
-                <div className="flex justify-end pt-6 border-t border-slate-800">
+                <div className="flex justify-end pt-6 border-t border-border">
                     <button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+                        className="px-6 py-3 bg-primary hover:bg-emerald-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-primary-foreground font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-slate-900"
                     >
                         {isSaving ? (
                             <div className="flex items-center space-x-2">

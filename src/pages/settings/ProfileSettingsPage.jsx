@@ -86,7 +86,7 @@ function ProfileSettingsPage() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h2 className="text-2xl font-semibold text-foreground mb-2">Profile Information</h2>
+                        <h2 className="text-2xl font-semibold text-primary-foreground mb-2">Profile Information</h2>
                         <p className="text-muted-foreground">
                             Update your account&apos;s profile information and email address.
                         </p>
@@ -108,7 +108,7 @@ function ProfileSettingsPage() {
                 {message && (
                     <div className={`p-4 rounded-lg mb-6 ${
                         message.includes('successfully') 
-                            ? 'bg-emerald-600/20 border border-emerald-600/30 text-emerald-400'
+                            ? 'bg-primary/20 border border-emerald-600/30 text-emerald-400'
                             : 'bg-red-600/20 border border-red-600/30 text-red-400'
                     }`}>
                         <div className="flex items-center">
@@ -128,12 +128,12 @@ function ProfileSettingsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Avatar Section */}
                     <div className="md:col-span-2 mb-6">
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Profile Picture
                         </label>
                         <div className="flex items-center space-x-4">
-                            <div className="w-20 h-20 bg-emerald-600 rounded-full flex items-center justify-center">
-                                <span className="text-white text-2xl font-medium">
+                            <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center">
+                                <span className="text-primary-foreground text-2xl font-medium">
                                     {formData.name?.[0] || formData.email?.[0] || 'U'}
                                 </span>
                             </div>
@@ -153,7 +153,7 @@ function ProfileSettingsPage() {
 
                     {/* Full Name */}
                     <div>
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Full Name
                         </label>
                         <input
@@ -162,14 +162,14 @@ function ProfileSettingsPage() {
                             value={formData.name}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="Enter your full name"
                         />
                     </div>
 
                     {/* Email */}
                     <div>
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Email Address
                         </label>
                         <input
@@ -178,14 +178,14 @@ function ProfileSettingsPage() {
                             value={formData.email}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="Enter your email"
                         />
                     </div>
 
                     {/* Company */}
                     <div>
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Company
                         </label>
                         <input
@@ -194,14 +194,14 @@ function ProfileSettingsPage() {
                             value={formData.company}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="Enter your company name"
                         />
                     </div>
 
                     {/* Job Title */}
                     <div>
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Job Title
                         </label>
                         <input
@@ -210,14 +210,14 @@ function ProfileSettingsPage() {
                             value={formData.job_title}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                             placeholder="Enter your job title"
                         />
                     </div>
 
                     {/* Timezone */}
                     <div>
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Timezone
                         </label>
                         <select
@@ -225,7 +225,7 @@ function ProfileSettingsPage() {
                             value={formData.timezone}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <option value="UTC">UTC</option>
                             <option value="America/New_York">Eastern Time</option>
@@ -242,7 +242,7 @@ function ProfileSettingsPage() {
 
                     {/* Language */}
                     <div>
-                        <label className="block text-sm font-medium text-white mb-2">
+                        <label className="block text-sm font-medium text-primary-foreground mb-2">
                             Language
                         </label>
                         <select
@@ -250,7 +250,7 @@ function ProfileSettingsPage() {
                             value={formData.language}
                             onChange={handleInputChange}
                             disabled={!isEditing}
-                            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full px-3 py-2 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <option value="en">English</option>
                             <option value="es">Español</option>
@@ -280,10 +280,10 @@ function ProfileSettingsPage() {
                         <button
                             onClick={handleSave}
                             disabled={isSaving}
-                            className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center px-4 py-2 bg-primary hover:bg-emerald-700 text-primary-foreground rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isSaving && (
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-foreground" fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>

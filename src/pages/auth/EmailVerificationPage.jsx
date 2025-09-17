@@ -42,9 +42,9 @@ const EmailVerificationPage = () => {
               <p className="text-red-400 mb-3">
                 You&apos;re on the production domain. Please use the local development server instead.
               </p>
-              <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+              <div className="bg-card p-4 rounded-lg border border-border">
                 <p className="text-slate-300 text-sm mb-2">To verify your email:</p>
-                <ol className="text-slate-400 text-sm space-y-1 list-decimal list-inside">
+                <ol className="text-muted-foreground text-sm space-y-1 list-decimal list-inside">
                   <li>Open your local development server: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173</code></li>
                   <li>Navigate to: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173/verify/{token}</code></li>
                   <li>Or click the button below to copy the local URL</li>
@@ -56,7 +56,7 @@ const EmailVerificationPage = () => {
                   navigator.clipboard.writeText(localUrl);
                   alert('Local verification URL copied to clipboard!');
                 }}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
               >
                 Copy Local Verification URL
               </button>
@@ -107,7 +107,7 @@ const EmailVerificationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 text-center">
         {/* Status Icon */}
         <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center">
@@ -116,14 +116,14 @@ const EmailVerificationPage = () => {
           )}
           {status === 'success' && (
             <div className="bg-green-600 rounded-full p-4">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
           )}
           {status === 'error' && (
             <div className="bg-red-600 rounded-full p-4">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
@@ -132,12 +132,12 @@ const EmailVerificationPage = () => {
 
         {/* Header */}
         <div>
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <h2 className="text-3xl font-bold text-primary-foreground mb-2">
             {status === 'verifying' && 'Verifying Email...'}
             {status === 'success' && '🎉 Email Verified Successfully!'}
             {status === 'error' && 'Verification Failed'}
           </h2>
-          <p className="text-slate-400">
+          <p className="text-muted-foreground">
             {status === 'verifying' && 'Please wait a moment...'}
             {status === 'success' && 'Congratulations! Your account is now active.'}
             {status === 'error' && 'There was an error verifying your email.'}
@@ -151,7 +151,7 @@ const EmailVerificationPage = () => {
               ? 'bg-green-900/50 border border-green-500 text-green-200'
               : status === 'error'
               ? 'bg-red-900/50 border border-red-500 text-red-200'
-              : 'bg-slate-800/50 border border-slate-700 text-slate-300'
+              : 'bg-card/50 border border-border text-slate-300'
           }`}>
             <p className="text-sm">{message}</p>
           </div>
@@ -165,7 +165,7 @@ const EmailVerificationPage = () => {
               placeholder="Enter your email address"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-card border border-border rounded-lg text-primary-foreground placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
             />
           </div>
         )}
@@ -175,7 +175,7 @@ const EmailVerificationPage = () => {
           {status === 'success' && (
             <Link
               to="/auth/login"
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-lg transition-colors inline-block text-center"
+              className="w-full bg-primary hover:bg-emerald-700 text-primary-foreground font-medium py-3 px-4 rounded-lg transition-colors inline-block text-center"
             >
               Login Now
             </Link>
@@ -186,7 +186,7 @@ const EmailVerificationPage = () => {
               <button
                 onClick={handleResendVerification}
                 disabled={isResending}
-                className="w-full bg-slate-700 hover:bg-slate-600 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                className="w-full bg-slate-700 hover:bg-slate-600 disabled:bg-slate-600 disabled:cursor-not-allowed text-primary-foreground font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
               >
                 {isResending ? (
                   <>
@@ -199,7 +199,7 @@ const EmailVerificationPage = () => {
               </button>
               <Link
                 to="/auth/login"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-lg transition-colors inline-block text-center"
+                className="w-full bg-primary hover:bg-emerald-700 text-primary-foreground font-medium py-3 px-4 rounded-lg transition-colors inline-block text-center"
               >
                 Back to Login
               </Link>
@@ -207,7 +207,7 @@ const EmailVerificationPage = () => {
           )}
 
           {status === 'verifying' && (
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-muted-foreground">
               <p>Processing your email verification...</p>
             </div>
           )}

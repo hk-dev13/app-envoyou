@@ -65,8 +65,8 @@ const Dashboard = () => {
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white">Platform Overview</h1>
-          <p className="mt-1 text-sm text-slate-400">Snapshot of usage & quick access to specialized dashboards.</p>
+          <h1 className="text-2xl font-bold text-primary-foreground">Platform Overview</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Snapshot of usage & quick access to specialized dashboards.</p>
         </div>
         <EmailVerificationBanner />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -76,20 +76,20 @@ const Dashboard = () => {
           <StatCard title="Active API Keys" value={stats.activeKeys} change="0%" changeType="neutral" sparklineData={sparklineData.activeKeys} loading={loading} onClick={() => window.open('/developer/api-keys', '_self')} icon={(props)=>(<svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>)} />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2 bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+          <div className="lg:col-span-2 bg-card/50 border border-border rounded-lg p-6">
             <h3 className="text-sm font-semibold text-slate-300 mb-2">Usage Overview</h3>
             <UsageChart data={usageData} />
             <div className="mt-4 text-right">
-              <Link to="/dashboard/monitoring" className="text-xs text-slate-400 hover:text-slate-300 font-medium">Go to Monitoring →</Link>
+              <Link to="/dashboard/monitoring" className="text-xs text-muted-foreground hover:text-slate-300 font-medium">Go to Monitoring →</Link>
             </div>
           </div>
           <div className="space-y-4">
-            <div className="p-5 bg-slate-800/50 border border-slate-700 rounded-lg">
-              <h4 className="text-xs font-semibold tracking-wide text-slate-400 mb-2">Specialized Dashboards</h4>
+            <div className="p-5 bg-card/50 border border-border rounded-lg">
+              <h4 className="text-xs font-semibold tracking-wide text-muted-foreground mb-2">Specialized Dashboards</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link to="/dashboard/monitoring" className="text-slate-400 hover:text-slate-300">ESG Monitoring</Link><p className="text-[11px] text-slate-500">Real-time score, alerts, regulations</p></li>
-                <li><Link to="/dashboard/analytics" className="text-slate-400 hover:text-slate-300">Analytics (Investor / Company)</Link><p className="text-[11px] text-slate-500">Portfolio & facility intelligence</p></li>
-                <li><Link to="/dashboard/reporting" className="text-slate-400 hover:text-slate-300">Reporting & Disclosure</Link><p className="text-[11px] text-slate-500">Exports, mappings, webhooks</p></li>
+                <li><Link to="/dashboard/monitoring" className="text-muted-foreground hover:text-slate-300">ESG Monitoring</Link><p className="text-[11px] text-slate-500">Real-time score, alerts, regulations</p></li>
+                <li><Link to="/dashboard/analytics" className="text-muted-foreground hover:text-slate-300">Analytics (Investor / Company)</Link><p className="text-[11px] text-slate-500">Portfolio & facility intelligence</p></li>
+                <li><Link to="/dashboard/reporting" className="text-muted-foreground hover:text-slate-300">Reporting & Disclosure</Link><p className="text-[11px] text-slate-500">Exports, mappings, webhooks</p></li>
               </ul>
             </div>
             <RecentActivity />

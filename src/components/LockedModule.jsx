@@ -24,9 +24,9 @@ export default function LockedModule({ required, current, featureKey, children, 
       <div className={inline ? 'opacity-40 pointer-events-none' : 'opacity-40 pointer-events-none'} aria-hidden="true">
         {children}
       </div>
-      <div className="locked-module-overlay absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg border border-slate-800 p-3 text-center">
+      <div className="locked-module-overlay absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg border border-border p-3 text-center">
         <div className="flex flex-col items-center text-center px-2">
-          <span id={labelId} className="text-[11px] font-medium text-white tracking-wide">Requires {required} Plan</span>
+          <span id={labelId} className="text-[11px] font-medium text-primary-foreground tracking-wide">Requires {required} Plan</span>
           <span className="text-[10px] text-secondary">Current: {current}</span>
         </div>
         <button

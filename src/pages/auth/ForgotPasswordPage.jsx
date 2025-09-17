@@ -62,14 +62,14 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-primary-foreground">
             Reset Password
           </h2>
-          <p className="mt-2 text-center text-sm text-slate-400">
+          <p className="mt-2 text-center text-sm text-muted-foreground">
             Enter your email address and we&apos;ll send you a link to reset your password.
           </p>
         </div>
@@ -98,7 +98,7 @@ const ForgotPasswordPage = () => {
               required
               className={`appearance-none rounded-md relative block w-full px-3 py-2 border ${
                 validationError ? 'border-red-500' : 'border-slate-600'
-              } placeholder-slate-400 text-white bg-slate-800 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
+              } placeholder-slate-400 text-primary-foreground bg-card focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 focus:z-10 sm:text-sm`}
               placeholder="Email address"
               value={email}
               onChange={handleEmailChange}
@@ -113,7 +113,7 @@ const ForgotPasswordPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-primary-foreground bg-primary hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center">
@@ -134,7 +134,7 @@ const ForgotPasswordPage = () => {
             >
               Back to Login
             </Link>
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
               <Link
                 to="/auth/register"

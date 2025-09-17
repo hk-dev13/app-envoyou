@@ -91,7 +91,7 @@ const APIKeyManager = () => {
   };
 
   const getStatusColor = (status) => {
-    return status === 'active' ? 'text-emerald-400 bg-emerald-400/10' : 'text-slate-400 bg-slate-400/10';
+    return status === 'active' ? 'text-emerald-400 bg-emerald-400/10' : 'text-muted-foreground bg-slate-400/10';
   };
 
   const formatDate = (dateString) => {
@@ -109,12 +109,12 @@ const APIKeyManager = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">API Key Management</h2>
-          <p className="text-slate-400 mt-1">Create and manage your API keys for accessing Envoyou services</p>
+          <h2 className="text-2xl font-bold text-primary-foreground">API Key Management</h2>
+          <p className="text-muted-foreground mt-1">Create and manage your API keys for accessing Envoyou services</p>
         </div>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center space-x-2"
+          className="px-4 py-2 bg-primary hover:bg-emerald-700 text-primary-foreground text-sm font-medium rounded-lg transition-colors flex items-center space-x-2"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -125,15 +125,15 @@ const APIKeyManager = () => {
 
       {/* Message */}
       {message && (
-        <div className={`p-4 rounded-lg ${message.includes('success') ? 'bg-emerald-600/20 border border-emerald-600/50 text-emerald-400' : 'bg-red-600/20 border border-red-600/50 text-red-400'}`}>
+        <div className={`p-4 rounded-lg ${message.includes('success') ? 'bg-primary/20 border border-emerald-600/50 text-emerald-400' : 'bg-red-600/20 border border-red-600/50 text-red-400'}`}>
           {message}
         </div>
       )}
 
       {/* Create Key Form */}
       {showCreateForm && (
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-white mb-4">Create New API Key</h3>
+        <div className="bg-card/50 border border-border rounded-lg p-6">
+          <h3 className="text-lg font-medium text-primary-foreground mb-4">Create New API Key</h3>
           <form onSubmit={handleCreateKey} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-2">Key Name</label>
@@ -142,7 +142,7 @@ const APIKeyManager = () => {
                 value={newKeyData.name}
                 onChange={(e) => setNewKeyData({...newKeyData, name: e.target.value})}
                 placeholder="e.g., Production API Key"
-                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-primary-foreground placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 required
               />
             </div>
@@ -152,7 +152,7 @@ const APIKeyManager = () => {
               <select
                 value={newKeyData.environment}
                 onChange={(e) => setNewKeyData({...newKeyData, environment: e.target.value})}
-                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-primary-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               >
                 <option value="development">Development</option>
                 <option value="staging">Staging</option>
@@ -168,7 +168,7 @@ const APIKeyManager = () => {
                 onChange={(e) => setNewKeyData({...newKeyData, rateLimit: parseInt(e.target.value)})}
                 min="100"
                 max="100000"
-                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-primary-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 required
               />
             </div>
@@ -176,14 +176,14 @@ const APIKeyManager = () => {
             <div className="flex space-x-3">
               <button
                 type="submit"
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors"
+                className="px-4 py-2 bg-primary hover:bg-emerald-700 text-primary-foreground text-sm font-medium rounded-lg transition-colors"
               >
                 Create Key
               </button>
               <button
                 type="button"
                 onClick={() => setShowCreateForm(false)}
-                className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white text-sm font-medium rounded-lg transition-colors"
+                className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-primary-foreground text-sm font-medium rounded-lg transition-colors"
               >
                 Cancel
               </button>
@@ -197,7 +197,7 @@ const APIKeyManager = () => {
         {loading ? (
           // Loading skeleton
           Array.from({ length: 2 }).map((_, index) => (
-            <div key={index} className="bg-slate-800/50 border border-slate-700 rounded-lg p-6 animate-pulse">
+            <div key={index} className="bg-card/50 border border-border rounded-lg p-6 animate-pulse">
               <div className="flex items-center justify-between mb-4">
                 <div className="h-6 bg-slate-700 rounded w-48"></div>
                 <div className="h-6 bg-slate-700 rounded w-20"></div>
@@ -210,10 +210,10 @@ const APIKeyManager = () => {
           ))
         ) : apiKeys.length > 0 ? (
           apiKeys.map((key) => (
-            <div key={key.id} className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+            <div key={key.id} className="bg-card/50 border border-border rounded-lg p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <h3 className="text-lg font-medium text-white">{key.name}</h3>
+                  <h3 className="text-lg font-medium text-primary-foreground">{key.name}</h3>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getEnvironmentColor(key.environment)}`}>
                     {key.environment}
                   </span>
@@ -234,31 +234,31 @@ const APIKeyManager = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wide">API Key</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">API Key</p>
                   <p className="text-sm font-mono text-slate-300">{key.prefix}****</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wide">Created</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Created</p>
                   <p className="text-sm text-slate-300">{formatDate(key.createdAt)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wide">Last Used</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Last Used</p>
                   <p className="text-sm text-slate-300">
                     {key.lastUsed ? formatDate(key.lastUsed) : 'Never'}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wide">Rate Limit</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Rate Limit</p>
                   <p className="text-sm text-slate-300">{key.rateLimit.toLocaleString()}/hour</p>
                 </div>
               </div>
 
               {/* Usage Progress */}
               {key.usage && (
-                <div className="bg-slate-900/50 rounded-lg p-4">
+                <div className="bg-background/50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-slate-300">Usage this hour</span>
-                    <span className="text-sm text-slate-400">
+                    <span className="text-sm text-muted-foreground">
                       {key.usage.current} / {key.usage.limit}
                     </span>
                   </div>
@@ -273,15 +273,15 @@ const APIKeyManager = () => {
             </div>
           ))
         ) : (
-          <div className="text-center py-12 bg-slate-800/50 border border-slate-700 rounded-lg">
-            <svg className="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center py-12 bg-card/50 border border-border rounded-lg">
+            <svg className="w-12 h-12 text-muted-foreground mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
             </svg>
-            <h3 className="text-lg font-medium text-white mb-2">No API Keys</h3>
-            <p className="text-slate-400 mb-4">Create your first API key to start using the Envoyou API</p>
+            <h3 className="text-lg font-medium text-primary-foreground mb-2">No API Keys</h3>
+            <p className="text-muted-foreground mb-4">Create your first API key to start using the Envoyou API</p>
             <button
               onClick={() => setShowCreateForm(true)}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors"
+              className="px-4 py-2 bg-primary hover:bg-emerald-700 text-primary-foreground text-sm font-medium rounded-lg transition-colors"
             >
               Create Your First API Key
             </button>

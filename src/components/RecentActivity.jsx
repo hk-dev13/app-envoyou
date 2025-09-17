@@ -52,7 +52,7 @@ const RecentActivity = ({ activities = [], loading = false }) => {
     if (status >= 200 && status < 300) return 'text-emerald-400 bg-emerald-400/10';
     if (status >= 400 && status < 500) return 'text-red-400 bg-red-400/10';
     if (status >= 500) return 'text-yellow-400 bg-yellow-400/10';
-    return 'text-slate-400 bg-slate-400/10';
+    return 'text-muted-foreground bg-slate-400/10';
   };
 
   const getMethodColor = (method) => {
@@ -61,7 +61,7 @@ const RecentActivity = ({ activities = [], loading = false }) => {
       case 'POST': return 'text-emerald-400 bg-emerald-400/10';
       case 'PUT': return 'text-yellow-400 bg-yellow-400/10';
       case 'DELETE': return 'text-red-400 bg-red-400/10';
-      default: return 'text-slate-400 bg-slate-400/10';
+      default: return 'text-muted-foreground bg-slate-400/10';
     }
   };
 
@@ -82,12 +82,12 @@ const RecentActivity = ({ activities = [], loading = false }) => {
   };
 
   return (
-    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+    <div className="bg-card/50 border border-border rounded-lg p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-white">Recent API Calls</h3>
+        <h3 className="text-lg font-medium text-primary-foreground">Recent API Calls</h3>
         <Link
           to="/developer/analytics"
-          className="text-slate-400 hover:text-slate-300 text-sm font-medium transition-colors"
+          className="text-muted-foreground hover:text-slate-300 text-sm font-medium transition-colors"
         >
           View all
         </Link>
@@ -119,14 +119,14 @@ const RecentActivity = ({ activities = [], loading = false }) => {
               {/* Endpoint & Status */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
-                  <p className="text-sm font-medium text-white truncate">
+                  <p className="text-sm font-medium text-primary-foreground truncate">
                     {activity.endpoint}
                   </p>
                   <div className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(activity.status)}`}>
                     {activity.status}
                   </div>
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   {formatTimestamp(activity.timestamp)} • {activity.responseTime}ms
                 </p>
               </div>
@@ -137,16 +137,16 @@ const RecentActivity = ({ activities = [], loading = false }) => {
                   activity.responseTime < 100 ? 'bg-emerald-400' :
                   activity.responseTime < 500 ? 'bg-yellow-400' : 'bg-red-400'
                 }`}></div>
-                <span className="text-xs text-slate-400">{activity.responseTime}ms</span>
+                <span className="text-xs text-muted-foreground">{activity.responseTime}ms</span>
               </div>
             </div>
           ))
         ) : (
           <div className="text-center py-8">
-            <svg className="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-12 h-12 text-muted-foreground mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p className="text-slate-400 text-sm">No recent activity</p>
+            <p className="text-muted-foreground text-sm">No recent activity</p>
             <p className="text-slate-500 text-xs mt-1">API calls will appear here</p>
           </div>
         )}
@@ -154,25 +154,25 @@ const RecentActivity = ({ activities = [], loading = false }) => {
 
       {/* Summary */}
       {displayActivities.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-slate-700">
+        <div className="mt-4 pt-4 border-t border-border">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-lg font-bold text-emerald-400">
                 {displayActivities.filter(a => a.status >= 200 && a.status < 300).length}
               </p>
-              <p className="text-xs text-slate-400">Success</p>
+              <p className="text-xs text-muted-foreground">Success</p>
             </div>
             <div>
               <p className="text-lg font-bold text-red-400">
                 {displayActivities.filter(a => a.status >= 400).length}
               </p>
-              <p className="text-xs text-slate-400">Errors</p>
+              <p className="text-xs text-muted-foreground">Errors</p>
             </div>
             <div>
               <p className="text-lg font-bold text-blue-400">
                 {Math.round(displayActivities.reduce((sum, a) => sum + a.responseTime, 0) / displayActivities.length)}ms
               </p>
-              <p className="text-xs text-slate-400">Avg Response</p>
+              <p className="text-xs text-muted-foreground">Avg Response</p>
             </div>
           </div>
         </div>

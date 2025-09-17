@@ -36,9 +36,9 @@ export default function Breadcrumbs() {
         <span key={it.href} className="flex items-center">
           {idx !== 0 && <span className="mx-2 text-border">/</span>}
           {it.last ? (
-            <span className="text-foreground font-medium">{it.label}</span>
+            <span className="text-primary-foreground font-medium">{it.label}</span>
           ) : (
-            <Link to={it.href} className="hover:text-foreground transition-colors">{it.label}</Link>
+            <Link to={it.href} className="hover:text-primary-foreground transition-colors">{it.label}</Link>
           )}
         </span>
       ))}

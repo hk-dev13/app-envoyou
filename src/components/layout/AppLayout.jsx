@@ -266,7 +266,7 @@ export default function AppLayout({ children }) {
           <div className="flex items-center justify-between mb-4">
             <Link to="/dashboard" className="flex items-center gap-2">
               <img src="/svg/logo-nb.svg" alt="Envoyou" className="h-6 w-auto rounded" />
-              {sidebarVisible && <span className="text-foreground font-semibold tracking-wide">Envoyou</span>}
+              {sidebarVisible && <span className="text-primary-foreground font-semibold tracking-wide">Envoyou</span>}
             </Link>
             <div />
           </div>
@@ -283,8 +283,8 @@ export default function AppLayout({ children }) {
                   to={item.path}
                   className={`group relative flex items-center px-3 py-2 rounded-md transition-colors ${
                     item.active
-                      ? `text-foreground ${activeTone} border border-border/60`
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/20'
+                      ? `text-primary-foreground ${activeTone} border border-border/60`
+                      : 'text-muted-foreground hover:text-primary-foreground hover:bg-accent/20'
                   }`}
                 >
                   <div className="flex-shrink-0 opacity-90 group-hover:opacity-100">{item.icon}</div>
@@ -342,7 +342,7 @@ export default function AppLayout({ children }) {
             {/* Mobile open */}
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
+              className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-primary-foreground hover:bg-accent"
               aria-label="Open sidebar"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

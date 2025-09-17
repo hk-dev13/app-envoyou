@@ -149,10 +149,10 @@ function SecuritySettingsPage() {
 
                 {/* Set Local Password Section - Only for OAuth users without local password */}
                 {user?.auth_provider && !user?.has_local_password && (
-                    <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+                    <div className="bg-background/50 rounded-xl border border-border p-6">
                         <div className="mb-6">
-                            <h2 className="text-2xl font-semibold text-white mb-2">Set a Password for Your Account</h2>
-                            <p className="text-slate-400">
+                            <h2 className="text-2xl font-semibold text-primary-foreground mb-2">Set a Password for Your Account</h2>
+                            <p className="text-muted-foreground">
                                 You signed up with {user.auth_provider}. If you&apos;d like, you can also create a password to log in without {user.auth_provider}.
                             </p>
                         </div>
@@ -160,7 +160,7 @@ function SecuritySettingsPage() {
                         <form onSubmit={handleSetLocalPassword} className="space-y-4">
                             {/* New Password */}
                             <div>
-                                <label className="block text-sm font-medium text-white mb-2">
+                                <label className="block text-sm font-medium text-primary-foreground mb-2">
                                     New Password
                                 </label>
                                 <div className="relative">
@@ -168,14 +168,14 @@ function SecuritySettingsPage() {
                                         type={showLocalPassword ? 'text' : 'password'}
                                         value={localPassword}
                                         onChange={(e) => setLocalPassword(e.target.value)}
-                                        className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                        className="w-full px-3 py-2 pr-10 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
                                         placeholder="Enter your new password"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowLocalPassword(!showLocalPassword)}
-                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary-foreground"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showLocalPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
@@ -187,7 +187,7 @@ function SecuritySettingsPage() {
 
                             {/* Confirm Password */}
                             <div>
-                                <label className="block text-sm font-medium text-white mb-2">
+                                <label className="block text-sm font-medium text-primary-foreground mb-2">
                                     Confirm New Password
                                 </label>
                                 <div className="relative">
@@ -195,14 +195,14 @@ function SecuritySettingsPage() {
                                         type={showConfirmLocalPassword ? 'text' : 'password'}
                                         value={confirmLocalPassword}
                                         onChange={(e) => setConfirmLocalPassword(e.target.value)}
-                                        className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                        className="w-full px-3 py-2 pr-10 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
                                         placeholder="Confirm your new password"
                                         required
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowConfirmLocalPassword(!showConfirmLocalPassword)}
-                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary-foreground"
                                     >
                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showConfirmLocalPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
@@ -213,9 +213,9 @@ function SecuritySettingsPage() {
                             </div>
 
                             {/* Password Requirements */}
-                            <div className="bg-slate-800/50 rounded-lg p-4">
-                                <h4 className="text-white font-medium mb-2">Password Requirements:</h4>
-                                <ul className="text-slate-400 text-sm space-y-1">
+                            <div className="bg-card/50 rounded-lg p-4">
+                                <h4 className="text-primary-foreground font-medium mb-2">Password Requirements:</h4>
+                                <ul className="text-muted-foreground text-sm space-y-1">
                                     <li className="flex items-center">
                                         <svg className={`w-4 h-4 mr-2 ${localPassword.length >= 8 ? 'text-emerald-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -246,10 +246,10 @@ function SecuritySettingsPage() {
                             <button
                                 type="submit"
                                 disabled={isSettingLocalPassword}
-                                className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-primary-foreground rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSettingLocalPassword && (
-                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-foreground" fill="none" viewBox="0 0 24 24">
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
@@ -262,10 +262,10 @@ function SecuritySettingsPage() {
 
                 {/* Change Password Section - Only show if user has local password */}
                 {user?.has_local_password && (
-                <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+                <div className="bg-background/50 rounded-xl border border-border p-6">
                     <div className="mb-6">
-                        <h2 className="text-2xl font-semibold text-white mb-2">Change Password</h2>
-                        <p className="text-slate-400">
+                        <h2 className="text-2xl font-semibold text-primary-foreground mb-2">Change Password</h2>
+                        <p className="text-muted-foreground">
                             Ensure your account is using a long, random password to stay secure.
                         </p>
                     </div>
@@ -273,7 +273,7 @@ function SecuritySettingsPage() {
                     <form onSubmit={handlePasswordChange} className="space-y-4">
                         {/* Current Password */}
                         <div>
-                            <label className="block text-sm font-medium text-white mb-2">
+                            <label className="block text-sm font-medium text-primary-foreground mb-2">
                                 Current Password
                             </label>
                             <div className="relative">
@@ -281,14 +281,14 @@ function SecuritySettingsPage() {
                                     type={showCurrentPassword ? 'text' : 'password'}
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
-                                    className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                    className="w-full px-3 py-2 pr-10 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
                                     placeholder="Enter your current password"
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary-foreground"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showCurrentPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
@@ -300,7 +300,7 @@ function SecuritySettingsPage() {
 
                         {/* New Password */}
                         <div>
-                            <label className="block text-sm font-medium text-white mb-2">
+                            <label className="block text-sm font-medium text-primary-foreground mb-2">
                                 New Password
                             </label>
                             <div className="relative">
@@ -308,14 +308,14 @@ function SecuritySettingsPage() {
                                     type={showNewPassword ? 'text' : 'password'}
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
-                                    className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                    className="w-full px-3 py-2 pr-10 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
                                     placeholder="Enter your new password"
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowNewPassword(!showNewPassword)}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary-foreground"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showNewPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
@@ -327,7 +327,7 @@ function SecuritySettingsPage() {
 
                         {/* Confirm Password */}
                         <div>
-                            <label className="block text-sm font-medium text-white mb-2">
+                            <label className="block text-sm font-medium text-primary-foreground mb-2">
                                 Confirm New Password
                             </label>
                             <div className="relative">
@@ -335,14 +335,14 @@ function SecuritySettingsPage() {
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full px-3 py-2 pr-10 bg-slate-800 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
+                                    className="w-full px-3 py-2 pr-10 bg-card border border-border text-primary-foreground rounded-lg focus:ring-2 focus:ring-emerald-600 focus:border-transparent"
                                     placeholder="Confirm your new password"
                                     required
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white"
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary-foreground"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={showConfirmPassword ? "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" : "M15 12a3 3 0 11-6 0 3 3 0 016 0z"} />
@@ -353,9 +353,9 @@ function SecuritySettingsPage() {
                         </div>
 
                         {/* Password Requirements */}
-                        <div className="bg-slate-800/50 rounded-lg p-4">
-                            <h4 className="text-white font-medium mb-2">Password Requirements:</h4>
-                            <ul className="text-slate-400 text-sm space-y-1">
+                        <div className="bg-card/50 rounded-lg p-4">
+                            <h4 className="text-primary-foreground font-medium mb-2">Password Requirements:</h4>
+                            <ul className="text-muted-foreground text-sm space-y-1">
                                 <li className="flex items-center">
                                     <svg className={`w-4 h-4 mr-2 ${newPassword.length >= 8 ? 'text-emerald-400' : 'text-slate-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -386,10 +386,10 @@ function SecuritySettingsPage() {
                         <button
                             type="submit"
                             disabled={isChangingPassword}
-                            className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="inline-flex items-center px-4 py-2 bg-slate-600 hover:bg-slate-700 text-primary-foreground rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isChangingPassword && (
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-foreground" fill="none" viewBox="0 0 24 24">
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
@@ -401,11 +401,11 @@ function SecuritySettingsPage() {
                 )}
 
                 {/* Two-Factor Authentication */}
-                <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+                <div className="bg-background/50 rounded-xl border border-border p-6">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h2 className="text-2xl font-semibold text-white mb-2">Two-Factor Authentication</h2>
-                            <p className="text-slate-400">
+                            <h2 className="text-2xl font-semibold text-primary-foreground mb-2">Two-Factor Authentication</h2>
+                            <p className="text-muted-foreground">
                                 Add an extra layer of security to your account by enabling two-factor authentication.
                             </p>
                         </div>
@@ -413,7 +413,7 @@ function SecuritySettingsPage() {
                             <button
                                 onClick={toggleTwoFactor}
                                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                    twoFactorEnabled ? 'bg-emerald-600' : 'bg-slate-700'
+                                    twoFactorEnabled ? 'bg-primary' : 'bg-slate-700'
                                 }`}
                             >
                                 <span
@@ -426,7 +426,7 @@ function SecuritySettingsPage() {
                     </div>
 
                     {twoFactorEnabled && (
-                        <div className="mt-4 p-4 bg-emerald-600/20 border border-emerald-600/30 rounded-lg">
+                        <div className="mt-4 p-4 bg-primary/20 border border-emerald-600/30 rounded-lg">
                             <div className="flex items-center text-emerald-400">
                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -438,22 +438,22 @@ function SecuritySettingsPage() {
                 </div>
 
                 {/* Session Management */}
-                <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+                <div className="bg-background/50 rounded-xl border border-border p-6">
                     <div className="mb-6">
-                        <h2 className="text-2xl font-semibold text-white mb-2">Session Management</h2>
-                        <p className="text-slate-400">
+                        <h2 className="text-2xl font-semibold text-primary-foreground mb-2">Session Management</h2>
+                        <p className="text-muted-foreground">
                             Manage your active sessions and logout from all devices if needed.
                         </p>
                     </div>
 
                     <div className="space-y-4">
                         {/* Current Session */}
-                        <div className="flex items-center justify-between p-4 bg-slate-800/50 rounded-lg">
+                        <div className="flex items-center justify-between p-4 bg-card/50 rounded-lg">
                             <div className="flex items-center space-x-3">
                                 <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
                                 <div>
-                                    <div className="text-white font-medium">Current Session</div>
-                                    <div className="text-slate-400 text-sm">Browser • Last active now</div>
+                                    <div className="text-primary-foreground font-medium">Current Session</div>
+                                    <div className="text-muted-foreground text-sm">Browser • Last active now</div>
                                 </div>
                             </div>
                             <span className="text-emerald-400 text-sm font-medium">Active</span>

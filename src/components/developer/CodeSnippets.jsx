@@ -783,10 +783,10 @@ func main() {
       {/* Header */}
       {/* <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-white">Code Snippets</h2>
-          <p className="text-slate-400 mt-1">Ready-to-use code examples in multiple languages</p>
+          <h2 className="text-3xl font-bold text-primary-foreground">Code Snippets</h2>
+          <p className="text-muted-foreground mt-1">Ready-to-use code examples in multiple languages</p>
         </div>
-        <Badge variant="secondary" className="bg-emerald-600/20 text-emerald-400 border-emerald-600/30">
+        <Badge variant="secondary" className="bg-primary/20 text-emerald-400 border-emerald-600/30">
           <Code2 className="h-3 w-3 mr-1" />
           6 Languages
         </Badge>
@@ -803,21 +803,21 @@ func main() {
               key={endpoint.id}
               className={`cursor-pointer transition-all duration-200 hover:shadow-lg ${
                 isSelected
-                  ? 'bg-slate-800/80 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
-                  : 'bg-slate-800/50 border-slate-700 hover:border-slate-600'
+                  ? 'bg-card/80 border-emerald-500/50 shadow-lg shadow-emerald-500/10'
+                  : 'bg-card/50 border-border hover:border-slate-600'
               }`}
               onClick={() => setSelectedEndpoint(endpoint.id)}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-lg ${isSelected ? 'bg-emerald-600/20' : 'bg-slate-700/50'}`}>
+                  <div className={`p-2 rounded-lg ${isSelected ? 'bg-primary/20' : 'bg-slate-700/50'}`}>
                     <Icon className={`h-5 w-5 ${endpoint.color}`} />
                   </div>
                   <div>
-                    <CardTitle className={`text-lg ${isSelected ? 'text-emerald-400' : 'text-white'}`}>
+                    <CardTitle className={`text-lg ${isSelected ? 'text-emerald-400' : 'text-primary-foreground'}`}>
                       {endpoint.name}
                     </CardTitle>
-                    <CardDescription className="text-slate-400">
+                    <CardDescription className="text-muted-foreground">
                       {endpoint.description}
                     </CardDescription>
                   </div>
@@ -829,13 +829,13 @@ func main() {
       </div>
 
       {/* Code Tabs */}
-      <Card className="bg-slate-800/50 border-slate-700">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {EndpointIcon && <EndpointIcon className={`h-5 w-5 ${selectedEndpointData?.color}`} />}
               <div>
-                <CardTitle className="text-white">
+                <CardTitle className="text-primary-foreground">
                   {selectedEndpointData?.name} Example
                 </CardTitle>
                 <CardDescription>
@@ -843,14 +843,14 @@ func main() {
                 </CardDescription>
               </div>
             </div>
-            <Badge variant="outline" className="text-slate-400 border-slate-600">
+            <Badge variant="outline" className="text-muted-foreground border-slate-600">
               Don&apos;t forget to replace YOUR_API_KEY
             </Badge>
           </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="javascript" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 bg-slate-900/50">
+            <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 bg-background/50">
               <TabsTrigger value="javascript" className="text-xs">JavaScript</TabsTrigger>
               <TabsTrigger value="python" className="text-xs">Python</TabsTrigger>
               <TabsTrigger value="curl" className="text-xs">cURL</TabsTrigger>
@@ -862,13 +862,13 @@ func main() {
             {['javascript', 'python', 'curl', 'php', 'ruby', 'go'].map((language) => (
               <TabsContent key={language} value={language} className="mt-4">
                 <div className="relative">
-                  <div className="flex items-center justify-between p-3 bg-slate-900/50 border border-slate-600 rounded-t-lg">
-                    <span className="text-sm text-slate-400 capitalize">{language}</span>
+                  <div className="flex items-center justify-between p-3 bg-background/50 border border-slate-600 rounded-t-lg">
+                    <span className="text-sm text-muted-foreground capitalize">{language}</span>
                     <Button
                       size="sm"
                       variant="ghost"
                       onClick={() => copyToClipboard(language, selectedEndpoint)}
-                      className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+                      className="text-muted-foreground hover:text-primary-foreground hover:bg-slate-700/50"
                     >
                       {copiedStates[`${language}-${selectedEndpoint}`] ? (
                         <>
@@ -883,7 +883,7 @@ func main() {
                       )}
                     </Button>
                   </div>
-                  <pre className="bg-slate-900/50 p-4 rounded-b-lg border-x border-b border-slate-600 overflow-x-auto text-sm">
+                  <pre className="bg-background/50 p-4 rounded-b-lg border-x border-b border-slate-600 overflow-x-auto text-sm">
                     <code className="text-slate-300 font-mono leading-relaxed">
                       {codeSnippets[language]?.[selectedEndpoint] || 'Code snippet not available for this language/endpoint combination.'}
                     </code>
@@ -896,9 +896,9 @@ func main() {
       </Card>
 
       {/* Quick Start Guide */}
-      <Card className="bg-slate-800/50 border-slate-700">
+      <Card className="bg-card/50 border-border">
         <CardHeader>
-          <CardTitle className="text-white flex items-center">
+          <CardTitle className="text-primary-foreground flex items-center">
             {/* <Zap className="h-5 w-5 mr-2 text-yellow-400" /> */}
             Quick Start Guide
           </CardTitle>
@@ -910,15 +910,15 @@ func main() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
                   1
                 </div>
                 <div>
-                  <h4 className="text-lg font-medium text-white mb-2">Get Your API Key</h4>
+                  <h4 className="text-lg font-medium text-primary-foreground mb-2">Get Your API Key</h4>
                   <p className="text-slate-300 mb-3">
                     Create an API key from the API Keys section. You&apos;ll need this for authentication.
                   </p>
-                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                  <div className="bg-background/50 p-3 rounded border border-slate-600">
                     <code className="text-emerald-400 text-sm font-mono">
                       Authorization: Bearer YOUR_API_KEY
                     </code>
@@ -927,15 +927,15 @@ func main() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
                   2
                 </div>
                 <div>
-                  <h4 className="text-lg font-medium text-white mb-2">Make Your First Request</h4>
+                  <h4 className="text-lg font-medium text-primary-foreground mb-2">Make Your First Request</h4>
                   <p className="text-slate-300 mb-3">
                     Use the code snippets above to make your first API call. Start with authentication.
                   </p>
-                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                  <div className="bg-background/50 p-3 rounded border border-slate-600">
                     <code className="text-blue-400 text-sm font-mono">
                       POST /v1/auth/login
                     </code>
@@ -946,15 +946,15 @@ func main() {
 
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 bg-yellow-600 rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
                   3
                 </div>
                 <div>
-                  <h4 className="text-lg font-medium text-white mb-2">Monitor Rate Limits</h4>
+                  <h4 className="text-lg font-medium text-primary-foreground mb-2">Monitor Rate Limits</h4>
                   <p className="text-slate-300 mb-3">
                     Keep an eye on your usage in the Analytics section. Respect rate limits to avoid throttling.
                   </p>
-                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                  <div className="bg-background/50 p-3 rounded border border-slate-600">
                     <code className="text-yellow-400 text-sm font-mono">
                       X-RateLimit-Remaining: 999
                     </code>
@@ -963,15 +963,15 @@ func main() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-primary-foreground font-bold text-sm">
                   4
                 </div>
                 <div>
-                  <h4 className="text-lg font-medium text-white mb-2">Handle Errors</h4>
+                  <h4 className="text-lg font-medium text-primary-foreground mb-2">Handle Errors</h4>
                   <p className="text-slate-300 mb-3">
                     Always handle API errors gracefully. Check response status and error messages.
                   </p>
-                  <div className="bg-slate-900/50 p-3 rounded border border-slate-600">
+                  <div className="bg-background/50 p-3 rounded border border-slate-600">
                     <code className="text-red-400 text-sm font-mono">
                       {`{ "error": "Invalid API key" }`}
                     </code>

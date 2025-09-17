@@ -18,7 +18,7 @@ const StatCard = ({
       case 'negative':
         return 'text-red-400';
       default:
-        return 'text-slate-400';
+        return 'text-muted-foreground';
     }
   };
 
@@ -35,7 +35,7 @@ const StatCard = ({
 
   return (
     <div
-      className={`bg-slate-800/50 border border-slate-700 rounded-lg p-6 transition-all duration-200 hover:bg-slate-800/70 hover:border-slate-600 ${
+      className={`bg-card/50 border border-border rounded-lg p-6 transition-all duration-200 hover:bg-card/70 hover:border-slate-600 ${
         onClick ? 'cursor-pointer hover:shadow-lg hover:shadow-slate-900/20' : ''
       }`}
       onClick={onClick}
@@ -43,7 +43,7 @@ const StatCard = ({
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium text-slate-400">{title}</p>
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
             {Icon && (
               <div className="w-8 h-8 bg-slate-700/50 rounded-lg flex items-center justify-center">
                 <Icon className="w-4 h-4 text-slate-300" />
@@ -58,7 +58,7 @@ const StatCard = ({
             </div>
           ) : (
             <>
-              <p className="text-3xl font-bold text-white mb-1">
+              <p className="text-3xl font-bold text-primary-foreground mb-1">
                 {typeof value === 'number' ? value.toLocaleString() : value}
               </p>
 

@@ -20,7 +20,7 @@ const DateRangePicker = ({ selectedRange, onRangeChange }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+        className="flex items-center space-x-2 px-3 py-2 bg-card border border-border rounded-lg text-sm text-slate-300 hover:text-primary-foreground hover:border-slate-600 transition-colors"
       >
         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -32,7 +32,7 @@ const DateRangePicker = ({ selectedRange, onRangeChange }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50">
           <div className="py-1">
             {ranges.map((range) => (
               <button

@@ -66,7 +66,7 @@ const SheetTitle = React.forwardRef(({
   return (
     <h2
       ref={ref}
-      className={`text-lg font-semibold text-foreground ${className}`}
+      className={`text-lg font-semibold text-primary-foreground ${className}`}
       {...props}
     >
       {children}
