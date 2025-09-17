@@ -18,6 +18,9 @@
   --scrollbar-track: #0d1117;
   --scrollbar-thumb: #1f2a33;
   --scrollbar-thumb-hover: #2c3e50;
+  /* Button colors */
+  --card: var(--color-bg-elevated);
+  --border: var(--color-border);
 }
 
 /* Light theme overrides */
@@ -40,7 +43,7 @@
 html, body, .app-card, .panel { transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
 
 html, body {
-  background: var(--background);
+  background: var(--color-bg);
   color: var(--color-text);
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -124,11 +127,16 @@ h1,h2,h3,h4,h5,h6 { font-weight: 600; letter-spacing: .5px; }
 } */
 
 /* Remove colored icon wrappers */
-.icon-wrapper, .icon-circle, .icon-bg, .icon-tile {
+/* Batasi hanya di sidebar */
+.sidebar .icon-wrapper,
+.sidebar .icon-circle,
+.sidebar .icon-bg,
+.sidebar .icon-tile {
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
 }
+
 
 /* Tables */
 table { width: 100%; border-collapse: collapse; }
@@ -214,4 +222,28 @@ a.button-link:hover { border-color: var(--color-accent); color: var(--color-acce
 /* === UNTUK PERBAIKAN FOTO PROFIL === */
 .rounded-full {
   border-radius: 9999px !important;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  margin: 1.5rem 0;
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.separator:not(:empty)::before {
+  margin-right: .75em;
+}
+
+.separator:not(:empty)::after {
+  margin-left: .75em;
 }

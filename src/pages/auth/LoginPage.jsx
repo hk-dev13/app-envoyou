@@ -168,12 +168,14 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none relative block w-full pl-10 pr-10 py-3 bg-card border border-border placeholder-slate-400 text-primary-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors"
+                  className="appearance-none relative block w-full pl-10 pr-12 py-3 bg-card border border-border placeholder-slate-400 text-primary-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm transition-colors"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 flex items-center pl-2 pr-2 
+             text-muted-foreground hover:text-foreground 
+             focus:outline-none"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -242,7 +244,7 @@ const LoginPage = () => {
               <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-background text-muted-foreground">Or continue with</span>
+              <span className="separator px-2 bg-[var(--color-bg)] text-muted-foreground">Or continue with</span>
             </div>
           </div>
 
