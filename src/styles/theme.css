@@ -213,11 +213,19 @@ a.button-link:hover { border-color: var(--color-accent); color: var(--color-acce
 }
 
 /* PERBAIKAN TOOLTIP TRANSPARAN */
-[role="tooltip"] {
-  background-color: var(--color-surface) !important;
-  backdrop-filter: none !important;
+/* Perbaiki tooltip supaya solid */
+[role="tooltip"],
+.tooltip,
+[data-radix-tooltip-content] {
+  background-color: var(--color-surface) !important; /* pakai surface solid */
   color: var(--color-text) !important;
+  backdrop-filter: none !important;
+  border: 1px solid var(--color-border-subtle) !important;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
 }
+
 
 /* === UNTUK PERBAIKAN FOTO PROFIL === */
 .rounded-full {
