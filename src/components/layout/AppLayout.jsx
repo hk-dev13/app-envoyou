@@ -25,11 +25,11 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
 
   if (compact) {
     return (
-      <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground text-sm font-medium">
+      <button className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-accent/40 transition-colors">
+        <div className="w-8 h-8 bg-primary/20 text-primary rounded-full grid place-items-center text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
-      </div>
+      </button>
     );
   }
 
@@ -41,16 +41,16 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
     >
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex items-center space-x-2 p-2 rounded-lg hover:bg-transparent transition-colors"
+        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-accent/40 transition-colors text-left"
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground text-sm font-medium">
+        <div className="w-9 h-9 bg-primary/20 text-primary rounded-full grid place-items-center text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
-        <div className="text-left">
-          <div className="text-sm font-medium text-foreground">{user?.name || 'User'}</div>
-          <div className="text-xs text-muted-foreground">{user?.email || 'user@example.com'}</div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium text-foreground truncate">{user?.name || 'User'}</div>
+          <div className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</div>
         </div>
         <svg className={`w-4 h-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -63,9 +63,14 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
           onMouseEnter={clearClose}
           onMouseLeave={scheduleClose}
         >
-          <div className="px-4 py-2 border-b border-border">
-            <div className="text-sm font-medium text-popover-foreground">{user?.name || 'User'}</div>
-            <div className="text-xs text-muted-foreground">{user?.email || 'user@example.com'}</div>
+          <div className="px-4 py-3 border-b border-border flex items-center gap-3">
+            <div className="w-8 h-8 bg-primary/20 text-primary rounded-full grid place-items-center text-xs font-medium">
+              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+            </div>
+            <div className="min-w-0">
+              <div className="text-sm font-medium text-popover-foreground truncate">{user?.name || 'User'}</div>
+              <div className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</div>
+            </div>
           </div>
           <Link
             to="/settings/profile"
@@ -278,23 +283,23 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-card/95 backdrop-blur border-r border-border transition-all duration-300 ease-in-out ${
-          sidebarExpanded ? 'w-64' : 'w-16'
+        className={`fixed inset-y-0 left-0 z-50 bg-card/90 backdrop-blur-xl border-r border-border/80 transition-all duration-300 ease-in-out ${
+          sidebarExpanded ? 'w-64' : 'w-18'
         } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarVisible ? 'md:translate-x-0' : 'md:-translate-x-full'}`}
       >
         {/* Brand + Section Switcher */}
         <div className="px-3 py-4 border-b border-border">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-4">
             <Link to="/dashboard" className="flex items-center gap-2">
-              <img src="/svg/logo-nb.svg" alt="Envoyou" className="h-6 w-auto" />
-              {sidebarExpanded && <span className="text-foreground font-semibold">Envoyou</span>}
+              <img src="/svg/logo-nb.svg" alt="Envoyou" className="h-6 w-auto rounded" />
+              {sidebarExpanded && <span className="text-foreground font-semibold tracking-wide">Envoyou</span>}
             </Link>
             <div className="flex items-center gap-1">
               {sidebarExpanded && (
-                <span className="text-[10px] px-2 py-1 rounded bg-primary/10 text-primary border border-primary/20">App</span>
+                <span className="text-[10px] px-2 py-1 rounded-md bg-primary/10 text-primary border border-primary/20">App</span>
               )}
               <button
-                className="p-1.5 rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                className="p-1.5 rounded-md hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-colors"
                 title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
                 onClick={() => setSidebarExpanded(v => !v)}
               >
@@ -308,10 +313,11 @@ export default function AppLayout({ children }) {
               </button>
             </div>
           </div>
-          <div className="flex space-x-1">
+          {/* Segmented section switcher */}
+          <div className="grid grid-cols-3 gap-1 bg-muted/30 p-1 rounded-lg">
             <Link
               to="/dashboard"
-              className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`px-3 py-2 text-xs font-medium rounded-md text-center transition-colors ${
                 !location.pathname.startsWith('/developer') && !location.pathname.startsWith('/settings')
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -321,7 +327,7 @@ export default function AppLayout({ children }) {
             </Link>
             <Link
               to="/developer"
-              className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`px-3 py-2 text-xs font-medium rounded-md text-center transition-colors ${
                 location.pathname.startsWith('/developer')
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -331,7 +337,7 @@ export default function AppLayout({ children }) {
             </Link>
             <Link
               to="/settings/profile"
-              className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+              className={`px-3 py-2 text-xs font-medium rounded-md text-center transition-colors ${
                 location.pathname.startsWith('/settings')
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -343,32 +349,33 @@ export default function AppLayout({ children }) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-6 space-y-2">
+        <nav className="flex-1 px-2 md:px-3 py-6 space-y-1">
           {navigationItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
               title={!sidebarExpanded ? item.name : undefined}
-              className={`group flex items-center px-3 py-3 rounded-lg transition-all duration-200 ${
+              className={`group relative flex items-center px-3 py-2 rounded-lg transition-colors ${
                 item.active
-                  ? 'text-primary border-l-4 border-primary bg-accent/50'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/30'
+                  ? 'text-foreground bg-accent/60'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
               }`}
             >
-              <div className="flex-shrink-0">
-                {item.icon}
-              </div>
-              <span className={`ml-3 transition-opacity duration-200 ${
+              <div className="flex-shrink-0 opacity-90 group-hover:opacity-100">{item.icon}</div>
+              <span className={`ml-3 transition-all duration-200 ${
                 sidebarExpanded ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'
               }`}>
                 {item.name}
               </span>
+              {item.active && (
+                <span className="absolute inset-y-1 right-1 w-1.5 rounded-full bg-primary" />
+              )}
             </Link>
           ))}
         </nav>
 
         {/* User Profile at Bottom */}
-        <div className="border-t border-border p-3">
+        <div className="border-t border-border/80 p-3">
           <ProfileMenu user={user} onLogout={logout} compact={!sidebarExpanded} />
         </div>
       </aside>
