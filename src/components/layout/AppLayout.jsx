@@ -145,7 +145,7 @@ export default function AppLayout({ children }) {
       return true;
     }
   });
-  const [sidebarExpanded, setSidebarExpanded] = useState(() => {
+  const [sidebarExpanded] = useState(() => {
     try {
       const v = localStorage.getItem('env.sidebarExpanded');
       return v ? v === '1' : true;
@@ -337,7 +337,7 @@ export default function AppLayout({ children }) {
           sidebarExpanded ? 'w-64' : 'w-16'
         } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarVisible ? 'md:translate-x-0 md:border-r md:border-border/80 md:pointer-events-auto' : 'md:-translate-x-full md:w-0 md:border-transparent md:pointer-events-none md:overflow-hidden'}`}
       >
-        {/* Brand + Section Switcher */}
+        {/* Brand */}
         <div className="px-3 py-4 border-b border-border">
           <div className="flex items-center justify-between mb-4">
             <Link to="/dashboard" className="flex items-center gap-2">
@@ -345,9 +345,6 @@ export default function AppLayout({ children }) {
               {sidebarExpanded && !sidebarCompact && <span className="text-foreground font-semibold tracking-wide">Envoyou</span>}
             </Link>
             <div className="flex items-center gap-1">
-              {sidebarExpanded && !sidebarCompact && (
-                <span className="text-[10px] px-2 py-1 rounded-md bg-primary/10 text-primary border border-primary/20">App</span>
-              )}
               {/* Compact toggle */}
               <button
                 className="p-1.5 rounded-md hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-colors"
@@ -356,68 +353,23 @@ export default function AppLayout({ children }) {
               >
                 <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4h2v2H4V4zm0 5h2v2H4V9zm0 5h2v2H4v-2zm5-10h2v2H9V4zm0 5h2v2H9V9zm0 5h2v2H9v-2zm5-10h2v2h-2V4zm0 5h2v2h-2V9zm0 5h2v2h-2v-2z"/></svg>
               </button>
-              <button
-                className="p-1.5 rounded-md hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-colors"
-                title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-                onClick={() => setSidebarExpanded(v => !v)}
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {sidebarExpanded ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  )}
-                </svg>
-              </button>
             </div>
           </div>
-          {/* Segmented section switcher */}
-          <Tooltip.Provider delayDuration={200}>
-            <div className="grid grid-cols-3 gap-1 bg-muted/30 p-1 rounded-lg">
-              {[
-                { to: '/dashboard', active: !location.pathname.startsWith('/developer') && !location.pathname.startsWith('/settings'), tone: 'emerald', label: 'Dashboard', icon: (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/></svg>
-                )},
-                { to: '/developer', active: location.pathname.startsWith('/developer'), tone: 'purple', label: 'Developer', icon: (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                )},
-                { to: '/settings/profile', active: location.pathname.startsWith('/settings'), tone: 'blue', label: 'Settings', icon: (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M4 12a8 8 0 1016 0 8 8 0 10-16 0z"/></svg>
-                )}
-              ].map((s) => {
-                const activeCls = s.tone === 'purple' ? 'bg-purple-600/20 text-purple-400' : s.tone === 'blue' ? 'bg-blue-600/20 text-blue-400' : 'bg-emerald-600/20 text-emerald-400';
-                const el = (
-                  <Link key={s.to} to={s.to}
-                    className={`${sidebarCompact ? 'py-2' : 'px-3 py-2'} text-xs font-medium rounded-md text-center transition-colors ${s.active ? activeCls : 'text-muted-foreground hover:text-foreground hover:bg-accent'}`}
-                  >
-                    {sidebarCompact ? s.icon : s.label}
-                  </Link>
-                );
-                return sidebarCompact ? (
-                  <Tooltip.Root key={s.to}>
-                    <Tooltip.Trigger asChild>{el}</Tooltip.Trigger>
-                    <Tooltip.Content side="right" className="rounded-md bg-popover text-popover-foreground border border-border px-2 py-1 text-xs shadow-md">{s.label}</Tooltip.Content>
-                  </Tooltip.Root>
-                ) : el;
-              })}
-            </div>
-          </Tooltip.Provider>
         </div>
 
         {/* Navigation */}
         <Tooltip.Provider delayDuration={200} skipDelayDuration={200}>
           <nav className="flex-1 px-2 md:px-3 py-6 space-y-1">
             {navigationItems.map((item) => {
-              const activeTone = sectionTone === 'purple' ? 'bg-purple-600/20' : sectionTone === 'blue' ? 'bg-blue-600/20' : 'bg-emerald-600/20';
-              const indicatorTone = sectionTone === 'purple' ? 'bg-purple-400' : sectionTone === 'blue' ? 'bg-blue-400' : 'bg-emerald-400';
+              const activeTone = sectionTone === 'purple' ? 'bg-purple-600/15' : sectionTone === 'blue' ? 'bg-blue-600/15' : 'bg-emerald-600/15';
               const link = (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`group relative flex items-center px-3 py-2 rounded-lg transition-colors ${
+                  className={`group relative flex items-center px-3 py-2 rounded-md transition-colors ${
                     item.active
                       ? `text-foreground ${activeTone}`
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/40'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/30'
                   }`}
                 >
                   <div className="flex-shrink-0 opacity-90 group-hover:opacity-100">{item.icon}</div>
@@ -426,9 +378,6 @@ export default function AppLayout({ children }) {
                   }`}>
                     {item.name}
                   </span>
-                  {item.active && (
-                    <span className={`absolute inset-y-1 right-1 w-1.5 rounded-full ${indicatorTone}`} />
-                  )}
                 </Link>
               );
               return sidebarExpanded ? (
@@ -452,6 +401,13 @@ export default function AppLayout({ children }) {
           <ProfileMenu user={user} onLogout={logout} compact={!sidebarExpanded || sidebarCompact} />
         </div>
       </aside>
+
+      {/* Edge hover handle for show/hide (desktop) */}
+      <div
+        className={`hidden md:block fixed inset-y-0 left-0 z-40 ${sidebarVisible ? (sidebarExpanded ? 'ml-64' : 'ml-16') : 'ml-0'} w-2`}
+        onClick={() => setSidebarVisible(v => !v)}
+        style={{ cursor: 'ew-resize' }}
+      />
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
@@ -506,18 +462,13 @@ export default function AppLayout({ children }) {
         </main>
       </div>
 
-      {/* Floating sidebar toggle (desktop) */}
-      <button
+      {/* Edge hover handle for show/hide (desktop) */}
+      <div
+        className={`hidden md:block fixed inset-y-0 left-0 z-40 ${sidebarVisible ? 'ml-16 md:ml-16' : 'ml-0'} ${sidebarVisible ? '' : ''} w-3 hover:bg-border/40 transition-colors`}
         onClick={() => setSidebarVisible(v => !v)}
-        className={`hidden md:flex fixed bottom-4 left-4 z-50 h-9 w-9 rounded-full border border-border bg-card/90 backdrop-blur items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors ${sidebarVisible ? '' : ''}`}
-        aria-label={sidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
-      >
-        {sidebarVisible ? (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
-        ) : (
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
-        )}
-      </button>
+        style={{ cursor: 'ew-resize' }}
+        aria-label="Toggle sidebar"
+      />
     </div>
   );
 }
