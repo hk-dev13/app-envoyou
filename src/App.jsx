@@ -12,10 +12,7 @@ import { UpgradeProvider } from './components/UpgradeProvider.jsx';
 // import { ToastProvider } from './components/Toast';
 
 // Lazy load pages for better performance
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const MonitoringDashboard = lazy(() => import('./pages/MonitoringDashboard'));
-const AnalyticsDashboard = lazy(() => import('./pages/AnalyticsDashboard'));
-const ReportingDashboard = lazy(() => import('./pages/ReportingDashboard'));
+const DashboardHome = lazy(() => import('./pages/dashboard/DashboardHome'));
 const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 const RegisterSuccessPage = lazy(() => import('./pages/auth/RegisterSuccessPage'));
@@ -126,11 +123,12 @@ const AppContent = () => {
             } />
             
             {/* Protected dashboard routes */}
-            <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><AppLayout><DashboardHome /></AppLayout></ProtectedRoute>} />
+            {/* Legacy redirects */}
             <Route path="/dashboard/usage" element={<Navigate to="/developer/analytics" replace />} />
-            <Route path="/dashboard/monitoring" element={<ProtectedRoute><AppLayout><MonitoringDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/monitoring" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard/analytics" element={<Navigate to="/developer/analytics" replace />} />
-            <Route path="/dashboard/reporting" element={<ProtectedRoute><AppLayout><ReportingDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/reporting" element={<Navigate to="/dashboard" replace />} />
             
             {/* Protected settings routes */}
             <Route path="/settings/profile" element={<ProtectedRoute><AppLayout><ProfileSettingsPage /></AppLayout></ProtectedRoute>} />
