@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
-import AppLayout from '../../components/layout/AppLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -56,8 +55,7 @@ const DeveloperDashboard = () => {
   }, []);
 
   return (
-    <AppLayout>
-      <div className="space-y-8 p-6">
+    <div className="space-y-8 p-6">
         {/* Welcome Section */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center space-x-4">
@@ -222,7 +220,6 @@ const DeveloperDashboard = () => {
           </Card>
         </div>
       </div>
-    </AppLayout>
   );
 };
 
