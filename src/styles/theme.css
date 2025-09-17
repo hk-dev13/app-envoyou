@@ -63,13 +63,13 @@ a:hover { color: var(--color-accent-hover); }
 *::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
 /* Cards */
-/* .app-card, .card, .panel, .dashboard-card {
+.app-card, .card, .panel, .dashboard-card {
   background: var(--card) !important;
   border: 1px solid var(--border) !important;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   position: relative;
-} */
+}
 
 /* Remove loud gradients */
 [class*="gradient"], .gradient-bg, .bg-gradient, .hero-gradient {

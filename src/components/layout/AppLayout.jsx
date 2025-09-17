@@ -46,7 +46,7 @@ const ProfileMenu = ({ user, onLogout }) => {
       {open && (
         <div
           ref={menuRef}
-          className="absolute bottom-full left-0 right-0 z-40 mb-2 rounded-md border border-border bg-popover/95 backdrop-blur-sm shadow-lg py-1"
+          className="absolute bottom-full left-0 w-48 z-40 mb-2 rounded-md border border-border bg-popover/95 backdrop-blur-sm shadow-lg py-1"
           role="menu"
         >
           <Link
@@ -274,18 +274,23 @@ export default function AppLayout({ children }) {
 
         {/* Navigation */}
         <Tooltip.Provider delayDuration={200} skipDelayDuration={200}>
-          <nav className="flex-1 px-2 md:px-3 py-6 space-y-1">
+          <nav className="flex-1 px-2 md:px-3 py-4 space-y-1">
             {navigationItems.map((item) => {
               const isActive = item.active;
-              const base = `group relative flex items-center ${sidebarVisible ? 'px-3' : 'px-2'} py-2 rounded-md transition-colors`;
-              const cls = isActive ? 'text-foreground bg-accent/15' : 'text-muted-foreground hover:text-foreground hover:bg-accent/20';
+              const collapsed = !sidebarVisible;
+              const base = collapsed
+                ? 'group relative flex items-center justify-center h-10 w-full rounded-md transition-colors'
+                : 'group relative flex items-center px-3 py-2 rounded-md transition-colors';
+              const cls = isActive
+                ? (collapsed ? 'text-foreground' : 'text-foreground bg-accent')
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent/10';
               const link = (
                 <Link key={item.path} to={item.path} className={`${base} ${cls}`}>
                   {isActive && (
-                    <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-foreground/70" />
+                    <span className="absolute left-1 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-foreground/70" />
                   )}
                   <div className="flex-shrink-0 opacity-90 group-hover:opacity-100">{item.icon}</div>
-                  <span className={`ml-3 transition-all duration-200 ${sidebarVisible ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                  <span className={`${sidebarVisible ? 'ml-3' : 'hidden'} transition-all duration-200`}>
                     {item.name}
                   </span>
                 </Link>
