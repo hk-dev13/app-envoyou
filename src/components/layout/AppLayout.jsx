@@ -36,7 +36,7 @@ const ProfileMenu = ({ user, onLogout }) => {
         onClick={() => setOpen(o => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="w-full p-2 rounded-lg hover:bg-accent/40 transition-colors grid place-items-center"
+        className="p-1 rounded-full hover:bg-accent/40 transition-colors grid place-items-center"
       >
         <div className="w-8 h-8 bg-primary/20 text-primary rounded-full grid place-items-center text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
@@ -257,7 +257,7 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-card/90 backdrop-blur-xl border-r border-border/80 transition-all duration-300 ease-in-out 
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-card border-r border-border/80 transition-all duration-300 ease-in-out 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 
         ${sidebarVisible ? 'w-64' : 'w-14'}`}
       >
