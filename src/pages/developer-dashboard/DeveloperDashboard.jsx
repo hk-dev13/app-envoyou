@@ -3,16 +3,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
-import {
-  Key,
-  Gauge,
-  Plus,
-  TrendingUp,
-  Activity,
-  Zap
-} from 'lucide-react';
+import { Key, Gauge, Plus, TrendingUp, Activity, Zap, Inbox } from 'lucide-react';
+import EmptyState from '../../components/EmptyState.jsx';
 import apiService from '../../services/apiService';
 
 const DeveloperDashboard = () => {
@@ -55,40 +47,31 @@ const DeveloperDashboard = () => {
   }, []);
 
   return (
-    <div className="space-y-8 p-6">
-        {/* Welcome Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center space-x-4">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={user?.avatar} />
-              <AvatarFallback className="bg-emerald-600 text-white text-xl">
-                {user?.name?.[0] || user?.email?.[0] || 'D'}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">
-                Welcome back, {user?.name || 'Developer'}! 👋
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                Here&apos;s what&apos;s happening with your API today
-              </p>
-              <div className="flex items-center space-x-2 mt-2">
-                <Badge variant="secondary" className="bg-emerald-600/20 text-emerald-400 border-emerald-600/30">
-                  Pro Plan
-                </Badge>
-                <Badge variant="outline" className="text-muted-foreground border-border">
-                  API Access
-                </Badge>
+    <div className="space-y-8 p-4 md:p-6">
+        {/* Hero */}
+        <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-b from-background to-muted/30">
+          <div className="absolute inset-0 pointer-events-none" style={{background:"radial-gradient(600px 200px at 20% -20%, rgba(16,185,129,0.15), transparent), radial-gradient(600px 200px at 80% -40%, rgba(59,130,246,0.15), transparent)"}} />
+          <div className="relative p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="max-w-2xl">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Welcome back, {user?.name || 'Developer'} 👋</h1>
+              <p className="mt-2 text-muted-foreground">Build, test, and scale your Envoyou API integrations. Track usage, manage keys, and monitor performance — all in one place.</p>
+              <div className="mt-4 flex gap-2">
+                <Button asChild>
+                  <Link to="/developer/api-keys"><Plus className="h-4 w-4 mr-2"/>Create API Key</Link>
+                </Button>
+                <Link to="/developer/api-docs" className="inline-flex items-center px-4 py-2 rounded-md border border-border text-foreground hover:bg-accent">Read Docs</Link>
               </div>
             </div>
-          </div>
-          <div className="mt-4 sm:mt-0">
-            <Button asChild>
-              <Link to="/developer/api-keys">
-                <Plus className="h-4 w-4 mr-2" />
-                New API Key
-              </Link>
-            </Button>
+            <div className="flex gap-3">
+              <div className="px-4 py-3 rounded-lg bg-card border border-border text-left">
+                <div className="text-xs text-muted-foreground">Requests this month</div>
+                <div className="text-xl font-semibold text-foreground">{loading ? '—' : stats.totalRequests.toLocaleString()}</div>
+              </div>
+              <div className="px-4 py-3 rounded-lg bg-card border border-border text-left">
+                <div className="text-xs text-muted-foreground">Active keys</div>
+                <div className="text-xl font-semibold text-foreground">{loading ? '—' : stats.activeKeys}</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -156,7 +139,7 @@ const DeveloperDashboard = () => {
           </Card>
         </div>
 
-        {/* Recent Activity & Analytics Preview */}
+  {/* Recent Activity & Analytics Preview */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="bg-card border-border">
             <CardHeader>
@@ -166,29 +149,39 @@ const DeveloperDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-foreground text-sm">API key generated</p>
-                    <p className="text-muted-foreground text-xs">2 hours ago</p>
+              {loading || stats.totalRequests > 0 ? (
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-foreground text-sm">API key generated</p>
+                      <p className="text-muted-foreground text-xs">2 hours ago</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-foreground text-sm">1000 requests processed</p>
+                      <p className="text-muted-foreground text-xs">5 hours ago</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-foreground text-sm">Rate limit warning</p>
+                      <p className="text-muted-foreground text-xs">1 day ago</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-foreground text-sm">1000 requests processed</p>
-                    <p className="text-muted-foreground text-xs">5 hours ago</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-foreground text-sm">Rate limit warning</p>
-                    <p className="text-muted-foreground text-xs">1 day ago</p>
-                  </div>
-                </div>
-              </div>
+              ) : (
+                <EmptyState
+                  icon={Inbox}
+                  title="No activity yet"
+                  description="When your application starts making requests, your activity will appear here."
+                  primaryAction={<a href="/developer/api-keys" className="inline-flex items-center px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 text-sm">Create API Key</a>}
+                  secondaryAction={<a href="/developer/api-docs" className="inline-flex items-center px-3 py-2 rounded-md border border-border text-foreground hover:bg-accent text-sm">Read Docs</a>}
+                />
+              )}
             </CardContent>
           </Card>
 

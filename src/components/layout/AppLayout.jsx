@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
 import ThemeToggle from '../ThemeToggle.jsx';
 import PlanStatus from '../PlanStatus.jsx';
+import Breadcrumbs from '../Breadcrumbs.jsx';
 
 const ProfileMenu = ({ user, onLogout, compact = false }) => {
   const [open, setOpen] = React.useState(false);
@@ -99,8 +100,30 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
 export default function AppLayout({ children }) {
   const { user, logout } = useAuth();
   const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // mobile overlay
+  const [sidebarVisible, setSidebarVisible] = useState(() => {
+    try {
+      const v = localStorage.getItem('env.sidebarVisible');
+      return v ? v === '1' : true;
+    } catch {
+      return true;
+    }
+  });
+  const [sidebarExpanded, setSidebarExpanded] = useState(() => {
+    try {
+      const v = localStorage.getItem('env.sidebarExpanded');
+      return v ? v === '1' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  React.useEffect(() => {
+    try { localStorage.setItem('env.sidebarVisible', sidebarVisible ? '1' : '0'); } catch (e) { void e; }
+  }, [sidebarVisible]);
+  React.useEffect(() => {
+    try { localStorage.setItem('env.sidebarExpanded', sidebarExpanded ? '1' : '0'); } catch (e) { void e; }
+  }, [sidebarExpanded]);
 
   const navigationItems = React.useMemo(() => {
     const isDeveloperSection = location.pathname.startsWith('/developer');
@@ -255,14 +278,36 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-card border-r border-border transition-all duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-50 bg-card/95 backdrop-blur border-r border-border transition-all duration-300 ease-in-out ${
           sidebarExpanded ? 'w-64' : 'w-16'
-        } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
-        onMouseEnter={() => setSidebarExpanded(true)}
-        onMouseLeave={() => setSidebarExpanded(false)}
+        } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarVisible ? 'md:translate-x-0' : 'md:-translate-x-full'}`}
       >
-        {/* Section Switcher */}
+        {/* Brand + Section Switcher */}
         <div className="px-3 py-4 border-b border-border">
+          <div className="flex items-center justify-between mb-3">
+            <Link to="/dashboard" className="flex items-center gap-2">
+              <img src="/svg/logo-nb.svg" alt="Envoyou" className="h-6 w-auto" />
+              {sidebarExpanded && <span className="text-foreground font-semibold">Envoyou</span>}
+            </Link>
+            <div className="flex items-center gap-1">
+              {sidebarExpanded && (
+                <span className="text-[10px] px-2 py-1 rounded bg-primary/10 text-primary border border-primary/20">App</span>
+              )}
+              <button
+                className="p-1.5 rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                title={sidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
+                onClick={() => setSidebarExpanded(v => !v)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {sidebarExpanded ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  )}
+                </svg>
+              </button>
+            </div>
+          </div>
           <div className="flex space-x-1">
             <Link
               to="/dashboard"
@@ -303,6 +348,7 @@ export default function AppLayout({ children }) {
             <Link
               key={item.path}
               to={item.path}
+              title={!sidebarExpanded ? item.name : undefined}
               className={`group flex items-center px-3 py-3 rounded-lg transition-all duration-200 ${
                 item.active
                   ? 'text-primary border-l-4 border-primary bg-accent/50'
@@ -336,34 +382,53 @@ export default function AppLayout({ children }) {
       )}
 
       {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'md:ml-64' : 'md:ml-16'}`}>
-        {/* Minimal Header */}
-        <header className="h-16 border-b border-border/80 bg-background/80 backdrop-blur flex items-center justify-between px-6">
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          {/* Logo for mobile */}
-          <div className="md:hidden">
-            <Link to="/dashboard" className="flex items-center space-x-2">
-              <img
-                src="/svg/logo-nb.svg"
-                alt="Envoyou"
-                className="h-6 w-auto"
-              />
-            </Link>
+  <div className={`flex-1 transition-all duration-300 ${sidebarVisible ? (sidebarExpanded ? 'md:ml-64' : 'md:ml-16') : 'md:ml-0'}`}>
+        {/* SaaS Header */}
+        <header className="h-16 border-b border-border/80 bg-background/70 backdrop-blur flex items-center justify-between px-4 md:px-6">
+          {/* Sidebar toggles */}
+          <div className="flex items-center gap-1">
+            {/* Mobile open */}
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
+              aria-label="Open sidebar"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            {/* Desktop show/hide */}
+            <button
+              onClick={() => setSidebarVisible(v => !v)}
+              className="hidden md:inline-flex p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
+              title={sidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
+            >
+              {sidebarVisible ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
+              )}
+            </button>
           </div>
 
-          {/* Right side actions */}
-          <div className="flex items-center gap-4">
-            <PlanStatus compact />
+          {/* Left: Breadcrumbs */}
+          <div className="flex-1 flex items-center min-w-0">
+            <Breadcrumbs />
+          </div>
+
+          {/* Right: Quick actions */}
+          <div className="flex items-center gap-1 md:gap-3">
+            <div className="hidden md:block">
+              <PlanStatus compact />
+            </div>
             <ThemeToggle compact />
+            <Link
+              to="/developer/api-keys"
+              className="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
+              New Key
+            </Link>
           </div>
         </header>
 
