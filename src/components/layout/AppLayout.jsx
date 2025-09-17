@@ -102,70 +102,154 @@ export default function AppLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
-  const navigationItems = [
-    {
-      name: 'Overview',
-      path: '/dashboard',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
-        </svg>
-      ),
-      active: ['/dashboard'].some(p => location.pathname.startsWith(p))
-    },
-    {
-      name: 'Monitoring',
-      path: '/dashboard/monitoring',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      active: location.pathname.startsWith('/dashboard/monitoring')
-    },
-    {
-      name: 'Analytics',
-      path: '/dashboard/analytics',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-1.172a2 2 0 01-1.414-.586l-.828-.828A2 2 0 009.172 4H8a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      ),
-      active: location.pathname.startsWith('/dashboard/analytics')
-    },
-    {
-      name: 'Reporting',
-      path: '/dashboard/reporting',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-      ),
-      active: location.pathname.startsWith('/dashboard/reporting')
-    },
-    {
-      name: 'Developer',
-      path: '/developer',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-        </svg>
-      ),
-      active: ['/developer','/developer/api-keys','/developer/api-docs','/developer/rate-limits','/developer/snippets'].some(p => location.pathname.startsWith(p))
-    },
-    {
-      name: 'Settings',
-      path: '/settings/profile',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-      ),
-      active: location.pathname.startsWith('/settings')
+  const navigationItems = React.useMemo(() => {
+    const isDeveloperSection = location.pathname.startsWith('/developer');
+    const isSettingsSection = location.pathname.startsWith('/settings');
+
+    if (isDeveloperSection) {
+      return [
+        {
+          name: 'Overview',
+          path: '/developer',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
+            </svg>
+          ),
+          active: location.pathname === '/developer'
+        },
+        {
+          name: 'API Docs',
+          path: '/developer/api-docs',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/developer/api-docs')
+        },
+        {
+          name: 'API Keys',
+          path: '/developer/api-keys',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/developer/api-keys')
+        },
+        {
+          name: 'Analytics',
+          path: '/developer/analytics',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-1.172a2 2 0 01-1.414-.586l-.828-.828A2 2 0 009.172 4H8a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/developer/analytics')
+        },
+        {
+          name: 'Rate Limits',
+          path: '/developer/rate-limits',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/developer/rate-limits')
+        },
+        {
+          name: 'Snippets',
+          path: '/developer/snippets',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/developer/snippets')
+        }
+      ];
+    } else if (isSettingsSection) {
+      return [
+        {
+          name: 'Profile',
+          path: '/settings/profile',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/settings/profile')
+        },
+        {
+          name: 'Notifications',
+          path: '/settings/notifications',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5v-5zM4.868 12.683A17.925 17.925 0 012 21h13.78a3 3 0 002.553-1.658l.046-.092A17.925 17.925 0 0118.708 7.5 17.925 17.925 0 0112 3c-2.131 0-4.09.61-5.84 1.683M12 3v18" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/settings/notifications')
+        },
+        {
+          name: 'Security',
+          path: '/settings/security',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/settings/security')
+        }
+      ];
+    } else {
+      // Dashboard section
+      return [
+        {
+          name: 'Overview',
+          path: '/dashboard',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
+            </svg>
+          ),
+          active: location.pathname === '/dashboard'
+        },
+        {
+          name: 'Monitoring',
+          path: '/dashboard/monitoring',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/dashboard/monitoring')
+        },
+        {
+          name: 'Analytics',
+          path: '/dashboard/analytics',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-1.172a2 2 0 01-1.414-.586l-.828-.828A2 2 0 009.172 4H8a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/dashboard/analytics')
+        },
+        {
+          name: 'Reporting',
+          path: '/dashboard/reporting',
+          icon: (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          ),
+          active: location.pathname.startsWith('/dashboard/reporting')
+        }
+      ];
     }
-  ];
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-background flex">
@@ -177,15 +261,40 @@ export default function AppLayout({ children }) {
         onMouseEnter={() => setSidebarExpanded(true)}
         onMouseLeave={() => setSidebarExpanded(false)}
       >
-        {/* Logo */}
-        <div className="flex items-center justify-center h-16 border-b border-border">
-          <Link to="/dashboard" className="flex items-center space-x-2">
-            <img
-              src="/svg/logo-full-nb.svg"
-              alt="Envoyou"
-              className={`transition-all duration-300 ${sidebarExpanded ? 'h-8' : 'h-6'}`}
-            />
-          </Link>
+        {/* Section Switcher */}
+        <div className="px-3 py-4 border-b border-border">
+          <div className="flex space-x-1">
+            <Link
+              to="/dashboard"
+              className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                !location.pathname.startsWith('/developer') && !location.pathname.startsWith('/settings')
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/developer"
+              className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                location.pathname.startsWith('/developer')
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            >
+              Developer
+            </Link>
+            <Link
+              to="/settings/profile"
+              className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                location.pathname.startsWith('/settings')
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
+              }`}
+            >
+              Settings
+            </Link>
+          </div>
         </div>
 
         {/* Navigation */}

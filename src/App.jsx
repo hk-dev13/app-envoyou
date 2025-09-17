@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import React, { Suspense, lazy } from 'react';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './hooks/useAuth.js';
@@ -79,11 +79,57 @@ const AppContent = () => {
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
             <Route path="/verify/:token" element={<EmailVerificationPage />} />
             
+            {/* Handle production domain verification links */}
+            <Route path="/auth/verify/:token" element={<EmailVerificationPage />} />
+            <Route path="/auth/confirm" element={<EmailVerificationPage />} />
+            
+            {/* Catch-all route for production domain redirects */}
+            <Route path="*" element={
+              window.location.hostname === 'envoyou.com' ? (
+                <div className="min-h-screen bg-slate-950 flex items-center justify-center py-12 px-4">
+                  <div className="max-w-md w-full space-y-6 text-center">
+                    <div className="bg-red-600 rounded-full p-4 w-16 h-16 mx-auto flex items-center justify-center">
+                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                      </svg>
+                    </div>
+                    <h1 className="text-2xl font-bold text-white">Wrong Domain</h1>
+                    <p className="text-slate-400">
+                      You&apos;re on the production domain. Please use your local development server instead.
+                    </p>
+                    <div className="bg-slate-800 p-4 rounded-lg border border-slate-700 text-left">
+                      <p className="text-slate-300 text-sm mb-2">To access the application:</p>
+                      <ol className="text-slate-400 text-sm space-y-1 list-decimal list-inside">
+                        <li>Go to: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173</code></li>
+                        <li>If you&apos;re verifying email, use: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173/verify/[token]</code></li>
+                      </ol>
+                    </div>
+                    <button
+                      onClick={() => window.location.href = 'http://localhost:5173'}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      Go to Local Development
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold text-white mb-4">Page Not Found</h1>
+                    <p className="text-slate-400 mb-6">The page you&apos;re looking for doesn&apos;t exist.</p>
+                    <Link to="/" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                      Go Home
+                    </Link>
+                  </div>
+                </div>
+              )
+            } />
+            
             {/* Protected dashboard routes */}
             <Route path="/dashboard" element={<ProtectedRoute><AppLayout><Dashboard /></AppLayout></ProtectedRoute>} />
             <Route path="/dashboard/usage" element={<Navigate to="/developer/analytics" replace />} />
             <Route path="/dashboard/monitoring" element={<ProtectedRoute><AppLayout><MonitoringDashboard /></AppLayout></ProtectedRoute>} />
-            <Route path="/dashboard/analytics" element={<ProtectedRoute><AppLayout><AnalyticsDashboard /></AppLayout></ProtectedRoute>} />
+            <Route path="/dashboard/analytics" element={<Navigate to="/developer/analytics" replace />} />
             <Route path="/dashboard/reporting" element={<ProtectedRoute><AppLayout><ReportingDashboard /></AppLayout></ProtectedRoute>} />
             
             {/* Protected settings routes */}

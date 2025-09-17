@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import SettingsLayout from '../../components/settings/SettingsLayout';
 import { useAuth } from '../../hooks/useAuth.js';
 import apiService from '../../services/apiService';
 
@@ -126,21 +125,21 @@ function SecuritySettingsPage() {
     };
 
     return (
-        <SettingsLayout>
+        <div className="max-w-4xl mx-auto p-6 space-y-6">
             <div className="space-y-8">
                 {/* Success/Error Message */}
                 {message && (
                     <div className={`p-4 rounded-lg ${
-                        message.includes('successfully') 
-                            ? 'bg-slate-600/20 border border-slate-600/30 text-slate-300'
+                        message.includes('successfully')
+                            ? 'bg-green-600/20 border border-green-600/30 text-green-400'
                             : 'bg-red-600/20 border border-red-600/30 text-red-400'
                     }`}>
                         <div className="flex items-center">
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                                    d={message.includes('successfully') 
-                                        ? "M5 13l4 4L19 7" 
-                                        : "M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"} 
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                    d={message.includes('successfully')
+                                        ? "M5 13l4 4L19 7"
+                                        : "M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"}
                                 />
                             </svg>
                             {message}
@@ -473,7 +472,7 @@ function SecuritySettingsPage() {
                     </div>
                 </div>
             </div>
-        </SettingsLayout>
+        </div>
     );
 }
 

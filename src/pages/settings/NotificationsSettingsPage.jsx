@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import SettingsLayout from '../../components/settings/SettingsLayout';
 
 function NotificationsSettingsPage() {
     const [isSaving, setIsSaving] = useState(false);
@@ -71,10 +70,10 @@ function NotificationsSettingsPage() {
     };
 
     const NotificationSection = ({ title, description, children }) => (
-        <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+        <div className="bg-card rounded-xl border border-border p-6">
             <div className="mb-6">
-                <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
-                <p className="text-slate-400 text-sm">{description}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
+                <p className="text-muted-foreground text-sm">{description}</p>
             </div>
             <div className="space-y-4">
                 {children}
@@ -85,9 +84,9 @@ function NotificationsSettingsPage() {
     const NotificationToggle = ({ label, description, checked, onChange, disabled = false }) => (
         <div className="flex items-center justify-between py-3">
             <div className="flex-1">
-                <div className="text-white font-medium">{label}</div>
+                <div className="text-foreground font-medium">{label}</div>
                 {description && (
-                    <div className="text-slate-400 text-sm mt-1">{description}</div>
+                    <div className="text-muted-foreground text-sm mt-1">{description}</div>
                 )}
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -98,18 +97,18 @@ function NotificationsSettingsPage() {
                     onChange={(e) => onChange(e.target.checked)}
                     disabled={disabled}
                 />
-                <div className={`w-11 h-6 bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
+                <div className={`w-11 h-6 bg-muted peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[""] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}></div>
             </label>
         </div>
     );
 
     return (
-        <SettingsLayout>
+        <div className="max-w-4xl mx-auto p-6 space-y-6">
             <div className="max-w-4xl space-y-8">
                 {/* Header */}
                 <div>
-                    <h2 className="text-2xl font-bold text-white mb-2">Notifications</h2>
-                    <p className="text-slate-400">
+                    <h2 className="text-2xl font-bold text-foreground mb-2">Notifications</h2>
+                    <p className="text-muted-foreground">
                         Choose how you want to be notified about important updates and activities.
                     </p>
                 </div>
@@ -118,7 +117,7 @@ function NotificationsSettingsPage() {
                 {message && (
                     <div className={`p-4 rounded-lg border ${
                         message.includes('successfully')
-                            ? 'bg-emerald-600/20 border-emerald-600/30 text-emerald-400'
+                            ? 'bg-green-600/20 border-green-600/30 text-green-400'
                             : 'bg-red-600/20 border-red-600/30 text-red-400'
                     }`}>
                         {message}
@@ -249,7 +248,7 @@ function NotificationsSettingsPage() {
                     </button>
                 </div>
             </div>
-        </SettingsLayout>
+        </div>
     );
 }
 

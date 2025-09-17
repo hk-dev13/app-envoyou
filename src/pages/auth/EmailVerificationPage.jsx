@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import apiService from '../../services/apiService';
 
 const EmailVerificationPage = () => {
-  const { token } = useParams();
+  const { token: routeToken } = useParams();
+  const [searchParams] = useSearchParams();
   const [status, setStatus] = useState('verifying'); // 'verifying', 'success', 'error'
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
 
+  // Extract token from URL parameters or route
+  const token = routeToken || searchParams.get('token') || searchParams.get('access_token') || searchParams.get('confirmation_token');
+
   useEffect(() => {
     const verifyEmail = async () => {
       if (!token) {
         setStatus('error');
-        setMessage('Verification token is invalid');
+        setMessage('Verification token is missing. Please check your email for the correct verification link.');
         return;
       }
 
@@ -21,7 +25,7 @@ const EmailVerificationPage = () => {
         // Call the API to verify email
         const response = await apiService.verifyEmail({ token });
 
-        if (response.message === 'Email verified successfully') {
+        if (response.message === 'Email verified successfully' || response.success) {
           setStatus('success');
           setMessage('Email verified successfully! You can now log in to your account.');
         } else {
@@ -30,7 +34,37 @@ const EmailVerificationPage = () => {
       } catch (error) {
         console.error('Email verification error:', error);
         setStatus('error');
-        setMessage('Verification link is invalid or has expired. Please try again or request a new verification email.');
+
+        // Check if this is a production domain issue
+        if (window.location.hostname === 'envoyou.com' || window.location.hostname.includes('supabase')) {
+          setMessage(
+            <div className="text-left space-y-3">
+              <p className="text-red-400 mb-3">
+                You&apos;re on the production domain. Please use the local development server instead.
+              </p>
+              <div className="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                <p className="text-slate-300 text-sm mb-2">To verify your email:</p>
+                <ol className="text-slate-400 text-sm space-y-1 list-decimal list-inside">
+                  <li>Open your local development server: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173</code></li>
+                  <li>Navigate to: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173/verify/{token}</code></li>
+                  <li>Or click the button below to copy the local URL</li>
+                </ol>
+              </div>
+              <button
+                onClick={() => {
+                  const localUrl = `http://localhost:5173/verify/${token}`;
+                  navigator.clipboard.writeText(localUrl);
+                  alert('Local verification URL copied to clipboard!');
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Copy Local Verification URL
+              </button>
+            </div>
+          );
+        } else {
+          setMessage('Verification link is invalid or has expired. Please try again or request a new verification email.');
+        }
       }
     };
 

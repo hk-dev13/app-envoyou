@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import SettingsLayout from '../../components/settings/SettingsLayout';
 import { useAuth } from '../../hooks/useAuth.js';
 import apiService from '../../services/apiService';
 
@@ -82,20 +81,20 @@ function ProfileSettingsPage() {
     };
 
     return (
-        <SettingsLayout>
-            <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+        <div className="max-w-4xl mx-auto p-6 space-y-6">
+            <div className="bg-card rounded-xl border border-border p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div>
-                        <h2 className="text-2xl font-semibold text-white mb-2">Profile Information</h2>
-                        <p className="text-slate-400">
+                        <h2 className="text-2xl font-semibold text-foreground mb-2">Profile Information</h2>
+                        <p className="text-muted-foreground">
                             Update your account&apos;s profile information and email address.
                         </p>
                     </div>
                     {!isEditing && (
                         <button
                             onClick={() => setIsEditing(true)}
-                            className="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors"
+                            className="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
                         >
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -139,13 +138,13 @@ function ProfileSettingsPage() {
                                 </span>
                             </div>
                             <div>
-                                <button className="inline-flex items-center px-4 py-2 border border-slate-700 text-slate-300 rounded-lg hover:bg-slate-800 transition-colors">
+                                <button className="inline-flex items-center px-4 py-2 border border-border text-muted-foreground rounded-lg hover:bg-accent transition-colors">
                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                     Change Avatar
                                 </button>
-                                <p className="text-slate-500 text-sm mt-1">
+                                <p className="text-muted-foreground text-sm mt-1">
                                     PNG, JPG up to 2MB
                                 </p>
                             </div>
@@ -271,10 +270,10 @@ function ProfileSettingsPage() {
 
                 {/* Action Buttons */}
                 {isEditing && (
-                    <div className="flex items-center justify-end space-x-4 mt-8 pt-6 border-t border-slate-800">
+                    <div className="flex items-center justify-end space-x-4 mt-8 pt-6 border-t border-border">
                         <button
                             onClick={handleCancel}
-                            className="px-4 py-2 border border-slate-700 text-slate-300 rounded-lg hover:bg-slate-800 transition-colors"
+                            className="px-4 py-2 border border-border text-muted-foreground rounded-lg hover:bg-accent transition-colors"
                         >
                             Cancel
                         </button>
@@ -294,7 +293,7 @@ function ProfileSettingsPage() {
                     </div>
                 )}
             </div>
-        </SettingsLayout>
+        </div>
     );
 }
 
