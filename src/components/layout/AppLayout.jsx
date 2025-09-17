@@ -266,7 +266,7 @@ export default function AppLayout({ children }) {
           <div className="flex items-center justify-between mb-4">
             <Link to="/dashboard" className="flex items-center gap-2">
               <img src="/svg/logo-nb.svg" alt="Envoyou" className="h-6 w-auto rounded" />
-              {sidebarVisible && <span className="text-primary-foreground font-semibold tracking-wide">Envoyou</span>}
+              {sidebarVisible && <span className="text-foreground font-semibold tracking-wide">Envoyou</span>}
             </Link>
             <div />
           </div>
@@ -276,21 +276,16 @@ export default function AppLayout({ children }) {
         <Tooltip.Provider delayDuration={200} skipDelayDuration={200}>
           <nav className="flex-1 px-2 md:px-3 py-6 space-y-1">
             {navigationItems.map((item) => {
-              const activeTone = 'bg-accent/25'; // neutral subdued
+              const isActive = item.active;
+              const base = `group relative flex items-center ${sidebarVisible ? 'px-3' : 'px-2'} py-2 rounded-md transition-colors`;
+              const cls = isActive ? 'text-foreground bg-accent/15' : 'text-muted-foreground hover:text-foreground hover:bg-accent/20';
               const link = (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`group relative flex items-center px-3 py-2 rounded-md transition-colors ${
-                    item.active
-                      ? `text-primary-foreground ${activeTone} border border-border/60`
-                      : 'text-muted-foreground hover:text-primary-foreground hover:bg-accent/20'
-                  }`}
-                >
+                <Link key={item.path} to={item.path} className={`${base} ${cls}`}>
+                  {isActive && (
+                    <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-foreground/70" />
+                  )}
                   <div className="flex-shrink-0 opacity-90 group-hover:opacity-100">{item.icon}</div>
-                  <span className={`ml-3 transition-all duration-200 ${
-                    sidebarVisible ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'
-                  }`}>
+                  <span className={`ml-3 transition-all duration-200 ${sidebarVisible ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                     {item.name}
                   </span>
                 </Link>
@@ -299,9 +294,7 @@ export default function AppLayout({ children }) {
                 link
               ) : (
                 <Tooltip.Root key={item.path}>
-                  <Tooltip.Trigger asChild>
-                    {link}
-                  </Tooltip.Trigger>
+                  <Tooltip.Trigger asChild>{link}</Tooltip.Trigger>
                   <Tooltip.Content side="right" className="rounded-md bg-popover text-popover-foreground border border-border px-2 py-1 text-xs shadow-md">
                     {item.name}
                   </Tooltip.Content>
@@ -311,9 +304,25 @@ export default function AppLayout({ children }) {
           </nav>
         </Tooltip.Provider>
 
-        {/* User Profile at Bottom */}
-        <div className="border-t border-border/80 p-2">
-          <ProfileMenu user={user} onLogout={logout} />
+        {/* User + Settings at Bottom */}
+        <div className="mt-auto border-t border-border/80 px-2 py-2">
+          <div className="flex flex-col items-center gap-2">
+            <ProfileMenu user={user} onLogout={logout} />
+            <Tooltip.Provider delayDuration={200}>
+              <Tooltip.Root>
+                <Tooltip.Trigger asChild>
+                  <Link
+                    to="/settings/profile"
+                    className="w-9 h-9 grid place-items-center rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                    aria-label="Settings"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.065 2.573c.94 1.543-.827 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.065c-1.543.94-3.31-.827-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.065-2.572c-.94-1.543.827-3.31 2.37-2.37.94.558 2.146.178 2.573-1.066zM12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                  </Link>
+                </Tooltip.Trigger>
+                <Tooltip.Content side="right" className="rounded-md bg-popover text-popover-foreground border border-border px-2 py-1 text-xs shadow-md">Settings</Tooltip.Content>
+              </Tooltip.Root>
+            </Tooltip.Provider>
+          </div>
         </div>
       </aside>
 
