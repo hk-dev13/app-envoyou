@@ -6,27 +6,11 @@ import ThemeToggle from '../ThemeToggle.jsx';
 import PlanStatus from '../PlanStatus.jsx';
 import Breadcrumbs from '../Breadcrumbs.jsx';
 
-const ProfileMenu = ({ user, onLogout, compact = false }) => {
+const ProfileMenu = ({ user, onLogout }) => {
   const [open, setOpen] = React.useState(false);
-  const closeTimeout = React.useRef(null);
   const menuRef = React.useRef(null);
   const [focusIndex, setFocusIndex] = React.useState(0);
 
-  const clearClose = () => {
-    if (closeTimeout.current) {
-      clearTimeout(closeTimeout.current);
-      closeTimeout.current = null;
-    }
-  };
-
-  const scheduleClose = () => {
-    clearClose();
-    closeTimeout.current = setTimeout(() => setOpen(false), 160);
-  };
-
-  React.useEffect(() => () => clearClose(), []);
-
-  // Basic keyboard navigation for dropdown
   const onKeyDown = (e) => {
     if (!open) return;
     const items = menuRef.current?.querySelectorAll('[data-menu-item="true"]');
@@ -46,70 +30,38 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
     }
   };
 
-  if (compact) {
-    return (
-      <button className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-accent/40 transition-colors">
+  return (
+    <div className="relative" onKeyDown={onKeyDown}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="w-full p-2 rounded-lg hover:bg-accent/40 transition-colors grid place-items-center"
+      >
         <div className="w-8 h-8 bg-primary/20 text-primary rounded-full grid place-items-center text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
-      </button>
-    );
-  }
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => { clearClose(); setOpen(true); }}
-      onMouseLeave={scheduleClose}
-    >
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-accent/40 transition-colors text-left"
-        aria-haspopup="menu"
-        aria-expanded={open}
-      >
-        <div className="w-9 h-9 bg-primary/20 text-primary rounded-full grid place-items-center text-sm font-medium">
-          {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-medium text-foreground truncate">{user?.name || 'User'}</div>
-          <div className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</div>
-        </div>
-        <svg className={`w-4 h-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <span className="sr-only">Open profile menu</span>
       </button>
       {open && (
         <div
           ref={menuRef}
-          className="absolute bottom-full right-0 z-40 mt-2 w-56 rounded-md border border-border bg-popover/95 backdrop-blur-sm shadow-lg py-2"
+          className="absolute bottom-full left-0 right-0 z-40 mb-2 rounded-md border border-border bg-popover/95 backdrop-blur-sm shadow-lg py-1"
           role="menu"
-          onMouseEnter={clearClose}
-          onMouseLeave={scheduleClose}
-          onKeyDown={onKeyDown}
         >
-          <div className="px-4 py-3 border-b border-border flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary/20 text-primary rounded-full grid place-items-center text-xs font-medium">
-              {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-            </div>
-            <div className="min-w-0">
-              <div className="text-sm font-medium text-popover-foreground truncate">{user?.name || 'User'}</div>
-              <div className="text-xs text-muted-foreground truncate">{user?.email || 'user@example.com'}</div>
-            </div>
-          </div>
           <Link
             to="/settings/profile"
-            className="px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
+            className="px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
             role="menuitem"
             data-menu-item="true"
             onClick={() => setOpen(false)}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Profile Settings
+            Profile
           </Link>
           <Link
             to="/settings/notifications"
-            className="px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
+            className="px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
             role="menuitem"
             data-menu-item="true"
             onClick={() => setOpen(false)}
@@ -120,12 +72,12 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
           <div className="border-t border-border my-1" />
           <button
             onClick={() => { setOpen(false); onLogout(); }}
-            className="w-full text-left px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
+            className="w-full text-left px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground flex items-center gap-2"
             role="menuitem"
             data-menu-item="true"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 11-4 0V7a2 2 0 114 0v1"/></svg>
-            Sign Out
+            Sign out
           </button>
         </div>
       )}
@@ -145,40 +97,12 @@ export default function AppLayout({ children }) {
       return true;
     }
   });
-  const [sidebarExpanded] = useState(() => {
-    try {
-      const v = localStorage.getItem('env.sidebarExpanded');
-      return v ? v === '1' : true;
-    } catch {
-      return true;
-    }
-  });
-  // Compact (icon-only) mode, remembered separately from visibility
-  const [sidebarCompact, setSidebarCompact] = useState(() => {
-    try {
-      const v = localStorage.getItem('env.sidebarCompact');
-      return v === '1';
-    } catch {
-      return false;
-    }
-  });
+  // Desktop behavior: sidebarVisible = expanded (labels). When false = icon-only collapsed.
 
   React.useEffect(() => {
     try { localStorage.setItem('env.sidebarVisible', sidebarVisible ? '1' : '0'); } catch (e) { void e; }
   }, [sidebarVisible]);
-  React.useEffect(() => {
-    try { localStorage.setItem('env.sidebarExpanded', sidebarExpanded ? '1' : '0'); } catch (e) { void e; }
-  }, [sidebarExpanded]);
-  React.useEffect(() => {
-    try { localStorage.setItem('env.sidebarCompact', sidebarCompact ? '1' : '0'); } catch (e) { void e; }
-  }, [sidebarCompact]);
-
-  // Section tone for highlights
-  const sectionTone = React.useMemo(() => {
-    if (location.pathname.startsWith('/developer')) return 'purple';
-    if (location.pathname.startsWith('/settings')) return 'blue';
-    return 'emerald';
-  }, [location.pathname]);
+  // Section tone removed for neutral style
 
   const navigationItems = React.useMemo(() => {
     const isDeveloperSection = location.pathname.startsWith('/developer');
@@ -333,27 +257,18 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-card/90 backdrop-blur-xl transition-all duration-300 ease-in-out ${
-          sidebarExpanded ? 'w-64' : 'w-16'
-        } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} ${sidebarVisible ? 'md:translate-x-0 md:border-r md:border-border/80 md:pointer-events-auto' : 'md:-translate-x-full md:w-0 md:border-transparent md:pointer-events-none md:overflow-hidden'}`}
+        className={`fixed inset-y-0 left-0 z-50 bg-card/90 backdrop-blur-xl border-r border-border/80 transition-all duration-300 ease-in-out 
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 
+        ${sidebarVisible ? 'w-64' : 'w-14'}`}
       >
         {/* Brand */}
         <div className="px-3 py-4 border-b border-border">
           <div className="flex items-center justify-between mb-4">
             <Link to="/dashboard" className="flex items-center gap-2">
               <img src="/svg/logo-nb.svg" alt="Envoyou" className="h-6 w-auto rounded" />
-              {sidebarExpanded && !sidebarCompact && <span className="text-foreground font-semibold tracking-wide">Envoyou</span>}
+              {sidebarVisible && <span className="text-foreground font-semibold tracking-wide">Envoyou</span>}
             </Link>
-            <div className="flex items-center gap-1">
-              {/* Compact toggle */}
-              <button
-                className="p-1.5 rounded-md hover:bg-accent/50 text-muted-foreground hover:text-foreground transition-colors"
-                title={sidebarCompact ? 'Disable compact' : 'Enable compact'}
-                onClick={() => setSidebarCompact(v => !v)}
-              >
-                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4h2v2H4V4zm0 5h2v2H4V9zm0 5h2v2H4v-2zm5-10h2v2H9V4zm0 5h2v2H9V9zm0 5h2v2H9v-2zm5-10h2v2h-2V4zm0 5h2v2h-2V9zm0 5h2v2h-2v-2z"/></svg>
-              </button>
-            </div>
+            <div />
           </div>
         </div>
 
@@ -361,26 +276,26 @@ export default function AppLayout({ children }) {
         <Tooltip.Provider delayDuration={200} skipDelayDuration={200}>
           <nav className="flex-1 px-2 md:px-3 py-6 space-y-1">
             {navigationItems.map((item) => {
-              const activeTone = sectionTone === 'purple' ? 'bg-purple-600/15' : sectionTone === 'blue' ? 'bg-blue-600/15' : 'bg-emerald-600/15';
+              const activeTone = 'bg-accent/25'; // neutral subdued
               const link = (
                 <Link
                   key={item.path}
                   to={item.path}
                   className={`group relative flex items-center px-3 py-2 rounded-md transition-colors ${
                     item.active
-                      ? `text-foreground ${activeTone}`
-                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/30'
+                      ? `text-foreground ${activeTone} border border-border/60`
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent/20'
                   }`}
                 >
                   <div className="flex-shrink-0 opacity-90 group-hover:opacity-100">{item.icon}</div>
                   <span className={`ml-3 transition-all duration-200 ${
-                    sidebarExpanded && !sidebarCompact ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'
+                    sidebarVisible ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'
                   }`}>
                     {item.name}
                   </span>
                 </Link>
               );
-              return sidebarExpanded ? (
+              return sidebarVisible ? (
                 link
               ) : (
                 <Tooltip.Root key={item.path}>
@@ -397,16 +312,17 @@ export default function AppLayout({ children }) {
         </Tooltip.Provider>
 
         {/* User Profile at Bottom */}
-        <div className="border-t border-border/80 p-3">
-          <ProfileMenu user={user} onLogout={logout} compact={!sidebarExpanded || sidebarCompact} />
+        <div className="border-t border-border/80 p-2">
+          <ProfileMenu user={user} onLogout={logout} />
         </div>
       </aside>
 
       {/* Edge hover handle for show/hide (desktop) */}
       <div
-        className={`hidden md:block fixed inset-y-0 left-0 z-40 ${sidebarVisible ? (sidebarExpanded ? 'ml-64' : 'ml-16') : 'ml-0'} w-2`}
+        className={`hidden md:block fixed inset-y-0 left-0 z-40 ${sidebarVisible ? 'ml-64' : 'ml-14'} w-2 hover:bg-border/40 transition-colors`}
         onClick={() => setSidebarVisible(v => !v)}
         style={{ cursor: 'ew-resize' }}
+        aria-label="Toggle sidebar"
       />
 
       {/* Mobile Sidebar Overlay */}
@@ -418,7 +334,7 @@ export default function AppLayout({ children }) {
       )}
 
       {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ${sidebarVisible ? (sidebarExpanded ? 'md:ml-64' : 'md:ml-16') : 'md:ml-0'}`}>
+  <div className={`flex-1 transition-all duration-300 ${sidebarVisible ? 'md:ml-64' : 'md:ml-14'}`}>
         {/* SaaS Header */}
         <header className="h-16 border-b border-border/80 bg-background/70 backdrop-blur flex items-center justify-between px-4 md:px-6">
           {/* Sidebar toggles */}
@@ -464,7 +380,7 @@ export default function AppLayout({ children }) {
 
       {/* Edge hover handle for show/hide (desktop) */}
       <div
-        className={`hidden md:block fixed inset-y-0 left-0 z-40 ${sidebarVisible ? 'ml-16 md:ml-16' : 'ml-0'} ${sidebarVisible ? '' : ''} w-3 hover:bg-border/40 transition-colors`}
+        className={`hidden md:block fixed inset-y-0 left-0 z-40 ${sidebarVisible ? 'ml-64' : 'ml-14'} w-2 hover:bg-border/40 transition-colors`}
         onClick={() => setSidebarVisible(v => !v)}
         style={{ cursor: 'ew-resize' }}
         aria-label="Toggle sidebar"
