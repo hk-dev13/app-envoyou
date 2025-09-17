@@ -783,7 +783,7 @@ func main() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-white">Code Snippets</h2>
           <p className="text-slate-400 mt-1">Ready-to-use code examples in multiple languages</p>
@@ -792,7 +792,7 @@ func main() {
           <Code2 className="h-3 w-3 mr-1" />
           6 Languages
         </Badge>
-      </div>
+      </div> */}
 
       {/* Endpoint Selection */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -901,7 +901,7 @@ func main() {
       <Card className="bg-slate-800/50 border-slate-700">
         <CardHeader>
           <CardTitle className="text-white flex items-center">
-            <Zap className="h-5 w-5 mr-2 text-yellow-400" />
+            {/* <Zap className="h-5 w-5 mr-2 text-yellow-400" /> */}
             Quick Start Guide
           </CardTitle>
           <CardDescription>
