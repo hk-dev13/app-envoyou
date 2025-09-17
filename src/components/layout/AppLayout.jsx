@@ -25,7 +25,7 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
   if (compact) {
     return (
       <div className="flex items-center space-x-2">
-        <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
       </div>
@@ -44,31 +44,31 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
         aria-haspopup="menu"
         aria-expanded={open}
       >
-        <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-muted-foreground text-sm font-medium">
           {user?.name?.charAt(0)?.toUpperCase() || 'U'}
         </div>
         <div className="text-left">
-          <div className="text-sm font-medium text-white">{user?.name || 'User'}</div>
-          <div className="text-xs text-slate-400">{user?.email || 'user@example.com'}</div>
+          <div className="text-sm font-medium text-foreground">{user?.name || 'User'}</div>
+          <div className="text-xs text-muted-foreground">{user?.email || 'user@example.com'}</div>
         </div>
-        <svg className={`w-4 h-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={`w-4 h-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
       {open && (
         <div
-          className="absolute bottom-full right-0 z-40 mt-2 w-56 rounded-md border border-slate-800 bg-slate-900/95 backdrop-blur-sm shadow-lg py-2"
+          className="absolute bottom-full right-0 z-40 mt-2 w-56 rounded-md border border-border bg-popover/95 backdrop-blur-sm shadow-lg py-2"
           role="menu"
           onMouseEnter={clearClose}
           onMouseLeave={scheduleClose}
         >
-          <div className="px-4 py-2 border-b border-slate-800">
-            <div className="text-sm font-medium text-white">{user?.name || 'User'}</div>
-            <div className="text-xs text-slate-400">{user?.email || 'user@example.com'}</div>
+          <div className="px-4 py-2 border-b border-border">
+            <div className="text-sm font-medium text-popover-foreground">{user?.name || 'User'}</div>
+            <div className="text-xs text-muted-foreground">{user?.email || 'user@example.com'}</div>
           </div>
           <Link
             to="/settings/profile"
-            className="block px-4 py-2 text-sm text-slate-300 hover:bg-transparent hover:text-white"
+            className="block px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -76,16 +76,16 @@ const ProfileMenu = ({ user, onLogout, compact = false }) => {
           </Link>
           <Link
             to="/settings/notifications"
-            className="block px-4 py-2 text-sm text-slate-300 hover:bg-transparent hover:text-white"
+            className="block px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
             Notifications
           </Link>
-          <div className="border-t border-slate-800 my-1" />
+          <div className="border-t border-border my-1" />
           <button
             onClick={() => { setOpen(false); onLogout(); }}
-            className="block w-full text-left px-4 py-2 text-sm text-slate-300 hover:bg-transparent hover:text-white"
+            className="block w-full text-left px-4 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground"
             role="menuitem"
           >
             Sign Out
@@ -168,17 +168,17 @@ export default function AppLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 flex">
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out ${
+        className={`fixed inset-y-0 left-0 z-50 bg-card border-r border-border transition-all duration-300 ease-in-out ${
           sidebarExpanded ? 'w-64' : 'w-16'
         } ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
         onMouseEnter={() => setSidebarExpanded(true)}
         onMouseLeave={() => setSidebarExpanded(false)}
       >
         {/* Logo */}
-        <div className="flex items-center justify-center h-16 border-b border-slate-800">
+        <div className="flex items-center justify-center h-16 border-b border-border">
           <Link to="/dashboard" className="flex items-center space-x-2">
             <img
               src="/svg/logo-full-nb.svg"
@@ -196,8 +196,8 @@ export default function AppLayout({ children }) {
               to={item.path}
               className={`group flex items-center px-3 py-3 rounded-lg transition-all duration-200 ${
                 item.active
-                  ? 'text-slate-600 border border-slate-600'
-                  : 'text-slate-600 hover:text-slate-400'
+                  ? 'text-primary border-l-4 border-primary bg-accent/50'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/30'
               }`}
             >
               <div className="flex-shrink-0">
@@ -213,7 +213,7 @@ export default function AppLayout({ children }) {
         </nav>
 
         {/* User Profile at Bottom */}
-        <div className="border-t border-slate-800 p-3">
+        <div className="border-t border-border p-3">
           <ProfileMenu user={user} onLogout={logout} compact={!sidebarExpanded} />
         </div>
       </aside>
@@ -229,11 +229,11 @@ export default function AppLayout({ children }) {
       {/* Main Content */}
       <div className={`flex-1 transition-all duration-300 ${sidebarExpanded ? 'md:ml-64' : 'md:ml-16'}`}>
         {/* Minimal Header */}
-        <header className="h-16 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur flex items-center justify-between px-6">
+        <header className="h-16 border-b border-border/80 bg-background/80 backdrop-blur flex items-center justify-between px-6">
           {/* Mobile Menu Button */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-transparent"
+            className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

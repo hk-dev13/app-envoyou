@@ -6,11 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import {
   Copy,
   Check,
-  Code2,
   FileText,
   Key,
-  CheckCircle,
-  Zap
+  CheckCircle
 } from 'lucide-react';
 
 const CodeSnippets = () => {
