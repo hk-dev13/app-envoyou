@@ -35,7 +35,7 @@ const StatCard = ({
 
   return (
     <div
-      className={`bg-card/50 border border-border rounded-lg p-6 transition-all duration-200 hover:bg-card/70 hover:border-slate-600 ${
+      className={`bg-card border border-border rounded-lg p-6 transition-all duration-200 hover:bg-card hover:border-slate-600 ${
         onClick ? 'cursor-pointer hover:shadow-lg hover:shadow-slate-900/20' : ''
       }`}
       onClick={onClick}
