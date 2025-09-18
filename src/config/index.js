@@ -7,7 +7,7 @@
 export const APP_CONFIG = {
   name: import.meta.env.VITE_APP_NAME || 'Envoyou',
   version: import.meta.env.VITE_APP_VERSION || '1.0.0',
-  description: import.meta.env.VITE_APP_DESCRIPTION || 'Professional CV Enhancement API Service',
+  description: import.meta.env.VITE_APP_DESCRIPTION || 'Environmental Intelligence and Permits API',
   environment: import.meta.env.VITE_APP_ENV || 'development',
   isDevelopment: import.meta.env.VITE_APP_ENV === 'development',
   isProduction: import.meta.env.VITE_APP_ENV === 'production',
@@ -33,25 +33,7 @@ export const AUTH_CONFIG = {
   userKey: 'envoyou_user_data',
 };
 
-// OAuth Configuration
-export const OAUTH_CONFIG = {
-  google: {
-    clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-    redirectUri: import.meta.env.VITE_GOOGLE_CALLBACK_URL || `${window.location.origin}/auth/google/callback`,
-    scope: 'openid email profile',
-    authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
-    tokenUrl: 'https://oauth2.googleapis.com/token',
-    userInfoUrl: 'https://www.googleapis.com/oauth2/v2/userinfo',
-  },
-  github: {
-    clientId: import.meta.env.VITE_GITHUB_CLIENT_ID,
-    redirectUri: import.meta.env.VITE_GITHUB_CALLBACK_URL || `${window.location.origin}/auth/github/callback`,
-    scope: 'user:email',
-    authUrl: 'https://github.com/login/oauth/authorize',
-    tokenUrl: 'https://github.com/login/oauth/access_token',
-    userInfoUrl: 'https://api.github.com/user',
-  },
-};
+// OAuth is handled via Supabase; no direct provider config needed here.
 
 // Feature Flags
 export const FEATURES = {
@@ -72,7 +54,7 @@ export const EXTERNAL_SERVICES = {
     googleAnalyticsId: import.meta.env.VITE_GOOGLE_ANALYTICS_ID,
   },
   sentry: {
-    enabled: true, // Enable Sentry if DSN is available, regardless of environment
+    enabled: Boolean(import.meta.env.VITE_SENTRY_DSN),
     dsn: import.meta.env.VITE_SENTRY_DSN,
   },
   supabase: {
@@ -109,32 +91,7 @@ export const SOCIAL_LINKS = {
   twitter: import.meta.env.VITE_TWITTER_URL || 'https://x.com/EnvoyouAPI',
 };
 
-// API Endpoints
-export const API_ENDPOINTS = {
-  auth: {
-    login: '/auth/login',
-    register: '/auth/register',
-    logout: '/auth/logout',
-    refresh: '/auth/refresh',
-    profile: '/auth/profile',
-  },
-  user: {
-    profile: '/user/profile',
-    settings: '/user/settings',
-    apiKeys: '/user/api-keys',
-    usage: '/user/usage',
-  },
-  cv: {
-    enhance: '/cv/enhance',
-    analyze: '/cv/analyze',
-    optimize: '/cv/optimize',
-  },
-  admin: {
-    users: '/admin/users',
-    analytics: '/admin/analytics',
-    system: '/admin/system',
-  },
-};
+// API endpoints are defined in the service layer; keeping config minimal.
 
 // Error Messages
 export const ERROR_MESSAGES = {
@@ -145,6 +102,13 @@ export const ERROR_MESSAGES = {
   serverError: 'Server error. Please try again later.',
   validationError: 'Please check your input and try again.',
   rateLimitExceeded: 'Too many requests. Please try again later.',
+  // Aliases used by errorHandler (uppercase keys)
+  GENERIC_ERROR: 'An unexpected error occurred.',
+  AUTHENTICATION_ERROR: 'Authentication required. Please sign in.',
+  AUTHORIZATION_ERROR: 'You do not have permission to access this resource.',
+  VALIDATION_ERROR: 'Please check your input and try again.',
+  RATE_LIMIT_ERROR: 'Too many requests. Please try again later.',
+  SERVER_ERROR: 'Server error. Please try again later.',
 };
 
 // Success Messages
@@ -176,8 +140,9 @@ export const VALIDATION = {
 
 // Local Storage Keys
 export const STORAGE_KEYS = {
-  authToken: 'envoyou_auth_token',
-  userData: 'envoyou_user_data',
+  authToken: 'envoyou_token',
+  userData: 'envoyou_user',
+  demoApiKey: 'envoyou_demo_api_key',
   preferences: 'envoyou_preferences',
   apiKeys: 'envoyou_api_keys',
   lastActivity: 'envoyou_last_activity',
@@ -225,13 +190,10 @@ export default {
   API_CONFIG,
   AUTH_CONFIG,
   OAUTH_CONFIG,
-  FEATURES,
   EXTERNAL_SERVICES,
   CONTACT,
   SOCIAL_LINKS,
-  API_ENDPOINTS,
   ERROR_MESSAGES,
-  SUCCESS_MESSAGES,
   VALIDATION,
   STORAGE_KEYS,
   DEFAULTS,

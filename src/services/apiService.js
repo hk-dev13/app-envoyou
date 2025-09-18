@@ -114,8 +114,11 @@ class APIService {
           await new Promise(resolve => setTimeout(resolve, handledError.delay));
           continue;
         }
-        
-        throw handledError;
+        // Throw a proper Error instance with message for consumers
+        const err = new Error(handledError.message || handledError.userMessage || error.message || 'Request failed');
+        // Preserve useful fields from handledError
+        Object.assign(err, handledError);
+        throw err;
       }
     }
 

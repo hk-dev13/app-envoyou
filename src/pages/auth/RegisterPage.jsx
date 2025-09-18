@@ -118,25 +118,28 @@ const RegisterPage = () => {
     };
 
     const result = await register(userData);
-    
+
     if (result.success) {
       navigate('/auth/register-success');
-    } else if (error && /email already registered/i.test(error)) {
-      // Provide clear guidance if the email already exists
-      setValidationErrors({
-        email: (
-          <div>
-            This email is already registered. If you previously signed in with Google, use the
-            <span className="font-medium"> Continue with Google</span> button below to access your account. You can also{' '}
-            <Link
-              to={`/auth/set-password?email=${encodeURIComponent(formData.email)}`}
-              className="text-emerald-400 hover:text-emerald-300 underline"
-            >
-              set a local password
-            </Link>{' '}for traditional sign-in.
-          </div>
-        )
-      });
+    } else {
+      const errMsg = (result && result.error) || error || '';
+      const alreadyExistsRegex = /(email\s*(already|in use)|already\s*(registered|exists)|user\s*already\s*exists|account\s*already\s*exists)/i;
+      if (alreadyExistsRegex.test(errMsg)) {
+        setValidationErrors({
+          email: (
+            <div>
+              This email is already registered. If you previously signed in with Google, use the
+              <span className="font-medium"> Continue with Google</span> button below to access your account. You can also{' '}
+              <Link
+                to={`/auth/set-password?email=${encodeURIComponent(formData.email)}`}
+                className="text-emerald-400 hover:text-emerald-300 underline"
+              >
+                set a local password
+              </Link>{' '}for traditional sign-in.
+            </div>
+          )
+        });
+      }
     }
   };
 
@@ -195,7 +198,7 @@ const RegisterPage = () => {
               </svg>
               <div>
                 <p className="text-sm">{error}</p>
-                {/email already registered/i.test(error) && (
+                {/(email\s*(already|in use)|already\s*(registered|exists)|user\s*already\s*exists|account\s*already\s*exists)/i.test(error) && (
                   <div className="mt-3 space-y-2">
                     <p className="text-sm text-red-100">
                       It looks like you already have an account with this email. If you previously used Google, please sign in with Google below, or use one of the alternative options.
