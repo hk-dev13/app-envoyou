@@ -258,6 +258,20 @@ class APIService {
     });
   }
 
+  // --- API Token Methods ---
+
+  async getApiToken() {
+    return this.get('/v1/user/api-token');
+  }
+
+  async createApiToken() {
+    return this.post('/v1/user/api-token', {});
+  }
+
+  async regenerateApiToken() {
+    return this.post('/v1/user/api-token/regenerate', {});
+  }
+
   // --- API Keys Methods ---
 
   async getApiKeys() {

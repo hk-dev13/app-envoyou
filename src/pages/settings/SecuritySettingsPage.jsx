@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth.js';
 import apiService from '../../services/apiService';
 
@@ -18,6 +18,73 @@ function SecuritySettingsPage() {
     const [isSettingLocalPassword, setIsSettingLocalPassword] = useState(false);
     const [message, setMessage] = useState('');
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+    const [apiTokenInfo, setApiTokenInfo] = useState(null);
+    const [apiTokenVisible, setApiTokenVisible] = useState(false);
+    const [lastToken, setLastToken] = useState('');
+    const [isLoadingToken, setIsLoadingToken] = useState(false);
+    const [isRotatingToken, setIsRotatingToken] = useState(false);
+
+    useEffect(() => {
+        const loadToken = async () => {
+            setIsLoadingToken(true);
+            try {
+                const info = await apiService.getApiToken();
+                setApiTokenInfo(info);
+            } catch (e) {
+                console.warn('Failed to fetch API token info:', e.message);
+            } finally {
+                setIsLoadingToken(false);
+            }
+        };
+        loadToken();
+    }, []);
+
+    const handleCreateToken = async () => {
+        setIsRotatingToken(true);
+        setMessage('');
+        try {
+            const res = await apiService.createApiToken();
+            setApiTokenInfo({ exists: true, id: res.id, prefix: res.prefix, usage_count: 0 });
+            setLastToken(res.key);
+            try { await navigator.clipboard.writeText(res.key); } catch (_) {}
+            setMessage('API token generated. Copy and store it securely.');
+            setTimeout(() => setMessage(''), 5000);
+        } catch (e) {
+            setMessage(e.message || 'Failed to create API token.');
+        } finally {
+            setIsRotatingToken(false);
+        }
+    };
+
+    const handleCopyToken = async () => {
+        try {
+            if (lastToken) {
+                await navigator.clipboard.writeText(lastToken);
+                setMessage('Token copied to clipboard.');
+            } else {
+                setMessage('Full token is only shown on creation. Use Regenerate to get a new token.');
+            }
+            setTimeout(() => setMessage(''), 4000);
+        } catch (e) { /* noop */ }
+    };
+
+    const handleRegenerateToken = async () => {
+        if (!confirm('Regenerate your API token? Your old token will stop working immediately.')) return;
+        setIsRotatingToken(true);
+        setMessage('');
+        try {
+            const res = await apiService.regenerateApiToken();
+            setApiTokenInfo({ exists: true, id: res.id, prefix: res.prefix, usage_count: 0 });
+            setLastToken(res.key);
+            try { await navigator.clipboard.writeText(res.key); } catch (_) {}
+            setMessage('New API token generated. Update any integrations.');
+            setTimeout(() => setMessage(''), 6000);
+        } catch (e) {
+            setMessage(e.message || 'Failed to regenerate API token.');
+        } finally {
+            setIsRotatingToken(false);
+        }
+    };
 
     const handlePasswordChange = async (e) => {
         e.preventDefault();
@@ -146,6 +213,66 @@ function SecuritySettingsPage() {
                         </div>
                     </div>
                 )}
+
+                {/* API Token Section */}
+                <div className="bg-background/50 rounded-xl border border-border p-6">
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-semibold text-primary-foreground mb-2">API Token</h2>
+                        <p className="text-muted-foreground">
+                            Use this token to authenticate requests to Envoyou APIs. Keep it secret.
+                        </p>
+                    </div>
+
+                    {!apiTokenInfo?.exists && (
+                        <div className="flex items-center justify-between">
+                            <p className="text-muted-foreground">You don&apos;t have a personal API token yet.</p>
+                            <button
+                                onClick={handleCreateToken}
+                                disabled={isRotatingToken || isLoadingToken}
+                                className="inline-flex items-center px-4 py-2 bg-primary hover:bg-emerald-700 text-primary-foreground rounded-lg disabled:opacity-50"
+                            >
+                                {isRotatingToken ? 'Generating…' : 'Generate Token'}
+                            </button>
+                        </div>
+                    )}
+
+                    {apiTokenInfo?.exists && (
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label className="block text-sm text-muted-foreground mb-1">Token Prefix</label>
+                                    <div className="px-3 py-2 bg-card border border-border rounded-lg text-primary-foreground font-mono">{apiTokenInfo.prefix}</div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm text-muted-foreground mb-1">Usage</label>
+                                    <div className="px-3 py-2 bg-card border border-border rounded-lg text-primary-foreground">{apiTokenInfo.usage_count} calls</div>
+                                </div>
+                                <div className="flex items-end justify-start md:justify-end gap-3">
+                                    <button onClick={handleCopyToken} className="px-4 py-2 border border-border text-muted-foreground rounded-lg hover:bg-accent">Copy</button>
+                                    <button onClick={handleRegenerateToken} disabled={isRotatingToken} className="px-4 py-2 bg-slate-600 hover:bg-slate-700 text-primary-foreground rounded-lg disabled:opacity-50">{isRotatingToken ? 'Regenerating…' : 'Regenerate'}</button>
+                                </div>
+                            </div>
+                            {lastToken && (
+                                <div className="bg-card/50 border border-border rounded-lg p-4">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-sm text-muted-foreground">Your new token (copy and store it securely):</span>
+                                        <button onClick={() => setApiTokenVisible(!apiTokenVisible)} className="text-xs text-emerald-400 hover:text-emerald-300">
+                                            {apiTokenVisible ? 'Hide' : 'Show'}
+                                        </button>
+                                    </div>
+                                    <div className="font-mono text-sm break-all px-3 py-2 bg-background rounded border border-border">
+                                        {apiTokenVisible ? lastToken : '••••••••••••••••••••••••••••••••'}
+                                    </div>
+                                    <div className="mt-3 flex gap-2">
+                                        <button onClick={handleCopyToken} className="px-3 py-2 bg-primary text-primary-foreground rounded-lg">Copy Token</button>
+                                        <button onClick={() => setLastToken('')} className="px-3 py-2 border border-border text-muted-foreground rounded-lg hover:bg-accent">Dismiss</button>
+                                    </div>
+                                </div>
+                            )}
+                            <p className="text-xs text-muted-foreground">For security, the full token is only shown once on creation. If lost, regenerate to get a new one.</p>
+                        </div>
+                    )}
+                </div>
 
                 {/* Set Local Password Section - Only for OAuth users without local password */}
                 {user?.auth_provider && !user?.has_local_password && (
