@@ -28,6 +28,21 @@ class APIService {
     let token = null;
     try {
         token = localStorage.getItem(STORAGE_KEYS.authToken);
+        // Fallback: try to sync from Supabase session if empty
+        if (!token && typeof window !== 'undefined') {
+          // Lazy load to avoid circular import
+          try {
+            const supabaseModule = window.__supabaseClient || null;
+            if (supabaseModule?.auth) {
+              // cannot await; best-effort header sync
+              supabaseModule.auth.getSession().then(({ data }) => {
+                if (data?.session?.access_token) {
+                  try { localStorage.setItem(STORAGE_KEYS.authToken, data.session.access_token); } catch (_) {}
+                }
+              }).catch(() => {});
+            }
+          } catch (_) {}
+        }
     } catch (error) {
         console.warn('localStorage not available (incognito mode):', error);
     }

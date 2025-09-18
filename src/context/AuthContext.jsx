@@ -210,20 +210,17 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     dispatch({ type: AUTH_ACTIONS.LOGIN_START });
     try {
-      const data = await apiService.login({ email, password });
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
 
-      if (!data.access_token || !data.user) {
-        throw new Error('Login response is missing token or user data.');
+      if (!data?.session?.access_token) {
+        throw new Error('Login failed: no session returned');
       }
 
-  localStorage.setItem(STORAGE_KEYS.authToken, data.access_token);
-  localStorage.setItem(STORAGE_KEYS.userData, JSON.stringify(data.user));
-
-      dispatch({
-        type: AUTH_ACTIONS.LOGIN_SUCCESS,
-        payload: { token: data.access_token, user: data.user },
-      });
-      logger.info(`User ${data.user.email} logged in successfully.`);
+      // Persist via standard flow
+      await checkAuthStatus();
+      logger.info(`User ${email} logged in via Supabase.`);
       return { success: true };
     } catch (error) {
       logger.error('Login failed', { error: error.message });
@@ -456,6 +453,12 @@ export const AuthProvider = ({ children }) => {
       try {
         if (event === 'SIGNED_IN' && session) {
           await checkAuthStatus();
+        } else if (event === 'TOKEN_REFRESHED' && session) {
+          try {
+            if (session?.access_token) {
+              localStorage.setItem(STORAGE_KEYS.authToken, session.access_token);
+            }
+          } catch (_) {}
         } else if (event === 'SIGNED_OUT') {
           localStorage.removeItem('envoyou_token');
           localStorage.removeItem('envoyou_user');

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import getSupabaseClient from '../../services/supabaseClient';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import ThemeToggle from '../ThemeToggle.jsx';
 import PlanStatus from '../PlanStatus.jsx';
@@ -350,7 +351,30 @@ export default function AppLayout({ children }) {
       {/* Main Content */}
   <div className={`flex-1 transition-all duration-300 ${sidebarVisible ? 'md:ml-64' : 'md:ml-14'}`}>
         {/* SaaS Header */}
-        <header className="h-16 border-b border-border/80 bg-background/70 backdrop-blur flex items-center justify-between px-4 md:px-6">
+        <header className="border-b border-border/80 bg-background/70 backdrop-blur">
+          {/* Email not verified banner */}
+          {user && user.email_verified === false && (
+            <div className="bg-amber-900/40 text-amber-200 border-b border-amber-700/40 px-4 py-2 text-sm flex items-center justify-between">
+              <div>
+                Your email is not verified. Some features may be limited.
+              </div>
+              <button
+                onClick={async () => {
+                  try {
+                    const supabase = getSupabaseClient();
+                    await supabase.auth.resend({ type: 'signup', email: user.email, options: { emailRedirectTo: `${window.location.origin}/auth/verify` } });
+                    alert('Verification email sent. Please check your inbox.');
+                  } catch (e) {
+                    alert('Failed to resend verification email.');
+                  }
+                }}
+                className="px-3 py-1 rounded bg-amber-700 text-amber-50 hover:bg-amber-600"
+              >
+                Resend verification
+              </button>
+            </div>
+          )}
+          <div className="h-16 flex items-center justify-between px-4 md:px-6">
           {/* Sidebar toggles */}
           <div className="flex items-center gap-1">
             {/* Mobile open */}
@@ -383,6 +407,7 @@ export default function AppLayout({ children }) {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/></svg>
               New Key
             </Link>
+          </div>
           </div>
         </header>
 

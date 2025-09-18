@@ -30,7 +30,12 @@ export function usePlan() {
       setLoading(true); setError(null);
       try {
         const apiUrl = `${API_CONFIG.baseURL}/${API_CONFIG.version}/user/plan`;
-        const res = await fetch(apiUrl, { headers: { 'Accept': 'application/json' }, credentials: 'include' });
+        let headers = { 'Accept': 'application/json' };
+        try {
+          const token = localStorage.getItem('envoyou_token');
+          if (token) headers.Authorization = `Bearer ${token}`;
+        } catch (_) {}
+        const res = await fetch(apiUrl, { headers });
         if (!res.ok) throw new Error('plan request failed ' + res.status);
         const data = await res.json();
         if (!abort) setRemotePlan(data.plan || data.tier || fallbackPlan);

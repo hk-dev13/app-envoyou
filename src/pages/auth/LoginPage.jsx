@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
-import apiService from '../../services/apiService.js';
+import getSupabaseClient from '../../services/supabaseClient';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -71,7 +71,13 @@ const LoginPage = () => {
     if (!formData.email) return;
     setResendStatus({ loading: true, sent: false, error: null });
     try {
-      await apiService.sendVerificationEmail(formData.email);
+      const supabase = getSupabaseClient();
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: formData.email,
+        options: { emailRedirectTo: `${window.location.origin}/auth/verify` },
+      });
+      if (error) throw error;
       setResendStatus({ loading: false, sent: true, error: null });
     } catch (e) {
       setResendStatus({ loading: false, sent: false, error: e.message || 'Failed to resend verification email' });
