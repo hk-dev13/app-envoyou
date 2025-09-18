@@ -471,18 +471,6 @@ const RegisterPage = () => {
                 'Create Account'
               )}
             </button>
-            {/* Dedicated Google CTA near register button */}
-            <div className="mt-3">
-              <button
-                type="button"
-                onClick={handleGoogleLogin}
-                disabled={isLoading}
-                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-border rounded-lg shadow-sm bg-white text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <img src="/svg/google.svg" alt="Google" className="w-4 h-4" />
-                Continue with Google
-              </button>
-            </div>
           </div>
 
           {/* Divider */}
