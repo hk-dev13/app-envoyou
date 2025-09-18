@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom';
-import apiService from '../../services/apiService';
 import getSupabaseClient from '../../services/supabaseClient';
 import { STORAGE_KEYS } from '../../config/index.js';
 import { useAuth } from '../../hooks/useAuth.js';
@@ -49,30 +48,22 @@ const EmailVerificationPage = () => {
           }
         }
 
-        // Call the API to verify email
-  const response = await apiService.verifyEmail({ token });
-
-        if (response.message === 'Email verified successfully' || response.success) {
+    // If Supabase session is already set via hash tokens, treat as success
+    const supabase = getSupabaseClient();
+    const { data } = await supabase.auth.getSession();
+    if (data?.session?.user?.email_confirmed_at) {
           setStatus('success');
           setMessage('Email verified successfully! Redirecting to your dashboard...');
 
           // If backend returns access_token and user, set session for seamless login
-          if (response.access_token && response.user) {
-            try {
-              localStorage.setItem(STORAGE_KEYS.authToken, response.access_token);
-              localStorage.setItem(STORAGE_KEYS.userData, JSON.stringify(response.user));
-              await checkAuthStatus();
-            } catch (e) {
-              console.warn('Failed to persist login after verification:', e.message);
-            }
-          }
+          await checkAuthStatus();
 
           // Redirect to dashboard after a short delay
           setTimeout(() => {
             navigate('/dashboard', { replace: true });
           }, 1200);
         } else {
-          throw new Error('Verification failed');
+          throw new Error('Verification not confirmed yet');
         }
       } catch (error) {
         console.error('Email verification error:', error);
@@ -122,13 +113,14 @@ const EmailVerificationPage = () => {
         return;
       }
 
-      const response = await apiService.sendVerificationEmail({ email: emailToUse });
-
-      if (response.message === 'Verification email sent successfully') {
+      // Ask Supabase to resend via signUp again (it sends email when user exists and unconfirmed)
+      const supabase = getSupabaseClient();
+      const { error } = await supabase.auth.signUp({ email: emailToUse, password: crypto.randomUUID() });
+      if (!error) {
         setMessage('Verification email sent successfully! Please check your inbox.');
         setStatus('success');
       } else {
-        throw new Error('Failed to send verification email');
+        throw new Error('Failed to trigger verification email');
       }
     } catch (error) {
       console.error('Resend verification error:', error);

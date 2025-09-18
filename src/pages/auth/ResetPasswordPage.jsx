@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import apiService from '../../services/apiService';
+import getSupabaseClient from '../../services/supabaseClient';
 
 const ResetPasswordPage = () => {
   const [formData, setFormData] = useState({
@@ -17,13 +17,33 @@ const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    // Get token from URL parameters
-    const tokenParam = searchParams.get('token');
-    if (tokenParam) {
-      setToken(tokenParam);
-    } else {
-      setValidationError('Invalid or missing reset token. Please request a new password reset.');
-    }
+    // Supabase will redirect with a recovery token in hash; we attempt to set session if present
+    const init = async () => {
+      const hash = window.location.hash || '';
+      const hashParams = hash.startsWith('#') ? Object.fromEntries(new URLSearchParams(hash.substring(1))) : {};
+      const tokenParam = searchParams.get('token') || hashParams.access_token || '';
+      if (tokenParam && hashParams.refresh_token) {
+        try {
+          const supabase = getSupabaseClient();
+          const { error } = await supabase.auth.setSession({
+            access_token: hashParams.access_token,
+            refresh_token: hashParams.refresh_token,
+          });
+          if (error) {
+            setValidationError('Session initialization failed. Please use the latest reset link.');
+          } else {
+            setToken(tokenParam);
+          }
+        } catch (e) {
+          setValidationError('Unexpected error initializing session.');
+        }
+      } else if (tokenParam) {
+        setToken(tokenParam);
+      } else {
+        setValidationError('Invalid or missing reset token. Please request a new password reset.');
+      }
+    };
+    init();
   }, [searchParams]);
 
   const validatePassword = (password) => {
@@ -73,23 +93,14 @@ const ResetPasswordPage = () => {
     setMessage('');
 
     try {
-      const response = await apiService.resetPassword(token, formData.password);
-
-      if (response.message === 'Password reset successfully') {
-        setMessage('Password reset successfully! You can now log in with your new password.');
-        setTimeout(() => {
-          navigate('/auth/login');
-        }, 3000);
-      } else {
-        setValidationError('Failed to reset password. Please try again.');
-      }
+      const supabase = getSupabaseClient();
+      const { error } = await supabase.auth.updateUser({ password: formData.password });
+      if (error) throw error;
+      setMessage('Password reset successfully! You can now log in with your new password.');
+      setTimeout(() => navigate('/auth/login'), 3000);
     } catch (error) {
       console.error('Reset password error:', error);
-      if (error.response?.data?.detail) {
-        setValidationError(error.response.data.detail);
-      } else {
-        setValidationError('An error occurred. Please try again.');
-      }
+      setValidationError(error.message || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }

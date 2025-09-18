@@ -238,48 +238,49 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Register function
+  // Register function using Supabase Auth
   const register = async (userData) => {
     dispatch({ type: AUTH_ACTIONS.REGISTER_START });
     try {
-      const data = await apiService.register(userData);
-
-      // Handle new registration response format
-      if (data.success) {
-        // Create a temporary user object for unverified state
-        const tempUser = {
-          id: 'temp-' + Date.now(), // Temporary ID
-          email: userData.email,
-          name: userData.name,
-          email_verified: false,
-          company: userData.company,
-          job_title: userData.job_title,
-          created_at: new Date().toISOString()
-        };
-
-        // Store temporary session data
-  localStorage.setItem(STORAGE_KEYS.tempUser, JSON.stringify(tempUser));
-  localStorage.setItem(STORAGE_KEYS.registrationPending, 'true');
-
-        dispatch({
-          type: AUTH_ACTIONS.REGISTER_SUCCESS,
-          payload: {
-            token: null, // No token until verified
-            user: tempUser
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase.auth.signUp({
+        email: userData.email,
+        password: userData.password,
+        options: {
+          data: {
+            name: userData.name,
+            company: userData.company || null,
+            job_title: userData.job_title || null,
           },
-        });
-
-        logger.info(`New user ${userData.email} registered successfully (pending verification).`);
-        return { success: true, email_sent: data.email_sent };
-      } else {
-        throw new Error(data.message || 'Registration failed');
-      }
-    } catch (error) {
-      logger.error('Registration failed', { error: error.message });
-      dispatch({
-        type: AUTH_ACTIONS.REGISTER_FAILURE,
-        payload: error.message || 'An unexpected error occurred during registration.',
+          emailRedirectTo: `${window.location.origin}/auth/verify`,
+        },
       });
+
+      if (error) throw error;
+
+      // Store a lightweight pending state; Supabase sends the email
+      const tempUser = {
+        id: data.user?.id || 'temp-' + Date.now(),
+        email: userData.email,
+        name: userData.name,
+        email_verified: false,
+        company: userData.company,
+        job_title: userData.job_title,
+        created_at: new Date().toISOString(),
+      };
+
+      localStorage.setItem(STORAGE_KEYS.tempUser, JSON.stringify(tempUser));
+      localStorage.setItem(STORAGE_KEYS.registrationPending, 'true');
+
+      dispatch({
+        type: AUTH_ACTIONS.REGISTER_SUCCESS,
+        payload: { token: null, user: tempUser },
+      });
+      logger.info(`Supabase signUp initiated for ${userData.email}. Verification email sent by Supabase.`);
+      return { success: true, email_sent: true };
+    } catch (error) {
+      logger.error('Supabase registration failed', { error: error.message });
+      dispatch({ type: AUTH_ACTIONS.REGISTER_FAILURE, payload: error.message || 'Registration failed' });
       return { success: false, error: error.message };
     }
   };

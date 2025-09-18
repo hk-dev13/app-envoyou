@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import apiService from '../../services/apiService';
+import getSupabaseClient from '../../services/supabaseClient';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
@@ -32,23 +32,20 @@ const ForgotPasswordPage = () => {
     setMessage('');
 
     try {
-      const response = await apiService.forgotPassword(email);
+      const supabase = getSupabaseClient();
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      });
 
-      if (response.message === 'Password reset email sent successfully') {
-        setMessage('Password reset email sent! Please check your inbox and follow the instructions.');
-        setTimeout(() => {
-          navigate('/auth/login');
-        }, 5000);
-      } else {
-        setMessage('Failed to send password reset email. Please try again.');
-      }
+      if (error) throw error;
+
+      setMessage('Password reset email sent! Please check your inbox and follow the instructions.');
+      setTimeout(() => {
+        navigate('/auth/login');
+      }, 5000);
     } catch (error) {
       console.error('Forgot password error:', error);
-      if (error.response?.data?.detail) {
-        setMessage(error.response.data.detail);
-      } else {
-        setMessage('An error occurred. Please try again.');
-      }
+      setMessage(error.message || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
