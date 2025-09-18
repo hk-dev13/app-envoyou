@@ -3,6 +3,8 @@
  * Centralized configuration management for Envoyou application
  */
 
+// Sentry is configured via EXTERNAL_SERVICES; no direct imports here.
+
 // Application Configuration
 export const APP_CONFIG = {
   name: import.meta.env.VITE_APP_NAME || 'Envoyou',
@@ -15,7 +17,7 @@ export const APP_CONFIG = {
 
 // API Configuration
 export const API_CONFIG = {
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://api.envoyou.com',
   version: import.meta.env.VITE_API_VERSION || 'v1',
   timeout: parseInt(import.meta.env.VITE_API_TIMEOUT) || 30000,
   rateLimit: {
@@ -29,8 +31,8 @@ export const AUTH_CONFIG = {
   jwtSecret: import.meta.env.VITE_JWT_SECRET || 'fallback-secret',
   jwtExpiresIn: import.meta.env.VITE_JWT_EXPIRES_IN || '7d',
   sessionTimeout: parseInt(import.meta.env.VITE_SESSION_TIMEOUT) || 3600000,
-  tokenKey: 'envoyou_auth_token',
-  userKey: 'envoyou_user_data',
+  tokenKey: 'envoyou_token',
+  userKey: 'envoyou_user',
 };
 
 // OAuth is handled via Supabase; no direct provider config needed here.
@@ -143,6 +145,8 @@ export const STORAGE_KEYS = {
   authToken: 'envoyou_token',
   userData: 'envoyou_user',
   demoApiKey: 'envoyou_demo_api_key',
+  tempUser: 'envoyou_temp_user',
+  registrationPending: 'envoyou_registration_pending',
   preferences: 'envoyou_preferences',
   apiKeys: 'envoyou_api_keys',
   lastActivity: 'envoyou_last_activity',
@@ -189,7 +193,6 @@ export default {
   APP_CONFIG,
   API_CONFIG,
   AUTH_CONFIG,
-  OAUTH_CONFIG,
   EXTERNAL_SERVICES,
   CONTACT,
   SOCIAL_LINKS,

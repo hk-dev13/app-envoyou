@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useEffect, useCallback } from 'react';
 import apiService from '../services/apiService';
+import { STORAGE_KEYS, AUTH_CONFIG } from '../config/index.js';
 import getSupabaseClient from '../services/supabaseClient';
 import logger from '../services/logger';
 
@@ -135,8 +136,8 @@ export const AuthProvider = ({ children }) => {
           console.warn('User profile API not available, using Supabase data:', apiError.message);
         }
 
-        // Store both Supabase session and API token
-        localStorage.setItem('envoyou_token', session.access_token);
+  // Store both Supabase session and API token
+  localStorage.setItem(STORAGE_KEYS.authToken, session.access_token);
         
         // Use API data if available, otherwise use Supabase data
         const finalUserData = userData || {
@@ -149,7 +150,7 @@ export const AuthProvider = ({ children }) => {
           has_local_password: false // Default to false, will be updated by API if available
         };
 
-        localStorage.setItem('envoyou_user', JSON.stringify(finalUserData));
+  localStorage.setItem(STORAGE_KEYS.userData, JSON.stringify(finalUserData));
 
         dispatch({
           type: AUTH_ACTIONS.LOGIN_SUCCESS,
@@ -162,8 +163,8 @@ export const AuthProvider = ({ children }) => {
       } else {
         // Check if we have stored user data from a previous session
         try {
-          const storedToken = localStorage.getItem('envoyou_token');
-          const storedUser = localStorage.getItem('envoyou_user');
+          const storedToken = localStorage.getItem(STORAGE_KEYS.authToken);
+          const storedUser = localStorage.getItem(STORAGE_KEYS.userData);
           
           if (storedToken && storedUser) {
             const userData = JSON.parse(storedUser);
@@ -183,8 +184,8 @@ export const AuthProvider = ({ children }) => {
         
         // No valid session found via Supabase; attempt localStorage direct restore
         try {
-          const storedToken = localStorage.getItem('envoyou_token') || localStorage.getItem('envoyou_auth_token');
-          const storedUser = localStorage.getItem('envoyou_user') || localStorage.getItem('envoyou_user_data');
+          const storedToken = localStorage.getItem(STORAGE_KEYS.authToken) || localStorage.getItem(AUTH_CONFIG.tokenKey);
+          const storedUser = localStorage.getItem(STORAGE_KEYS.userData) || localStorage.getItem(AUTH_CONFIG.userKey);
           if (storedToken && storedUser) {
             const parsedUser = JSON.parse(storedUser);
             dispatch({
@@ -215,8 +216,8 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Login response is missing token or user data.');
       }
 
-      localStorage.setItem('envoyou_token', data.access_token);
-      localStorage.setItem('envoyou_user', JSON.stringify(data.user));
+  localStorage.setItem(STORAGE_KEYS.authToken, data.access_token);
+  localStorage.setItem(STORAGE_KEYS.userData, JSON.stringify(data.user));
 
       dispatch({
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
@@ -257,8 +258,8 @@ export const AuthProvider = ({ children }) => {
         };
 
         // Store temporary session data
-        localStorage.setItem('envoyou_temp_user', JSON.stringify(tempUser));
-        localStorage.setItem('envoyou_registration_pending', 'true');
+  localStorage.setItem(STORAGE_KEYS.tempUser, JSON.stringify(tempUser));
+  localStorage.setItem(STORAGE_KEYS.registrationPending, 'true');
 
         dispatch({
           type: AUTH_ACTIONS.REGISTER_SUCCESS,
@@ -379,8 +380,8 @@ export const AuthProvider = ({ children }) => {
       logger.error('Supabase logout failed', { error });
     }
 
-    localStorage.removeItem('envoyou_token');
-    localStorage.removeItem('envoyou_user');
+  localStorage.removeItem(STORAGE_KEYS.authToken);
+  localStorage.removeItem(STORAGE_KEYS.userData);
     dispatch({ type: AUTH_ACTIONS.LOGOUT });
     logger.info(`User ${userEmail || ''} logged out.`);
   };

@@ -137,7 +137,7 @@ const LoginPage = () => {
                 {/user not found/i.test(error) && (
                   <div className="mt-3 space-y-2">
                     <p className="text-sm text-red-100">
-                      We couldn't find an account with this email. If you previously used Google, try signing in with Google below. Otherwise, you can create a new account.
+                      We couldn&apos;t find an account with this email. If you previously used Google, try signing in with Google below. Otherwise, you can create a new account.
                     </p>
                     <div className="flex flex-wrap items-center gap-3">
                       <button

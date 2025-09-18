@@ -1,4 +1,4 @@
-import { API_CONFIG, EXTERNAL_SERVICES } from '../config/index.js';
+import { API_CONFIG, EXTERNAL_SERVICES, STORAGE_KEYS } from '../config/index.js';
 import logger from './logger.js';
 import { handleError } from './errorHandler.js';
 
@@ -27,7 +27,7 @@ class APIService {
   getAuthHeaders() {
     let token = null;
     try {
-        token = localStorage.getItem('envoyou_token');
+        token = localStorage.getItem(STORAGE_KEYS.authToken);
     } catch (error) {
         console.warn('localStorage not available (incognito mode):', error);
     }
@@ -233,7 +233,7 @@ class APIService {
     return this.post('/v1/auth/github/token', { code });
   }
 
-  async getOAuthUrl(provider) {
+  async getOAuthUrl() {
     throw new Error('getOAuthUrl is no longer used; OAuth handled by Supabase');
   }
 
@@ -389,9 +389,9 @@ class APIService {
     if (data && data.api_key) {
         const apiKey = data.api_key;
         logger.info('Demo API Key obtained and stored.');
-        try {
-            localStorage.setItem('envoyou_demo_api_key', apiKey);
-        } catch (error) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.demoApiKey, apiKey);
+    } catch (error) {
             console.warn('localStorage not available (incognito mode):', error);
         }
         return apiKey;
@@ -402,7 +402,7 @@ class APIService {
 
   getStoredApiKey() {
     try {
-        return localStorage.getItem('envoyou_demo_api_key');
+    return localStorage.getItem(STORAGE_KEYS.demoApiKey);
     } catch (error) {
         console.warn('localStorage not available (incognito mode):', error);
         return null;
@@ -411,7 +411,7 @@ class APIService {
 
   clearStoredApiKey() {
     try {
-        localStorage.removeItem('envoyou_demo_api_key');
+    localStorage.removeItem(STORAGE_KEYS.demoApiKey);
     } catch (error) {
         console.warn('localStorage not available (incognito mode):', error);
     }
