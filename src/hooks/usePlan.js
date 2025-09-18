@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { FEATURE_MIN_TIER, LIMITS_BY_TIER, TIERS, tierRank } from '../config/plans';
-import { API_CONFIG } from '../config/index.js';
+import apiService from '../services/apiService';
 import { useAuth } from './useAuth';
 
 // Temporary mapping user email domain or metadata to plan
@@ -29,15 +29,7 @@ export function usePlan() {
     async function fetchPlan() {
       setLoading(true); setError(null);
       try {
-        const apiUrl = `${API_CONFIG.baseURL}/${API_CONFIG.version}/user/plan`;
-        let headers = { 'Accept': 'application/json' };
-        try {
-          const token = localStorage.getItem('envoyou_token');
-          if (token) headers.Authorization = `Bearer ${token}`;
-        } catch (_) {}
-        const res = await fetch(apiUrl, { headers });
-        if (!res.ok) throw new Error('plan request failed ' + res.status);
-        const data = await res.json();
+        const data = await apiService.get('/v1/user/plan');
         if (!abort) setRemotePlan(data.plan || data.tier || fallbackPlan);
       } catch (e) {
         if (!abort) setError(e.message);

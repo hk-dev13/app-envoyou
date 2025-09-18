@@ -19,6 +19,9 @@ if (EXTERNAL_SERVICES.sentry.enabled && EXTERNAL_SERVICES.sentry.dsn) {
 class APIService {
   constructor() {
     this.baseURL = API_CONFIG.baseURL;
+    // Normalize: baseURL should not end with '/v1' because endpoints include version prefix.
+    // If env provides trailing slash, trim.
+    if (this.baseURL.endsWith('/')) this.baseURL = this.baseURL.slice(0, -1);
     this.timeout = API_CONFIG.timeout;
     this.retryAttempts = API_CONFIG.retryAttempts;
     this.retryDelay = API_CONFIG.retryDelay;
@@ -56,7 +59,7 @@ class APIService {
   }
 
   async request(endpoint, options = {}) {
-    const url = `${this.baseURL}${endpoint}`;
+  const url = `${this.baseURL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
     const method = options.method || 'GET';
     let lastError = null;
 
