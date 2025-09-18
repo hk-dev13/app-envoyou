@@ -231,7 +231,7 @@ class APIService {
   }
 
   async getOAuthUrl(provider) {
-    return this.get(`/v1/auth/${provider}/url`);
+    throw new Error('getOAuthUrl is no longer used; OAuth handled by Supabase');
   }
 
   // --- User Profile Methods ---
@@ -369,8 +369,9 @@ class APIService {
   }
 
   async testAPIKey(apiKey) {
-    // Use a working endpoint for testing API keys
-    return this.get('/v1/health', {
+    // Call a protected endpoint to actually validate API key
+    return this.get('/v1/global/iso', {
+      params: { limit: 1 },
       headers: { 'X-API-Key': apiKey },
     });
   }
