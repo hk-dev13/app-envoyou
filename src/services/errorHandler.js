@@ -4,7 +4,7 @@
  */
 
 import logger from './logger.js';
-import { ERROR_MESSAGES } from '../config/index.js';
+import { ERROR_MESSAGES, STORAGE_KEYS } from '../config/index.js';
 
 // Error Types
 export const ERROR_TYPES = {
@@ -62,14 +62,14 @@ class ErrorHandler {
     let type = ERROR_TYPES.UNKNOWN;
     let severity = ERROR_SEVERITY.MEDIUM;
     let message = error.message || 'An unknown error occurred';
-    let userMessage = ERROR_MESSAGES.GENERIC_ERROR;
+  let userMessage = ERROR_MESSAGES.GENERIC_ERROR;
     let code = error.code || 'UNKNOWN_ERROR';
 
     // Network errors
     if (error.name === 'TypeError' && error.message.includes('fetch')) {
       type = ERROR_TYPES.NETWORK;
       severity = ERROR_SEVERITY.HIGH;
-      userMessage = ERROR_MESSAGES.NETWORK_ERROR;
+      userMessage = ERROR_MESSAGES.network || ERROR_MESSAGES.GENERIC_ERROR;
       code = 'NETWORK_ERROR';
     }
 
@@ -77,30 +77,41 @@ class ErrorHandler {
     if (error.response) {
       type = ERROR_TYPES.API;
       code = `API_${error.response.status}`;
+      const msg = error.response.data?.message || error.response.data?.detail || '';
+      const path = context.url || '';
       
       switch (error.response.status) {
         case 401:
           type = ERROR_TYPES.AUTHENTICATION;
           severity = ERROR_SEVERITY.HIGH;
-          userMessage = ERROR_MESSAGES.AUTHENTICATION_ERROR;
+          // Specific friendly cases
+          if (/token|jwt|authorization/i.test(msg)) {
+            userMessage = 'Your session is missing or expired. Please sign in again.';
+          } else if (/verify|confirmed/i.test(msg)) {
+            userMessage = 'Please verify your email to continue. Check your inbox or resend from the banner.';
+          } else if (/not authenticated/i.test(msg)) {
+            userMessage = 'Authentication required. Please sign in.';
+          } else {
+            userMessage = ERROR_MESSAGES.AUTHENTICATION_ERROR || 'Authentication required. Please sign in.';
+          }
           code = 'AUTH_REQUIRED';
           break;
         case 403:
           type = ERROR_TYPES.AUTHORIZATION;
           severity = ERROR_SEVERITY.HIGH;
-          userMessage = ERROR_MESSAGES.AUTHORIZATION_ERROR;
+          userMessage = ERROR_MESSAGES.AUTHORIZATION_ERROR || 'Access denied. You do not have permission.';
           code = 'ACCESS_DENIED';
           break;
         case 422:
           type = ERROR_TYPES.VALIDATION;
           severity = ERROR_SEVERITY.LOW;
-          userMessage = error.response.data?.message || ERROR_MESSAGES.VALIDATION_ERROR;
+          userMessage = error.response.data?.message || error.response.data?.detail || ERROR_MESSAGES.VALIDATION_ERROR;
           code = 'VALIDATION_ERROR';
           break;
         case 429:
           type = ERROR_TYPES.API;
           severity = ERROR_SEVERITY.MEDIUM;
-          userMessage = ERROR_MESSAGES.RATE_LIMIT_ERROR;
+          userMessage = ERROR_MESSAGES.RATE_LIMIT_ERROR || 'Too many requests. Please try again later.';
           code = 'RATE_LIMITED';
           break;
         case 500:
@@ -109,11 +120,11 @@ class ErrorHandler {
         case 504:
           type = ERROR_TYPES.API;
           severity = ERROR_SEVERITY.CRITICAL;
-          userMessage = ERROR_MESSAGES.SERVER_ERROR;
+          userMessage = ERROR_MESSAGES.SERVER_ERROR || 'Server error. Please try again later.';
           code = 'SERVER_ERROR';
           break;
         default:
-          userMessage = error.response.data?.message || ERROR_MESSAGES.GENERIC_ERROR;
+          userMessage = msg || ERROR_MESSAGES.GENERIC_ERROR;
       }
     }
 
@@ -238,8 +249,8 @@ class ErrorHandler {
     if (recovery.clearSession) {
       // Clear user session
       try {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('user');
+          localStorage.removeItem(STORAGE_KEYS?.authToken || 'envoyou_token');
+          localStorage.removeItem(STORAGE_KEYS?.userData || 'envoyou_user');
       } catch (error) {
           console.warn('localStorage not available (incognito mode):', error);
       }
@@ -256,7 +267,7 @@ class ErrorHandler {
                                currentPath.includes('/verify/');
       
       if (!isOnProtectedPage) {
-        const loginUrl = `/login?redirect=${encodeURIComponent(currentPath)}`;
+        const loginUrl = `/auth/login?redirect=${encodeURIComponent(currentPath)}`;
         
         setTimeout(() => {
           window.location.href = loginUrl;
