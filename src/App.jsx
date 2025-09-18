@@ -66,6 +66,12 @@ const AppContent = () => {
             />
             
             {/* Auth routes - only login for existing users */}
+            {/* Map backend-style paths to frontend routes for convenience */}
+            <Route path="/v1/auth/login" element={<Navigate to="/auth/login" replace />} />
+            <Route path="/v1/auth/register" element={<Navigate to="/auth/register" replace />} />
+            <Route path="/v1/auth/forgot-password" element={<Navigate to="/auth/forgot-password" replace />} />
+            <Route path="/v1/auth/reset-password" element={<Navigate to="/auth/reset-password" replace />} />
+            <Route path="/v1/auth/*" element={<Navigate to="/auth/login" replace />} />
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/register" element={<RegisterPage />} />
             <Route path="/auth/register-success" element={<RegisterSuccessPage />} />
