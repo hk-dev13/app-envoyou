@@ -15,6 +15,18 @@ const EmailVerificationPage = () => {
   const { checkAuthStatus } = useAuth();
 
   // Extract token from URL parameters or route will be handled inside effect
+  // Prefill email from localStorage if available (from signup flow)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.tempUser);
+      if (raw && !userEmail) {
+        const temp = JSON.parse(raw);
+        if (temp?.email) setUserEmail(temp.email);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -113,14 +125,20 @@ const EmailVerificationPage = () => {
         return;
       }
 
-      // Ask Supabase to resend via signUp again (it sends email when user exists and unconfirmed)
+      // Use Supabase resend API for signup confirmation emails
       const supabase = getSupabaseClient();
-      const { error } = await supabase.auth.signUp({ email: emailToUse, password: crypto.randomUUID() });
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: emailToUse,
+        options: { emailRedirectTo: `${window.location.origin}/auth/verify` },
+      });
+
       if (!error) {
         setMessage('Verification email sent successfully! Please check your inbox.');
-        setStatus('success');
+        // Keep status as error to keep input visible, but enable user to try again or go back.
+        // Alternatively, we could set to success to show a clearer success state.
       } else {
-        throw new Error('Failed to trigger verification email');
+        throw new Error(error.message || 'Failed to trigger verification email');
       }
     } catch (error) {
       console.error('Resend verification error:', error);
@@ -210,7 +228,8 @@ const EmailVerificationPage = () => {
               <button
                 onClick={handleResendVerification}
                 disabled={isResending}
-                className="w-full bg-slate-700 hover:bg-slate-600 disabled:bg-slate-600 disabled:cursor-not-allowed text-primary-foreground font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+                type="button"
+                className="w-full bg-slate-700 hover:bg-slate-600 disabled:bg-slate-600 disabled:cursor-not-allowed text-primary-foreground font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center cursor-pointer"
               >
                 {isResending ? (
                   <>
