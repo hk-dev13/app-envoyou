@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useParams, Link, useSearchParams, useNavigate } from 'react-router-dom';
 import apiService from '../../services/apiService';
+import getSupabaseClient from '../../services/supabaseClient';
+import { STORAGE_KEYS } from '../../config/index.js';
+import { useAuth } from '../../hooks/useAuth.js';
 
 const EmailVerificationPage = () => {
   const { token: routeToken } = useParams();
@@ -9,12 +12,17 @@ const EmailVerificationPage = () => {
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState('');
   const [isResending, setIsResending] = useState(false);
+  const navigate = useNavigate();
+  const { checkAuthStatus } = useAuth();
 
-  // Extract token from URL parameters or route
-  const token = routeToken || searchParams.get('token') || searchParams.get('access_token') || searchParams.get('confirmation_token');
+  // Extract token from URL parameters or route will be handled inside effect
 
   useEffect(() => {
     const verifyEmail = async () => {
+      const hash = window.location.hash || '';
+      const hashParams = hash.startsWith('#') ? Object.fromEntries(new URLSearchParams(hash.substring(1))) : {};
+      const token = routeToken || searchParams.get('token') || searchParams.get('confirmation_token') || searchParams.get('access_token') || hashParams.access_token;
+
       if (!token) {
         setStatus('error');
         setMessage('Verification token is missing. Please check your email for the correct verification link.');
@@ -22,12 +30,47 @@ const EmailVerificationPage = () => {
       }
 
       try {
+        // If Supabase provided access/refresh tokens in URL hash, set session for auto-login
+        if (hashParams.access_token && hashParams.refresh_token) {
+          try {
+            const supabase = getSupabaseClient();
+            const { error: supaErr } = await supabase.auth.setSession({
+              access_token: hashParams.access_token,
+              refresh_token: hashParams.refresh_token,
+            });
+            if (supaErr) {
+              console.warn('Supabase setSession failed:', supaErr.message);
+            } else {
+              // Allow AuthContext to hydrate and then redirect
+              await checkAuthStatus();
+            }
+          } catch (e) {
+            console.warn('Supabase session setup error:', e.message);
+          }
+        }
+
         // Call the API to verify email
-        const response = await apiService.verifyEmail({ token });
+  const response = await apiService.verifyEmail({ token });
 
         if (response.message === 'Email verified successfully' || response.success) {
           setStatus('success');
-          setMessage('Email verified successfully! You can now log in to your account.');
+          setMessage('Email verified successfully! Redirecting to your dashboard...');
+
+          // If backend returns access_token and user, set session for seamless login
+          if (response.access_token && response.user) {
+            try {
+              localStorage.setItem(STORAGE_KEYS.authToken, response.access_token);
+              localStorage.setItem(STORAGE_KEYS.userData, JSON.stringify(response.user));
+              await checkAuthStatus();
+            } catch (e) {
+              console.warn('Failed to persist login after verification:', e.message);
+            }
+          }
+
+          // Redirect to dashboard after a short delay
+          setTimeout(() => {
+            navigate('/dashboard', { replace: true });
+          }, 1200);
         } else {
           throw new Error('Verification failed');
         }
@@ -40,26 +83,15 @@ const EmailVerificationPage = () => {
           setMessage(
             <div className="text-left space-y-3">
               <p className="text-red-400 mb-3">
-                You&apos;re on the production domain. Please use the local development server instead.
+                Unable to verify automatically. If you clicked from email and see this, please try the link again or contact support.
               </p>
               <div className="bg-card p-4 rounded-lg border border-border">
-                <p className="text-slate-300 text-sm mb-2">To verify your email:</p>
+                <p className="text-slate-300 text-sm mb-2">Troubleshooting steps:</p>
                 <ol className="text-muted-foreground text-sm space-y-1 list-decimal list-inside">
-                  <li>Open your local development server: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173</code></li>
-                  <li>Navigate to: <code className="bg-slate-700 px-2 py-1 rounded text-xs">http://localhost:5173/verify/{token}</code></li>
-                  <li>Or click the button below to copy the local URL</li>
+                  <li>Ensure the link opens on <code className="bg-slate-700 px-2 py-1 rounded text-xs">app.envoyou.com</code>.</li>
+                  <li>If prompted again, request a new verification email from the login page.</li>
                 </ol>
               </div>
-              <button
-                onClick={() => {
-                  const localUrl = `http://localhost:5173/verify/${token}`;
-                  navigator.clipboard.writeText(localUrl);
-                  alert('Local verification URL copied to clipboard!');
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                Copy Local Verification URL
-              </button>
             </div>
           );
         } else {
@@ -69,7 +101,7 @@ const EmailVerificationPage = () => {
     };
 
     verifyEmail();
-  }, [token]);
+  }, [routeToken, searchParams, checkAuthStatus, navigate]);
 
   const handleResendVerification = async () => {
     if (!userEmail && status !== 'error') {
