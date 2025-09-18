@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import apiService from '../../services/apiService.js';
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   
   const { login, googleLogin, githubLogin, error, isLoading, clearError } = useAuth();
+  const [resendStatus, setResendStatus] = useState({ loading: false, sent: false, error: null });
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,6 +67,17 @@ const LoginPage = () => {
     }
   };
 
+  const handleResendVerification = async () => {
+    if (!formData.email) return;
+    setResendStatus({ loading: true, sent: false, error: null });
+    try {
+      await apiService.sendVerificationEmail(formData.email);
+      setResendStatus({ loading: false, sent: true, error: null });
+    } catch (e) {
+      setResendStatus({ loading: false, sent: false, error: e.message || 'Failed to resend verification email' });
+    }
+  };
+
   const handleGoogleLogin = async () => {
     try {
       await googleLogin();
@@ -113,11 +126,69 @@ const LoginPage = () => {
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg flex items-center">
-            <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-sm">{error}</span>
+          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg">
+            <div className="flex items-start">
+              <svg className="w-5 h-5 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-sm">{error}</p>
+                {/* Guidance for specific errors */}
+                {/user not found/i.test(error) && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-sm text-red-100">
+                      We couldn't find an account with this email. If you previously used Google, try signing in with Google below. Otherwise, you can create a new account.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        className="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                      >
+                        <img src="/svg/google.svg" alt="Google" className="w-4 h-4" />
+                        Continue with Google
+                      </button>
+                      <Link to="/auth/register" className="text-emerald-300 hover:text-emerald-200 text-sm underline">
+                        Create a new account
+                      </Link>
+                    </div>
+                  </div>
+                )}
+                {/(verify your email|email not verified|please verify)/i.test(error) && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-sm text-red-100">
+                      Please verify your email address to continue. Check your inbox (and spam folder) for our verification email.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={handleResendVerification}
+                        disabled={!formData.email || resendStatus.loading}
+                        className="inline-flex items-center gap-2 bg-card text-slate-200 border border-border hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-60"
+                      >
+                        {resendStatus.loading ? (
+                          <>
+                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            Resending...
+                          </>
+                        ) : (
+                          <>Resend verification email</>
+                        )}
+                      </button>
+                      {resendStatus.sent && (
+                        <span className="text-emerald-300 text-sm">Verification email sent.</span>
+                      )}
+                      {resendStatus.error && (
+                        <span className="text-red-300 text-sm">{resendStatus.error}</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
 

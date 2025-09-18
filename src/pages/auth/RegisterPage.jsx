@@ -121,19 +121,19 @@ const RegisterPage = () => {
     
     if (result.success) {
       navigate('/auth/register-success');
-    } else if (error && error.includes("Email already registered")) {
-      // Check if this might be an OAuth user who wants to set a password
+    } else if (error && /email already registered/i.test(error)) {
+      // Provide clear guidance if the email already exists
       setValidationErrors({
         email: (
           <div>
-            This email is already registered with social login.{' '}
+            This email is already registered. If you previously signed in with Google, use the
+            <span className="font-medium"> Continue with Google</span> button below to access your account. You can also{' '}
             <Link
               to={`/auth/set-password?email=${encodeURIComponent(formData.email)}`}
               className="text-emerald-400 hover:text-emerald-300 underline"
             >
-              Click here to set a password
-            </Link>{' '}
-            for traditional login.
+              set a local password
+            </Link>{' '}for traditional sign-in.
           </div>
         )
       });
@@ -188,11 +188,46 @@ const RegisterPage = () => {
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg flex items-center">
-            <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-sm">{error}</span>
+          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg">
+            <div className="flex items-start">
+              <svg className="w-5 h-5 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p className="text-sm">{error}</p>
+                {/email already registered/i.test(error) && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-sm text-red-100">
+                      It looks like you already have an account with this email. If you previously used Google, please sign in with Google below, or use one of the alternative options.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        className="inline-flex items-center gap-2 bg-white text-slate-900 hover:bg-slate-100 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                      >
+                        <img src="/svg/google.svg" alt="Google" className="w-4 h-4" />
+                        Continue with Google
+                      </button>
+                      <Link to="/auth/login" className="text-emerald-300 hover:text-emerald-200 text-sm underline">
+                        Sign in with password
+                      </Link>
+                      <Link to="/auth/forgot-password" className="text-emerald-300 hover:text-emerald-200 text-sm underline">
+                        Forgot password?
+                      </Link>
+                      {formData.email && (
+                        <Link
+                          to={`/auth/set-password?email=${encodeURIComponent(formData.email)}`}
+                          className="text-emerald-300 hover:text-emerald-200 text-sm underline"
+                        >
+                          Set a local password
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
@@ -436,6 +471,18 @@ const RegisterPage = () => {
                 'Create Account'
               )}
             </button>
+            {/* Dedicated Google CTA near register button */}
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+                className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-border rounded-lg shadow-sm bg-white text-sm font-medium text-slate-900 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <img src="/svg/google.svg" alt="Google" className="w-4 h-4" />
+                Continue with Google
+              </button>
+            </div>
           </div>
 
           {/* Divider */}
