@@ -244,7 +244,7 @@ const LoginPage = () => {
               <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="separator px-2 bg-[var(--color-bg)] text-muted-foreground">Or continue with</span>
+              <span className="px-2 bg-[var(--color-bg)] text-muted-foreground">Or continue with</span>
             </div>
           </div>
 
